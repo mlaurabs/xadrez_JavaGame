@@ -1,5 +1,5 @@
 package project251.xadrez.model.figura;
 
-class Peao extends Figura {
+class Peao extends Peca {
 
 }

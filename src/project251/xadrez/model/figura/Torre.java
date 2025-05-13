@@ -1,5 +1,5 @@
 package project251.xadrez.model.figura;
 
-class Torre extends Figura {
+class Torre extends Peca {
 
 }

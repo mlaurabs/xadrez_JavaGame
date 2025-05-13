@@ -1,5 +1,5 @@
 package project251.xadrez.model.figura;
 
-class Rei extends Figura {
+class Rei extends Peca {
 
 }
