@@ -21,29 +21,29 @@ public class Tabuleiro {
     
     public void comecaJogo() {
         // Peças brancas
-        colocarPeca(new Torre(new Posicao(0, 0)), new Posicao(0, 0));
-        colocarPeca(new Cavalo(new Posicao(0, 1)), new Posicao(0, 1));
-        colocarPeca(new Bispo(new Posicao(0, 2)), new Posicao(0, 2));
-        colocarPeca(new Dama(new Posicao(0, 3)), new Posicao(0, 3));
-        colocarPeca(new Rei(new Posicao(0, 4)), new Posicao(0, 4));
-        colocarPeca(new Bispo(new Posicao(0, 5)), new Posicao(0, 5));
-        colocarPeca(new Cavalo(new Posicao(0, 6)), new Posicao(0, 6));
-        colocarPeca(new Torre(new Posicao(0, 7)), new Posicao(0, 7));
+        colocarPeca(new Torre(new Posicao(0, 0), 0), new Posicao(0, 0));
+        colocarPeca(new Cavalo(new Posicao(0, 1), 0), new Posicao(0, 1));
+        colocarPeca(new Bispo(new Posicao(0, 2), 0), new Posicao(0, 2));
+        colocarPeca(new Dama(new Posicao(0, 3), 0), new Posicao(0, 3));
+        colocarPeca(new Rei(new Posicao(0, 4), 0), new Posicao(0, 4));
+        colocarPeca(new Bispo(new Posicao(0, 5), 0), new Posicao(0, 5));
+        colocarPeca(new Cavalo(new Posicao(0, 6), 0), new Posicao(0, 6));
+        colocarPeca(new Torre(new Posicao(0, 7), 0), new Posicao(0, 7));
         for (int i = 0; i < 8; i++) {
-            colocarPeca(new Peao(new Posicao(1, i)), new Posicao(1, i));
+            colocarPeca(new Peao(new Posicao(1, i), 0), new Posicao(1, i));
         }
 
         // Peças pretas
-        colocarPeca(new Torre(new Posicao(7, 0)), new Posicao(7, 0));
-        colocarPeca(new Cavalo(new Posicao(7, 1)), new Posicao(7, 1));
-        colocarPeca(new Bispo(new Posicao(7, 2)), new Posicao(7, 2));
-        colocarPeca(new Dama(new Posicao(7, 3)), new Posicao(7, 3));
-        colocarPeca(new Rei(new Posicao(7, 4)), new Posicao(7, 4));
-        colocarPeca(new Bispo(new Posicao(7, 5)), new Posicao(7, 5));
-        colocarPeca(new Cavalo(new Posicao(7, 6)), new Posicao(7, 6));
-        colocarPeca(new Torre(new Posicao(7, 7)), new Posicao(7, 7));
+        colocarPeca(new Torre(new Posicao(7, 0), 1), new Posicao(7, 0));
+        colocarPeca(new Cavalo(new Posicao(7, 1), 1), new Posicao(7, 1));
+        colocarPeca(new Bispo(new Posicao(7, 2), 1), new Posicao(7, 2));
+        colocarPeca(new Dama(new Posicao(7, 3), 1), new Posicao(7, 3));
+        colocarPeca(new Rei(new Posicao(7, 4), 1), new Posicao(7, 4));
+        colocarPeca(new Bispo(new Posicao(7, 5), 1), new Posicao(7, 5));
+        colocarPeca(new Cavalo(new Posicao(7, 6), 1), new Posicao(7, 6));
+        colocarPeca(new Torre(new Posicao(7, 7), 1), new Posicao(7, 7));
         for (int i = 0; i < 8; i++) {
-            colocarPeca(new Peao(new Posicao(6, i)), new Posicao(6, i));
+            colocarPeca(new Peao(new Posicao(6, i), 1), new Posicao(6, i));
         }
     }
     
@@ -53,9 +53,9 @@ public class Tabuleiro {
             for (int coluna = 0; coluna < COLUNAS; coluna++) {
                 Peca peca = pecas[linha][coluna];
                 if (peca == null) {
-                    System.out.print("- ");
+                    System.out.print("-- ");
                 } else {
-                    System.out.print(peca + " ");
+                    System.out.print(peca + peca.getCor() + " ");
                 }
             }
             System.out.println();
@@ -73,12 +73,12 @@ public class Tabuleiro {
         return COLUNAS;
     }
 
-    public Object getPeca(int linha, int coluna) {
+    public Peca getPeca(int linha, int coluna) {
         validarPosicao(linha, coluna);
         return pecas[linha][coluna];
     }
 
-    public Object getPeca(Posicao posicao) {
+    public Peca getPeca(Posicao posicao) {
         return getPeca(posicao.getLinha(), posicao.getColuna());
     }
 

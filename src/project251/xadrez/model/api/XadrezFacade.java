@@ -1,6 +1,7 @@
 package project251.xadrez.model.api;
 
 import project251.xadrez.model.tabuleiro.Posicao;
+import project251.xadrez.model.figura.*;
 import project251.xadrez.model.tabuleiro.*;
 
 public class XadrezFacade {
@@ -15,6 +16,8 @@ public class XadrezFacade {
         tabuleiro.comecaJogo();  
         
         tabuleiro.exibirTabuleiro();
+        
+        System.out.println(tabuleiro.getPeca(0, 0)); 
     }
    
 }
