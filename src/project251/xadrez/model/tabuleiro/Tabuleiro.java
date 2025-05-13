@@ -19,12 +19,12 @@ public class Tabuleiro {
         pecas[posicao.getLinha()][posicao.getColuna()] = peca;
     }
     
-    private void comecaJogo() {
+    public void comecaJogo() {
         // Peças brancas
         colocarPeca(new Torre(new Posicao(0, 0)), new Posicao(0, 0));
         colocarPeca(new Cavalo(new Posicao(0, 1)), new Posicao(0, 1));
         colocarPeca(new Bispo(new Posicao(0, 2)), new Posicao(0, 2));
-        colocarPeca(new Rainha(new Posicao(0, 3)), new Posicao(0, 3));
+        colocarPeca(new Dama(new Posicao(0, 3)), new Posicao(0, 3));
         colocarPeca(new Rei(new Posicao(0, 4)), new Posicao(0, 4));
         colocarPeca(new Bispo(new Posicao(0, 5)), new Posicao(0, 5));
         colocarPeca(new Cavalo(new Posicao(0, 6)), new Posicao(0, 6));
@@ -37,11 +37,32 @@ public class Tabuleiro {
         colocarPeca(new Torre(new Posicao(7, 0)), new Posicao(7, 0));
         colocarPeca(new Cavalo(new Posicao(7, 1)), new Posicao(7, 1));
         colocarPeca(new Bispo(new Posicao(7, 2)), new Posicao(7, 2));
-        colocarPeca(new Rainha(new Posicao(7, 3)), new Posicao(7, 3));
+        colocarPeca(new Dama(new Posicao(7, 3)), new Posicao(7, 3));
         colocarPeca(new Rei(new Posicao(7, 4)), new Posicao(7, 4));
         colocarPeca(new Bispo(new Posicao(7, 5)), new Posicao(7, 5));
         colocarPeca(new Cavalo(new Posicao(7, 6)), new Posicao(7, 6));
         colocarPeca(new Torre(new Posicao(7, 7)), new Posicao(7, 7));
+        for (int i = 0; i < 8; i++) {
+            colocarPeca(new Peao(new Posicao(6, i)), new Posicao(6, i));
+        }
+    }
+    
+    public void exibirTabuleiro() {
+        for (int linha = LINHAS - 1; linha >= 0; linha--) {
+            System.out.print((linha + 1) + " ");
+            for (int coluna = 0; coluna < COLUNAS; coluna++) {
+                Peca peca = pecas[linha][coluna];
+                if (peca == null) {
+                    System.out.print("- ");
+                } else {
+                    System.out.print(peca + " ");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println("  a b c d e f g h");
+    }
+
        
 
     public int getLinhas() {
