@@ -21,29 +21,31 @@ public class Tabuleiro {
     
     public void comecaJogo() {
         // Peças brancas
-        colocarPeca(new Torre(new Posicao(0, 0), 0), new Posicao(0, 0));
-        colocarPeca(new Cavalo(new Posicao(0, 1), 0), new Posicao(0, 1));
-        colocarPeca(new Bispo(new Posicao(0, 2), 0), new Posicao(0, 2));
-        colocarPeca(new Dama(new Posicao(0, 3), 0), new Posicao(0, 3));
-        colocarPeca(new Rei(new Posicao(0, 4), 0), new Posicao(0, 4));
-        colocarPeca(new Bispo(new Posicao(0, 5), 0), new Posicao(0, 5));
-        colocarPeca(new Cavalo(new Posicao(0, 6), 0), new Posicao(0, 6));
-        colocarPeca(new Torre(new Posicao(0, 7), 0), new Posicao(0, 7));
-        for (int i = 0; i < 8; i++) {
-            colocarPeca(new Peao(new Posicao(1, i), 0), new Posicao(1, i));
+        colocarPeca(new Torre(new Posicao("a1"), 0), new Posicao("a1"));
+        colocarPeca(new Cavalo(new Posicao("b1"), 0), new Posicao("b1"));
+        colocarPeca(new Bispo(new Posicao("c1"), 0), new Posicao("c1"));
+        colocarPeca(new Dama(new Posicao("d1"), 0), new Posicao("d1"));
+        colocarPeca(new Rei(new Posicao("e1"), 0), new Posicao("e1"));
+        colocarPeca(new Bispo(new Posicao("f1"), 0), new Posicao("f1"));
+        colocarPeca(new Cavalo(new Posicao("g1"), 0), new Posicao("g1"));
+        colocarPeca(new Torre(new Posicao("h1"), 0), new Posicao("h1"));
+        for (char c = 'a'; c <= 'h'; c++) {
+            String notacao = "" + c + "2";
+            colocarPeca(new Peao(new Posicao(notacao), 0), new Posicao(notacao));
         }
 
         // Peças pretas
-        colocarPeca(new Torre(new Posicao(7, 0), 1), new Posicao(7, 0));
-        colocarPeca(new Cavalo(new Posicao(7, 1), 1), new Posicao(7, 1));
-        colocarPeca(new Bispo(new Posicao(7, 2), 1), new Posicao(7, 2));
-        colocarPeca(new Dama(new Posicao(7, 3), 1), new Posicao(7, 3));
-        colocarPeca(new Rei(new Posicao(7, 4), 1), new Posicao(7, 4));
-        colocarPeca(new Bispo(new Posicao(7, 5), 1), new Posicao(7, 5));
-        colocarPeca(new Cavalo(new Posicao(7, 6), 1), new Posicao(7, 6));
-        colocarPeca(new Torre(new Posicao(7, 7), 1), new Posicao(7, 7));
-        for (int i = 0; i < 8; i++) {
-            colocarPeca(new Peao(new Posicao(6, i), 1), new Posicao(6, i));
+        colocarPeca(new Torre(new Posicao("a8"), 1), new Posicao("a8"));
+        colocarPeca(new Cavalo(new Posicao("b8"), 1), new Posicao("b8"));
+        colocarPeca(new Bispo(new Posicao("c8"), 1), new Posicao("c8"));
+        colocarPeca(new Dama(new Posicao("d8"), 1), new Posicao("d8"));
+        colocarPeca(new Rei(new Posicao("e8"), 1), new Posicao("e8"));
+        colocarPeca(new Bispo(new Posicao("f8"), 1), new Posicao("f8"));
+        colocarPeca(new Cavalo(new Posicao("g8"), 1), new Posicao("g8"));
+        colocarPeca(new Torre(new Posicao("h8"), 1), new Posicao("h8"));
+        for (char c = 'a'; c <= 'h'; c++) {
+            String notacao = "" + c + "7";
+            colocarPeca(new Peao(new Posicao(notacao), 1), new Posicao(notacao));
         }
     }
     
@@ -55,15 +57,13 @@ public class Tabuleiro {
                 if (peca == null) {
                     System.out.print("-- ");
                 } else {
-                    System.out.print(peca + peca.getCor() + " ");
+                    System.out.print(peca + " ");
                 }
             }
             System.out.println();
         }
-        System.out.println("  a b c d e f g h");
+        System.out.println("   a  b  c  d  e  f  g  h");
     }
-
-       
 
     public int getLinhas() {
         return LINHAS;

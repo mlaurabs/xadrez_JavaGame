@@ -33,5 +33,5 @@ public abstract class Peca {
         this.cor = cor;
     }
     
-    public abstract ArrayList<Posicao> movValidos();
+    public abstract ArrayList<Posicao> movValidos(Tabuleiro tabuleiro);
 }

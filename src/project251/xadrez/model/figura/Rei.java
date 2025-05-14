@@ -3,6 +3,7 @@ package project251.xadrez.model.figura;
 import java.util.ArrayList;
 
 import project251.xadrez.model.tabuleiro.Posicao;
+import project251.xadrez.model.tabuleiro.Tabuleiro;
 
 public class Rei extends Peca {
 	private boolean jaMoveu = false; 
@@ -21,11 +22,13 @@ public class Rei extends Peca {
 	
 	@Override
 	public String toString() {
-	    return "R";
+	    return "R"+this.getCor();
 	}
 	
+	// para cada movimento, temos que verificar se não é um movimento ilegal
+	// movimentos ilegais: o rei está em xeque, o rei fica em xeque após o seu movimento
 	@Override
-	public ArrayList<Posicao> movValidos() {
+	public ArrayList<Posicao> movValidos(Tabuleiro tabuleiro) {
 		return null;
 	}
 }

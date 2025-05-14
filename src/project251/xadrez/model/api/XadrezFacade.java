@@ -7,17 +7,13 @@ import project251.xadrez.model.tabuleiro.*;
 public class XadrezFacade {
 
     public static void main(String[] args) {
-        Posicao p = new Posicao("e2");
-        System.out.println("Posição: " + p); // Deve imprimir "e2"
-        System.out.println("Linha: " + p.getLinha());  // Deve imprimir 6
-        System.out.println("Coluna: " + p.getColuna()); // Deve imprimir 4
-        
         Tabuleiro tabuleiro = new Tabuleiro();
-        tabuleiro.comecaJogo();  
-        
+        tabuleiro.comecaJogo();
         tabuleiro.exibirTabuleiro();
         
-        System.out.println(tabuleiro.getPeca(0, 0)); 
-    }
-   
+        Posicao peao_preto = new Posicao("a2");
+        System.out.println(tabuleiro.getPeca(peao_preto) + ": " + 
+        		tabuleiro.getPeca(peao_preto).movValidos(tabuleiro).toString());
+  	
+	}
 }

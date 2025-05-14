@@ -14,11 +14,11 @@ public class Posicao {
         if (notacao == null || notacao.length() != 2) { // se notacao for nulo ou de tamanho diferente de 2
             throw new IllegalArgumentException("Notação inválida: " + notacao); // retorna um erro
         }
-        char colunaChar = notacao.charAt(0); //coluna = primeiro caractere de notacao
-        char linhaChar = notacao.charAt(1); //linha = segundo caractere de notacao
+        char colunaChar = notacao.charAt(0); // coluna = primeiro caractere de notacao
+        char linhaChar = notacao.charAt(1);  // linha = segundo caractere de notacao
 
-        this.coluna = colunaChar - 'a'; // transforma pra int
-        this.linha = 8 - Character.getNumericValue(linhaChar);
+        this.coluna = colunaChar - 'a'; // transforma pra int, de 'a' a 'h'
+        this.linha = Character.getNumericValue(linhaChar) - 1; // transforma para 0-based (linha 1 -> 0, linha 2 -> 1, etc.)
     }
 
     public int getLinha() {
@@ -31,6 +31,6 @@ public class Posicao {
 
     @Override
     public String toString() {
-        return "" + (char) ('a' + coluna) + (8 - linha);
+        return "" + (char) ('a' + coluna) + (linha + 1); // converte de volta para notação de xadrez
     }
 }
