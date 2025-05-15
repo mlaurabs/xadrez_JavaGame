@@ -20,6 +20,31 @@ public class Cavalo extends Peca {
 	// movimentos ilegais: o rei está em xeque, o rei fica em xeque após o seu movimento
 	@Override
 	public ArrayList<Posicao> movValidos(Tabuleiro tabuleiro) {
-		return null;
+	    ArrayList<Posicao> movimentos = new ArrayList<>();
+	    int linha = posicao.getLinha();
+	    int coluna = posicao.getColuna();
+
+	    // Movimentos possíveis para o cavalo (em "L")
+	    int[][] direcoes = {
+	        {2, 1}, {2, -1}, {-2, 1}, {-2, -1}, // Movimentos com 2 casas na vertical
+	        {1, 2}, {1, -2}, {-1, 2}, {-1, -2}  // Movimentos com 2 casas na horizontal
+	    };
+
+	    // Para cada direção do cavalo
+	    for (int[] direcao : direcoes) {
+	        int novaLinha = linha + direcao[0];
+	        int novaColuna = coluna + direcao[1];
+	        Posicao novaPosicao = new Posicao(novaLinha, novaColuna);
+
+	        // Verifica se a posição existe no tabuleiro
+	        if (tabuleiro.posicaoExiste(novaPosicao)) {
+	            if (!tabuleiro.existePeca(novaPosicao) || this.cor != tabuleiro.getPeca(novaPosicao).cor) {
+	                movimentos.add(novaPosicao);
+	            }
+	        }
+	    }
+
+	    return movimentos;
 	}
+
 }

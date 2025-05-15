@@ -110,5 +110,4 @@ public class Bispo extends Peca {
 		return movimentos;
 	}
 	
-	
 }
