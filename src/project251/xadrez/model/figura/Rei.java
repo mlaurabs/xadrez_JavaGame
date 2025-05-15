@@ -7,6 +7,8 @@ import project251.xadrez.model.tabuleiro.Tabuleiro;
 
 public class Rei extends Peca {
 	private boolean jaMoveu = false; 
+	private boolean estaXeque = false;
+	private boolean podeRoque = true;
 
 	public Rei(Posicao posicao, int cor) {
 		super(posicao, cor);
@@ -27,6 +29,7 @@ public class Rei extends Peca {
 	
 	// para cada movimento, temos que verificar se não é um movimento ilegal
 	// movimentos ilegais: o rei está em xeque, o rei fica em xeque após o seu movimento
+	
 	@Override
 	public ArrayList<Posicao> movValidos(Tabuleiro tabuleiro) {
 	    ArrayList<Posicao> movimentos = new ArrayList<>();
@@ -127,6 +130,22 @@ public class Rei extends Peca {
 	            }
 	        }
 	    }
+	    
+	    // esta em xeque?
+	    
+		for (int lin = 0; lin < 8; lin ++) {
+			for (int col = 0; col < 8; col ++) {
+				Peca peca = tabuleiro.getPeca(new Posicao(lin,col));
+				if (peca.cor != this.cor) {
+					if (peca.movValidos(tabuleiro).contains(this.posicao)){
+						this.estaXeque = true;
+					}
+				}
+
+			}
+		}
+		
+		// pode roque
 
 	    return movimentos;
 	}
