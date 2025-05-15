@@ -9,9 +9,10 @@ public class XadrezFacade {
     public static void main(String[] args) {
         Tabuleiro tabuleiro = new Tabuleiro();
         tabuleiro.comecaJogo();
-        tabuleiro.exibirTabuleiro();
 
-        Posicao peca = new Posicao("e2");
+        Posicao peca = new Posicao("f8");
+        tabuleiro.removerPeca(new Posicao("e7"));
+        tabuleiro.exibirTabuleiro();
         System.out.println(tabuleiro.getPeca(peca) + ": " + 
         		tabuleiro.getPeca(peca).movValidos(tabuleiro).toString());
   	

@@ -22,7 +22,71 @@ public class Bispo extends Peca {
 		ArrayList<Posicao> movimentos = new ArrayList<>();
         int linha = posicao.getLinha();
         int coluna = posicao.getColuna();
-        
+        int mov_cor;
+
+     // Determina a direção do movimento com base na cor da peça
+     if (this.cor == 0) { // se as peças forem brancas elas andam para frente
+         mov_cor = 1;
+     } else {
+         mov_cor = -1; // se as peças forem pretas, elas andam para trás
+     }
+
+     // Diagonal superior direita (linha + i, coluna + i)
+     int i = 1;
+     Posicao diagonal_dir;
+     do {
+         if (!tabuleiro.posicaoExiste(new Posicao(linha + i * mov_cor, coluna + i))) {
+             break;  // Sai do loop se a posição não existir
+         }
+         diagonal_dir = new Posicao(linha + i * mov_cor, coluna + i);  // Atualiza a posição
+         if (!tabuleiro.existePeca(diagonal_dir)) {
+             movimentos.add(diagonal_dir);  // Adiciona movimento se não houver peça
+         }
+         i++;
+     } while (!tabuleiro.existePeca(diagonal_dir) && tabuleiro.posicaoExiste(diagonal_dir));
+
+     // Diagonal inferior direita (linha - i, coluna + i)
+     i = 1;
+     Posicao diagonal_dir_inf;
+     do {
+         if (!tabuleiro.posicaoExiste(new Posicao(linha - i * mov_cor, coluna + i))) {
+             break;  // Sai do loop se a posição não existir
+         }
+         diagonal_dir_inf = new Posicao(linha - i * mov_cor, coluna + i);  // Atualiza a posição
+         if (!tabuleiro.existePeca(diagonal_dir_inf)) {
+             movimentos.add(diagonal_dir_inf);  // Adiciona movimento se não houver peça
+         }
+         i++;
+     } while (!tabuleiro.existePeca(diagonal_dir_inf) && tabuleiro.posicaoExiste(diagonal_dir_inf));
+
+     // Diagonal superior esquerda (linha + i, coluna - i)
+     i = 1;
+     Posicao diagonal_esq;
+     do {
+         if (!tabuleiro.posicaoExiste(new Posicao(linha + i * mov_cor, coluna - i))) {
+             break;  // Sai do loop se a posição não existir
+         }
+         diagonal_esq = new Posicao(linha + i * mov_cor, coluna - i);  // Atualiza a posição
+         if (!tabuleiro.existePeca(diagonal_esq)) {
+             movimentos.add(diagonal_esq);  // Adiciona movimento se não houver peça
+         }
+         i++;
+     } while (!tabuleiro.existePeca(diagonal_esq) && tabuleiro.posicaoExiste(diagonal_esq));
+
+     // Diagonal inferior esquerda (linha - i, coluna - i)
+     i = 1;
+     Posicao diagonal_esq_inf;
+     do {
+         if (!tabuleiro.posicaoExiste(new Posicao(linha - i * mov_cor, coluna - i))) {
+             break;  // Sai do loop se a posição não existir
+         }
+         diagonal_esq_inf = new Posicao(linha - i * mov_cor, coluna - i);  // Atualiza a posição
+         if (!tabuleiro.existePeca(diagonal_esq_inf)) {
+             movimentos.add(diagonal_esq_inf);  // Adiciona movimento se não houver peça
+         }
+         i++;
+     } while (!tabuleiro.existePeca(diagonal_esq_inf) && tabuleiro.posicaoExiste(diagonal_esq_inf));
+
 		return movimentos;
 	}
 	
