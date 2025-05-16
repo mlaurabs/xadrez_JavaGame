@@ -1,5 +1,5 @@
 package project251.xadrez.model.tabuleiro;
-
+import java.util.ArrayList;
 import project251.xadrez.model.figura.*;
 
 public class Tabuleiro {
@@ -106,5 +106,18 @@ public class Tabuleiro {
 
     public boolean existePeca(Posicao posicao) {
         return getPeca(posicao) != null;
+    }
+    
+    public ArrayList<Peca> getPecasPorCor(int cor) {
+        ArrayList<Peca> pecasCor = new ArrayList<>();
+        for (int linha = 0; linha < LINHAS; linha++) {
+            for (int coluna = 0; coluna < COLUNAS; coluna++) {
+                Peca peca = pecas[linha][coluna];
+                if (peca != null && peca.cor == cor) {
+                    pecasCor.add(peca);
+                }
+            }
+        }
+        return pecasCor;
     }
 }

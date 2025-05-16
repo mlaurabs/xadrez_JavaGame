@@ -8,8 +8,9 @@ import project251.xadrez.model.tabuleiro.Tabuleiro;
 public class Rei extends Peca {
 	private boolean jaMoveu = false; 
 	private boolean estaXeque = false;
-	private boolean podeRoque = true;
-
+	private boolean podeRoqueGrande = true;
+	private boolean podeRoquePeq = true;
+	
 	public Rei(Posicao posicao, int cor) {
 		super(posicao, cor);
 	}
@@ -27,8 +28,121 @@ public class Rei extends Peca {
 	    return "R"+this.getCor();
 	}
 	
-	// para cada movimento, temos que verificar se não é um movimento ilegal
-	// movimentos ilegais: o rei está em xeque, o rei fica em xeque após o seu movimento
+	private boolean casaAtacada(Posicao posicao, Tabuleiro tabuleiro) {
+	    int corInimiga = (this.cor == 0) ? 1 : 0;
+	    ArrayList<Peca> pecasInimigas = tabuleiro.getPecasPorCor(corInimiga);
+
+	    for (Peca peca : pecasInimigas) {
+	        if (!(peca instanceof Rei)) { // ignora o rei inimigo
+	            if (peca.movValidos(tabuleiro).contains(posicao)) {
+	                return true;
+	            }
+	        }
+	    }
+	    return false;
+	}
+    
+    public void verificaXeque(Tabuleiro tabuleiro) {
+        this.estaXeque = casaAtacada(this.posicao, tabuleiro);
+    }
+
+    public boolean verificaRoquePeq(Tabuleiro tabuleiro) {
+        Posicao[] pos_brancas = {
+            new Posicao("f1"), // f1
+            new Posicao("g1")  // g1
+        };
+        
+        Posicao[] pos_pretas = {
+            new Posicao("f8"), // f1
+            new Posicao("g8")  // g1	
+        };
+
+
+        if (jaMoveu == true) {
+            this.podeRoquePeq = false;
+        } else {
+        	if (estaXeque) {
+        		this.podeRoquePeq = false;
+        	} else {
+                if (this.cor == 0) {
+                	Peca peca = tabuleiro.getPeca(new Posicao("h1"));
+                	if (!tabuleiro.existePeca(new Posicao("h1")) || !(peca instanceof Torre) || peca.cor != this.cor) {
+                		this.podeRoquePeq = false;
+                	}
+                	if (peca instanceof Torre && peca.cor == this.cor && ((Torre) peca).jaMoveu) { //verifica se a torre já moveu para poder rocar
+                	    this.podeRoquePeq = false;
+                	}
+                    if (casaAtacada(pos_brancas[0], tabuleiro) || casaAtacada(pos_brancas[1], tabuleiro)
+                    || tabuleiro.existePeca(pos_brancas[0]) || tabuleiro.existePeca(pos_brancas[1])){
+                        this.podeRoquePeq = false;
+                    }
+                } else {
+                	Peca peca = tabuleiro.getPeca(new Posicao("h8"));
+                	if (!tabuleiro.existePeca(new Posicao("h8")) || !(peca instanceof Torre) || peca.cor != this.cor) {
+                		this.podeRoquePeq = false;
+                	}
+                	if (peca instanceof Torre && peca.cor == this.cor && ((Torre) peca).jaMoveu) {//verifica se a torre já moveu para poder rocar
+                	    this.podeRoquePeq = false;
+                	}
+                    if (casaAtacada(pos_pretas[0], tabuleiro) || casaAtacada(pos_pretas[1], tabuleiro)
+                            || tabuleiro.existePeca(pos_pretas[0]) || tabuleiro.existePeca(pos_pretas[1])){
+                        this.podeRoquePeq = false;
+                    }
+                }
+        	}
+        }
+        return this.podeRoquePeq;
+    }
+    
+    public boolean verificaRoqueGrande(Tabuleiro tabuleiro) {
+        Posicao[] pos_brancas = {
+                new Posicao("d1"), 
+                new Posicao("c1"),
+                new Posicao("b1") 
+        };
+        
+        Posicao[] pos_pretas = {
+                new Posicao("d8"), 
+                new Posicao("c8"),
+                new Posicao("b8") 
+        };
+
+        if (jaMoveu == true) {
+            this.podeRoqueGrande = false;
+        } else {
+        	if (estaXeque) {
+        		this.podeRoqueGrande = false;
+        	} else {
+                if (this.cor == 0) {
+                	Peca peca = tabuleiro.getPeca(new Posicao("a1"));
+                	if (!tabuleiro.existePeca(new Posicao("a1")) || !(peca instanceof Torre) || peca.cor != this.cor) {
+                		this.podeRoqueGrande = false;
+                	}
+                	if (peca instanceof Torre && peca.cor == this.cor && ((Torre) peca).jaMoveu) {
+                		this.podeRoqueGrande = false;
+                	}
+                    if (casaAtacada(pos_brancas[0], tabuleiro) || casaAtacada(pos_brancas[1], tabuleiro) || casaAtacada(pos_brancas[2], tabuleiro) 
+                    || tabuleiro.existePeca(pos_brancas[0]) || tabuleiro.existePeca(pos_brancas[1]) || tabuleiro.existePeca(pos_brancas[2])) {
+                        this.podeRoqueGrande = false;
+                    }
+                } else {
+                	Peca peca = tabuleiro.getPeca(new Posicao("a8"));
+                	if (!tabuleiro.existePeca(new Posicao("a8")) || !(peca instanceof Torre) || peca.cor != this.cor) {
+                		this.podeRoqueGrande = false;
+                	}
+                	if (peca instanceof Torre && peca.cor == this.cor && ((Torre) peca).jaMoveu) {
+                		this.podeRoqueGrande = false;
+                	}
+                    if (casaAtacada(pos_pretas[0], tabuleiro) || casaAtacada(pos_pretas[1], tabuleiro) || casaAtacada(pos_pretas[2], tabuleiro) 
+                            || tabuleiro.existePeca(pos_pretas[0]) || tabuleiro.existePeca(pos_pretas[1]) || tabuleiro.existePeca(pos_pretas[2])) {
+                        this.podeRoqueGrande = false;
+                    }
+                }
+        	}
+        }
+        return this.podeRoqueGrande;
+    }
+		
 	
 	@Override
 	public ArrayList<Posicao> movValidos(Tabuleiro tabuleiro) {
@@ -131,21 +245,21 @@ public class Rei extends Peca {
 	        }
 	    }
 	    
-	    // esta em xeque?
+	    if(verificaRoquePeq(tabuleiro)) {
+	    	if(this.cor == 0) {
+		    	movimentos.add(new Posicao("g1")); 
+	    	} else{
+	    		movimentos.add(new Posicao("g8")); 
+	    	}
+	    }
 	    
-		for (int lin = 0; lin < 8; lin ++) {
-			for (int col = 0; col < 8; col ++) {
-				Peca peca = tabuleiro.getPeca(new Posicao(lin,col));
-				if (peca.cor != this.cor) {
-					if (peca.movValidos(tabuleiro).contains(this.posicao)){
-						this.estaXeque = true;
-					}
-				}
-
-			}
-		}
-		
-		// pode roque
+	    if(verificaRoqueGrande(tabuleiro)) {
+	    	if(this.cor == 0) {
+		    	movimentos.add(new Posicao("c1")); 
+	    	} else{
+	    		movimentos.add(new Posicao("c8")); 
+	    	}
+	    }   
 
 	    return movimentos;
 	}

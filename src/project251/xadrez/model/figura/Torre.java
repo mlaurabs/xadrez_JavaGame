@@ -6,7 +6,7 @@ import project251.xadrez.model.tabuleiro.Posicao;
 import project251.xadrez.model.tabuleiro.Tabuleiro;
 
 public class Torre extends Peca {
-	private boolean jaMoveu = false; 
+	public boolean jaMoveu = false; 
 
 	public Torre(Posicao posicao, int cor) {
 		super(posicao, cor);
