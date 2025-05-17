@@ -2,13 +2,15 @@ package project251.xadrez.model.api;
 
 import project251.xadrez.model.tabuleiro.Posicao;
 import project251.xadrez.model.tabuleiro.Tabuleiro;
+import project251.xadrez.model.figura.Peao;
 import project251.xadrez.model.figura.Peca;
+import project251.xadrez.model.figura.Rei;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class XadrezFacade {
-
+	
     public static void main(String[] args) {
         Tabuleiro tabuleiro = new Tabuleiro();
         tabuleiro.comecaJogo();
@@ -16,6 +18,22 @@ public class XadrezFacade {
 
         Jogador jogadorAtual = Jogador.B;
 
+        System.out.println("\n============= XADREZ" + " =============");
+        System.out.println("\n***** LEGENDA" + " *****");
+        System.out.println("\n*Peças*\n");
+        System.out.println("D - Dama");
+        System.out.println("R - Rei");
+        System.out.println("T - Torre");
+        System.out.println("B - Bispo");
+        System.out.println("C - Cavalo");
+        System.out.println("P - Peão");
+        System.out.println("\n*Jogadores*\n");
+        System.out.println("B - Branco");
+        System.out.println("P - Preto");
+        System.out.println("\n*Exemplo*\n");
+        System.out.println("TB: torre branca\n");
+        System.out.println("\n========== INCIANDO JOGO" + " ==========");
+        
         while (true) {
         	
             System.out.println("\n===== TURNO DO JOGADOR " + jogadorAtual.getNome() + " =====");
@@ -24,6 +42,11 @@ public class XadrezFacade {
             System.out.print("\nDigite a posição da peça que deseja mover (ex: e2): ");
             String origemStr = scanner.nextLine();
 
+            if("sair".equalsIgnoreCase(origemStr)) {
+            	System.out.println("Jogo Encerrado!");
+                System.exit(0); // Encerra o programa completamente
+            }
+            
             Posicao origem;
             try {
                 origem = new Posicao(origemStr);
@@ -67,14 +90,20 @@ public class XadrezFacade {
                 continue;
             }
 
-			/*
-			 * if (!movimentosValidos.contains(destino)) {
-			 * System.out.println("Movimento inválido para essa peça."); continue; }
-			 */
 
             tabuleiro.moverPeca(origem, destino, jogadorAtual);
+
+            
+            // Verifica se é um peão chegando à última linha
+    	    if (peca instanceof Peao && (destino.getLinha() == 0 || destino.getLinha() == 7)) {
+    	        Peca novaPeca = tabuleiro.escolherPromocao(destino, peca.cor, new Scanner(System.in));
+    	        tabuleiro.promovePeca(peca, novaPeca, destino);
+    	        tabuleiro.exibirTabuleiro();
+    	    }
+    	    
             Jogador.imprimirPlacarFormatado();
             jogadorAtual = jogadorAtual.proximo(); // alterna turno
         }
     }
 }
+

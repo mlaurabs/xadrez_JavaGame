@@ -14,7 +14,6 @@ public class Peao extends Peca {
 		return jaMoveu;
 	}
 
-
 	public void setJaMoveu(boolean jaMoveu) {
 		this.jaMoveu = jaMoveu;
 	}

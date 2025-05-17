@@ -2,6 +2,7 @@ package project251.xadrez.model.tabuleiro;
 import project251.xadrez.model.api.Jogador;
 import java.util.ArrayList;
 import project251.xadrez.model.figura.*;
+import java.util.Scanner;
 
 public class Tabuleiro {
 
@@ -18,6 +19,12 @@ public class Tabuleiro {
             throw new IllegalArgumentException("Já existe uma peça na posição " + posicao);
         }
         pecas[posicao.getLinha()][posicao.getColuna()] = peca;
+    }
+    
+    public void promovePeca(Peca antiga, Peca nova, Posicao posicao) {
+    	if (existePeca(posicao) && antiga instanceof Peao) {
+    		pecas[posicao.getLinha()][posicao.getColuna()] = nova;
+        }
     }
     
     public void comecaJogo() {
@@ -109,6 +116,29 @@ public class Tabuleiro {
         return getPeca(posicao) != null;
     }
     
+    public Peca escolherPromocao(Posicao posicao, int cor, Scanner scanner) {
+        System.out.println("\nPROMOÇÃO DE PEÃO!");
+        System.out.println("Escolha a peça para promover:");
+        System.out.println("1 - Dama");
+        System.out.println("2 - Torre");
+        System.out.println("3 - Bispo");
+        System.out.println("4 - Cavalo");
+        
+        while (true) {
+            System.out.print("Opção (1-4): ");
+            int opcao = scanner.nextInt();
+            scanner.nextLine(); // Limpa o buffer
+            
+            switch (opcao) {
+                case 1: return new Dama(posicao, cor);
+                case 2: return new Torre(posicao, cor);
+                case 3: return new Bispo(posicao, cor);
+                case 4: return new Cavalo(posicao, cor);
+                default: System.out.println("Opção inválida!");
+            }
+        }
+    }
+    
     public void moverPeca(Posicao origem, Posicao destino, Jogador j) {
         Peca peca = getPeca(origem);
         Peca peca_destino = getPeca(destino);
@@ -120,17 +150,22 @@ public class Tabuleiro {
 		 if (!peca.movValidos(this).contains(destino)) { throw new
 			 IllegalArgumentException("Movimento inválido para a peça em: " + destino); }
 		 
-        // Remover peça capturada (se houver)
-        if (existePeca(destino)) {
+    	
+	     // Remover peça capturada (se houver)
+	    if (existePeca(destino)) {
             removerPeca(destino);
-			/* j.adicionarPecaCapturada(peca_destino.getTipoPeca()); */
+			j.adicionarPecaCapturada(peca_destino.getTipoPeca());
+        }
+        
+        if (peca instanceof Peao peao) {
+            peao.setJaMoveu(true);
         }
 
         // Mover peça
         removerPeca(origem);
         peca.setPosicao(destino);
         colocarPeca(peca, destino);
-        //System.out.println(j.getPecasCapturadasString());
+	    
     }
 
     
