@@ -45,6 +45,10 @@ public class Rei extends Peca {
     public void verificaXeque(Tabuleiro tabuleiro) {
         this.estaXeque = casaAtacada(this.posicao, tabuleiro);
     }
+    
+    public boolean estaEmXeque() {
+        return this.estaXeque;
+    }
 
     public boolean verificaRoquePeq(Tabuleiro tabuleiro) {
         Posicao[] pos_brancas = {
