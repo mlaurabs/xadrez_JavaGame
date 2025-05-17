@@ -42,7 +42,6 @@ public enum Jogador {
     	if (!isPecaValida(tipo)) {
             throw new IllegalArgumentException("Tipo de peça inválido: " + tipo);
         }
-    	System.out.println("peça capturada adicionada");
     	pecasCapturadas.put(tipo, pecasCapturadas.getOrDefault(tipo, 0) + 1);
     }
     

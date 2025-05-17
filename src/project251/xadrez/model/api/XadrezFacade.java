@@ -96,9 +96,10 @@ public class XadrezFacade {
             
             // Verifica se é um peão chegando à última linha
     	    if (peca instanceof Peao && (destino.getLinha() == 0 || destino.getLinha() == 7)) {
-    	        Peca novaPeca = tabuleiro.escolherPromocao(destino, peca.cor, new Scanner(System.in));
+    	    	System.out.println("\n***** PEÃO ANTES DA PROMOÇÃO ***** \n");
+    	    	tabuleiro.exibirTabuleiro();
+    	    	Peca novaPeca = tabuleiro.escolherPromocao(destino, peca.cor, new Scanner(System.in));
     	        tabuleiro.promovePeca(peca, novaPeca, destino);
-    	        tabuleiro.exibirTabuleiro();
     	    }
     	    
             Jogador.imprimirPlacarFormatado();
