@@ -56,7 +56,7 @@ public class Peao extends Peca {
             }
         }
 
-        Posicao diag_dir = new Posicao(linha + 1*mov_cor, coluna + 1*mov_cor);
+        Posicao diag_dir = new Posicao(linha + mov_cor, coluna + 1);
         if (tabuleiro.posicaoExiste(diag_dir)) {
             if (tabuleiro.existePeca(diag_dir)) { //se houver uma peça da cor oposta na diagonal o peão pode capturar
                 if (tabuleiro.getPeca(diag_dir).cor != this.cor) {
@@ -65,7 +65,7 @@ public class Peao extends Peca {
             }
         }
 
-        Posicao diag_esq = new Posicao(linha - 1*mov_cor, coluna + 1*mov_cor);
+        Posicao diag_esq = new Posicao(linha + mov_cor, coluna - 1);
         if (tabuleiro.posicaoExiste(diag_esq)) {
             if (tabuleiro.existePeca(diag_esq)) { //se houver uma peça da cor oposta na diagonal o peão pode capturar
                 if (tabuleiro.getPeca(diag_esq).cor != this.cor) {

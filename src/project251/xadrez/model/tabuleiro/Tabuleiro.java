@@ -108,6 +108,28 @@ public class Tabuleiro {
         return getPeca(posicao) != null;
     }
     
+    public void moverPeca(Posicao origem, Posicao destino) {
+        Peca peca = getPeca(origem);
+        if (peca == null) {
+            throw new IllegalArgumentException("Não há peça na posição de origem: " + origem);
+        }
+
+        // Verifica se o movimento é válido
+		 if (!peca.movValidos(this).contains(destino)) { throw new
+			 IllegalArgumentException("Movimento inválido para a peça em: " + destino); }
+		 
+        // Remover peça capturada (se houver)
+        if (existePeca(destino)) {
+            removerPeca(destino);
+        }
+
+        // Mover peça
+        removerPeca(origem);
+        peca.setPosicao(destino);
+        colocarPeca(peca, destino);
+    }
+
+    
     public ArrayList<Peca> getPecasPorCor(int cor) {
         ArrayList<Peca> pecasCor = new ArrayList<>();
         for (int linha = 0; linha < LINHAS; linha++) {

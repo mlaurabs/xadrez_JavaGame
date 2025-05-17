@@ -22,9 +22,9 @@ public abstract class Peca {
     
     public String getCor() {
         if (cor == 0) {
-            return "b";
+            return "B";
         } else {
-            return "p";
+            return "P";
         }
     }
 
