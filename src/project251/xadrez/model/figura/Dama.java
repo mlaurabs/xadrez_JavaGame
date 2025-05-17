@@ -7,169 +7,52 @@ import project251.xadrez.model.tabuleiro.Tabuleiro;
 
 public class Dama extends Peca {
 
-	public Dama(Posicao posicao, int cor) {
-		super(posicao, cor);
-	}
-	
-	@Override
-	public String toString() {
-	    return "D"+this.getCor();
-	}
-	
-	// para cada movimento, temos que verificar se não é um movimento ilegal
-	// movimentos ilegais: o rei está em xeque, o rei fica em xeque após o seu movimento
-	@Override
-	public ArrayList<Posicao> movValidos(Tabuleiro tabuleiro) {
-		ArrayList<Posicao> movimentos = new ArrayList<>();
-        int linha = posicao.getLinha();
-        int coluna = posicao.getColuna();
-        int mov_cor;
+    public Dama(Posicao posicao, int cor) {
+        super(posicao, cor);
+    }
 
-     // Determina a direção do movimento com base na cor da peça
-     if (this.cor == 0) { // se as peças forem brancas elas andam para frente
-         mov_cor = 1;
-     } else {
-         mov_cor = -1; // se as peças forem pretas, elas andam para trás
-     }
+    @Override
+    public String toString() {
+        return "D" + this.getCor();
+    }
 
-     // Diagonal superior direita (linha + i, coluna + i)
-     int i = 1;
-     Posicao diagonal_dir;
-     do {
-         if (!tabuleiro.posicaoExiste(new Posicao(linha + i * mov_cor, coluna + i))) {
-             break;  // Sai do loop se a posição não existir
-         }
-         diagonal_dir = new Posicao(linha + i * mov_cor, coluna + i);  // Atualiza a posição
-         if (!tabuleiro.existePeca(diagonal_dir)) {
-             movimentos.add(diagonal_dir);  // Adiciona movimento se não houver peça
-         }
-         i++;
-     } while (!tabuleiro.existePeca(diagonal_dir) && tabuleiro.posicaoExiste(diagonal_dir));
+    @Override
+    public ArrayList<Posicao> movValidos(Tabuleiro tabuleiro) {
+        ArrayList<Posicao> movimentos = new ArrayList<>();
 
-     // Diagonal inferior direita (linha - i, coluna + i)
-     i = 1;
-     Posicao diagonal_dir_inf;
-     do {
-         if (!tabuleiro.posicaoExiste(new Posicao(linha - i * mov_cor, coluna + i))) {
-             break;  // Sai do loop se a posição não existir
-         }
-         diagonal_dir_inf = new Posicao(linha - i * mov_cor, coluna + i);  // Atualiza a posição
-         if (!tabuleiro.existePeca(diagonal_dir_inf)) {
-             movimentos.add(diagonal_dir_inf);  // Adiciona movimento se não houver peça
-         }
-         i++;
-     } while (!tabuleiro.existePeca(diagonal_dir_inf) && tabuleiro.posicaoExiste(diagonal_dir_inf));
+        // Todas as 8 direções possíveis da dama: diagonais, horizontais e verticais
+        int[][] direcoes = {
+            {-1, -1}, {-1, 0}, {-1, 1},  // diagonal sup-esq, cima, diagonal sup-dir
+            {0, -1},           {0, 1},   // esquerda,       , direita
+            {1, -1},  {1, 0},  {1, 1}    // diagonal inf-esq, baixo, diagonal inf-dir
+        };
 
-     // Diagonal superior esquerda (linha + i, coluna - i)
-     i = 1;
-     Posicao diagonal_esq;
-     do {
-         if (!tabuleiro.posicaoExiste(new Posicao(linha + i * mov_cor, coluna - i))) {
-             break;  // Sai do loop se a posição não existir
-         }
-         diagonal_esq = new Posicao(linha + i * mov_cor, coluna - i);  // Atualiza a posição
-         if (!tabuleiro.existePeca(diagonal_esq)) {
-             movimentos.add(diagonal_esq);  // Adiciona movimento se não houver peça
-         }
-         i++;
-     } while (!tabuleiro.existePeca(diagonal_esq) && tabuleiro.posicaoExiste(diagonal_esq));
+        for (int[] direcao : direcoes) {
+            int novaLinha = posicao.getLinha() + direcao[0];
+            int novaColuna = posicao.getColuna() + direcao[1];
 
-     // Diagonal inferior esquerda (linha - i, coluna - i)
-     i = 1;
-     Posicao diagonal_esq_inf;
-     do {
-         if (!tabuleiro.posicaoExiste(new Posicao(linha - i * mov_cor, coluna - i))) {
-             break;  // Sai do loop se a posição não existir
-         }
-         diagonal_esq_inf = new Posicao(linha - i * mov_cor, coluna - i);  // Atualiza a posição
-         if (!tabuleiro.existePeca(diagonal_esq_inf)) {
-             movimentos.add(diagonal_esq_inf);  // Adiciona movimento se não houver peça
-         }
-         i++;
-     } while (!tabuleiro.existePeca(diagonal_esq_inf) && tabuleiro.posicaoExiste(diagonal_esq_inf));
-     
-     // Diagonal superior direita (linha + i, coluna + i)
-     i = 1;
-     Posicao frente;
-     do {
-         if (!tabuleiro.posicaoExiste(new Posicao(linha + i * mov_cor, coluna))) {
-             break;  // Sai do loop se a posição não existir
-         }
-         frente = new Posicao(linha + i * mov_cor, coluna);  // Atualiza a posição
-         if (!tabuleiro.existePeca(frente)) {
-             movimentos.add(frente);  // Adiciona movimento se não houver peça
-         } else {
-        	 if (this.cor != tabuleiro.getPeca(frente).cor) {
-            	 movimentos.add(frente); 
-        	 }
-        	 break;
-         }
-         i++;
-     } while (!tabuleiro.existePeca(frente) && tabuleiro.posicaoExiste(frente));
+            while (tabuleiro.posicaoExiste(new Posicao(novaLinha, novaColuna))) {
+                Posicao novaPos = new Posicao(novaLinha, novaColuna);
 
-     // Diagonal inferior direita (linha - i, coluna + i)
-     i = 1;
-     Posicao tras;
-     do {
-         if (!tabuleiro.posicaoExiste(new Posicao(linha - i * mov_cor, coluna))) {
-             break;  // Sai do loop se a posição não existir
-         }
-         tras = new Posicao(linha - i * mov_cor, coluna);  // Atualiza a posição
-         if (!tabuleiro.existePeca(tras)) {
-             movimentos.add(tras);  // Adiciona movimento se não houver peça
-         } else {
-        	 if (this.cor != tabuleiro.getPeca(tras).cor) {
-            	 movimentos.add(tras); 
-        	 }
-        	 break;
-         }
-         i++;
-     } while (!tabuleiro.existePeca(tras) && tabuleiro.posicaoExiste(tras));
+                if (!tabuleiro.existePeca(novaPos)) {
+                    movimentos.add(novaPos);
+                } else {
+                    if (this.cor != tabuleiro.getPeca(novaPos).cor) {
+                        movimentos.add(novaPos); // Pode capturar inimigo
+                    }
+                    break; // Encerra o caminho nessa direção
+                }
 
-     // Diagonal superior esquerda (linha + i, coluna - i)
-     i = 1;
-     Posicao esq;
-     do {
-         if (!tabuleiro.posicaoExiste(new Posicao(linha, coluna - i * mov_cor))) {
-             break;  // Sai do loop se a posição não existir
-         }
-         esq = new Posicao(linha, coluna - i * mov_cor);  // Atualiza a posição
-         if (!tabuleiro.existePeca(esq)) {
-             movimentos.add(esq);  // Adiciona movimento se não houver peça
-         } else {
-        	 if (this.cor != tabuleiro.getPeca(esq).cor) {
-            	 movimentos.add(esq); 
-        	 }
-        	 break;
-         }
-         i++;
-     } while (!tabuleiro.existePeca(esq) && tabuleiro.posicaoExiste(esq));
+                novaLinha += direcao[0];
+                novaColuna += direcao[1];
+            }
+        }
 
-     // Diagonal inferior esquerda (linha - i, coluna - i)
-     i = 1;
-     Posicao dir;
-     do {
-         if (!tabuleiro.posicaoExiste(new Posicao(linha, coluna + i * mov_cor))) {
-             break;  // Sai do loop se a posição não existir
-         }
-         dir = new Posicao(linha, coluna + i * mov_cor);  // Atualiza a posição
-         if (!tabuleiro.existePeca(dir)) {
-             movimentos.add(dir);  // Adiciona movimento se não houver peça
-         } else {
-        	 if (this.cor != tabuleiro.getPeca(dir).cor) {
-            	 movimentos.add(dir); 
-        	 }
-        	 break;
-         }
-         i++;
-     } while (!tabuleiro.existePeca(dir) && tabuleiro.posicaoExiste(dir));
+        return movimentos;
+    }
 
-		return movimentos;
-	}
-
-	@Override
-	public String getTipoPeca() {
-		return "D";
-	}
-	
+    @Override
+    public String getTipoPeca() {
+        return "D";
+    }
 }

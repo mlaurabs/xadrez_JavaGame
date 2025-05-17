@@ -14,12 +14,10 @@ import project251.xadrez.model.tabuleiro.Tabuleiro;
 import java.util.List;
 
 /**
- * Classe de testes para verificar o comportamento do movimento dos Bispos no
- * tabuleiro de xadrez.
- * 
- * Os testes consideram: - Movimentos diagonais ilimitados - Bloqueio por peças
- * da mesma cor - Captura de peças adversárias - Restrição a movimentos
- * não-diagonais
+ * Os testes consideram: 
+ * - Movimentos diagonais ilimitados 
+ * - Bloqueio por peças da mesma cor 
+ * - Restrição a movimentos não-diagonais
  */
 public class TesteBispo {
 

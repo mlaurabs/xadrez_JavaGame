@@ -13,12 +13,9 @@ import project251.xadrez.model.tabuleiro.Tabuleiro;
 import java.util.List;
 
 /**
- * Classe de testes para verificar o comportamento do movimento das Torres no tabuleiro de xadrez.
- * 
  * Os testes consideram:
  * - Movimentos horizontais e verticais ilimitados
  * - Bloqueio por peças da mesma cor
- * - Captura de peças adversárias
  */
 public class TesteTorre {
 

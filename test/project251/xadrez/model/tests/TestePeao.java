@@ -13,9 +13,7 @@ import project251.xadrez.model.tabuleiro.Tabuleiro;
 import java.util.List;
 
 /**
- * Classe de testes para verificar o comportamento do movimento dos peões no tabuleiro de xadrez.
- * 
- * Os testes são realizados usando o framework JUnit 4 e consideram:
+ * Os testes consideram:
  * - Movimentos válidos no início do jogo
  * - Restrições de movimento após o primeiro lance
  * - Validação de movimentos diagonais
