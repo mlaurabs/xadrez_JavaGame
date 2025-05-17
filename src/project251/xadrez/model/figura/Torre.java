@@ -119,5 +119,10 @@ public class Torre extends Peca {
 
 		return movimentos;
 	}
+
+	@Override
+	public String getTipoPeca() {
+		return "T";
+	}
 	
 }

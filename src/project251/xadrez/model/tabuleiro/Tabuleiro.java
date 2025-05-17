@@ -1,4 +1,5 @@
 package project251.xadrez.model.tabuleiro;
+import project251.xadrez.model.api.Jogador;
 import java.util.ArrayList;
 import project251.xadrez.model.figura.*;
 
@@ -108,8 +109,9 @@ public class Tabuleiro {
         return getPeca(posicao) != null;
     }
     
-    public void moverPeca(Posicao origem, Posicao destino) {
+    public void moverPeca(Posicao origem, Posicao destino, Jogador j) {
         Peca peca = getPeca(origem);
+        Peca peca_destino = getPeca(destino);
         if (peca == null) {
             throw new IllegalArgumentException("Não há peça na posição de origem: " + origem);
         }
@@ -121,12 +123,14 @@ public class Tabuleiro {
         // Remover peça capturada (se houver)
         if (existePeca(destino)) {
             removerPeca(destino);
+			/* j.adicionarPecaCapturada(peca_destino.getTipoPeca()); */
         }
 
         // Mover peça
         removerPeca(origem);
         peca.setPosicao(destino);
         colocarPeca(peca, destino);
+        //System.out.println(j.getPecasCapturadasString());
     }
 
     

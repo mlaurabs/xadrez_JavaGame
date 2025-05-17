@@ -166,5 +166,10 @@ public class Dama extends Peca {
 
 		return movimentos;
 	}
+
+	@Override
+	public String getTipoPeca() {
+		return "D";
+	}
 	
 }

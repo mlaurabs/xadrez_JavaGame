@@ -264,5 +264,10 @@ public class Rei extends Peca {
 	    return movimentos;
 	}
 
+	@Override
+	public String getTipoPeca() {
+		return "R";
+	}
+
 }
 

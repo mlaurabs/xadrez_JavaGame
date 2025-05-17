@@ -17,55 +17,53 @@ public class XadrezFacade {
         Jogador jogadorAtual = Jogador.B;
 
         while (true) {
-            System.out.println("\n===== TURNO DO JOGADOR " + jogadorAtual + " =====");
+        	
+            System.out.println("\n===== TURNO DO JOGADOR " + jogadorAtual.getNome() + " =====");
             tabuleiro.exibirTabuleiro();
 
-            System.out.print("Digite a posição da peça que deseja mover (ex: e2): ");
+            System.out.print("\nDigite a posição da peça que deseja mover (ex: e2): ");
             String origemStr = scanner.nextLine();
 
             Posicao origem;
             try {
                 origem = new Posicao(origemStr);
             } catch (IllegalArgumentException e) {
-                System.out.println("Posição inválida.");
+                System.out.println("\nPosição inválida.");
                 continue;
             }
 
             Peca peca = tabuleiro.getPeca(origem);
             if (peca == null) {
-                System.out.println("Não há peça nessa posição.");
+                System.out.println("\nNão há peça nessa posição.");
                 continue;
             }
-
-            System.out.println("jogador atual " + jogadorAtual.toString());
+            
             if (!peca.getCor().toString().equalsIgnoreCase(jogadorAtual.toString())) {
-                System.out.println("Você só pode mover suas próprias peças!");
+                System.out.println("\nVocê só pode mover suas próprias peças!");
                 continue;
             }
 
             List<Posicao> movimentosValidos = peca.movValidos(tabuleiro);
             if (movimentosValidos.isEmpty()) {
-                System.out.println("Essa peça não tem movimentos válidos.");
+                System.out.println("\nEssa peça não tem movimentos válidos.");
                 continue;
             }
 
-            System.out.println("Movimentos válidos:");
+            System.out.println("\nMovimentos válidos:");
             for (Posicao destino : movimentosValidos) {
                 System.out.print(destino + " ");
             }
             System.out.println();
 
-            System.out.print("Digite a posição de destino (ex: e4): ");
+            System.out.print("\nDigite a posição de destino (ex: e4): ");
             String destinoStr = scanner.nextLine();
             
             System.out.println(destinoStr);
             Posicao destino;
             try {
                 destino = new Posicao(destinoStr);
-                System.out.println("linha: " + destino.getLinha());
-                System.out.println("coluna: " + destino.getColuna());
             } catch (IllegalArgumentException e) {
-                System.out.println("Posição de destino inválida.");
+                System.out.println("\nPosição de destino inválida.");
                 continue;
             }
 
@@ -74,7 +72,8 @@ public class XadrezFacade {
 			 * System.out.println("Movimento inválido para essa peça."); continue; }
 			 */
 
-            tabuleiro.moverPeca(origem, destino);
+            tabuleiro.moverPeca(origem, destino, jogadorAtual);
+            Jogador.imprimirPlacarFormatado();
             jogadorAtual = jogadorAtual.proximo(); // alterna turno
         }
     }

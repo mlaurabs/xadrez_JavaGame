@@ -109,5 +109,10 @@ public class Bispo extends Peca {
 
 		return movimentos;
 	}
+
+	@Override
+	public String getTipoPeca() {
+		return "B";
+	}
 	
 }

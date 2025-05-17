@@ -47,4 +47,9 @@ public class Cavalo extends Peca {
 	    return movimentos;
 	}
 
+	@Override
+	public String getTipoPeca() {
+		return "C";
+	}
+
 }

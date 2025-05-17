@@ -72,8 +72,14 @@ public class Peao extends Peca {
                     movimentos.add(diag_esq);
                 }
             }
-        }
+        };
+        
 
 		return movimentos;
+	}
+
+	@Override
+	public String getTipoPeca() {
+		return "P";
 	}
 }

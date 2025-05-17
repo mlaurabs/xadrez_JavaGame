@@ -32,6 +32,6 @@ public abstract class Peca {
     public void setCor(int cor) {
         this.cor = cor;
     }
-    
+    public abstract String getTipoPeca();
     public abstract ArrayList<Posicao> movValidos(Tabuleiro tabuleiro);
 }
