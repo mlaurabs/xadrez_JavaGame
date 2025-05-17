@@ -139,7 +139,7 @@ public class Tabuleiro {
         }
     }
     
-    public void moverPeca(Posicao origem, Posicao destino, Jogador j) {
+    public boolean moverPeca(Posicao origem, Posicao destino, Jogador j) {
         Peca peca = getPeca(origem);
         Peca peca_destino = getPeca(destino);
         if (peca == null) {
@@ -148,23 +148,25 @@ public class Tabuleiro {
 
         // Verifica se o movimento é válido
 		 if (!peca.movValidos(this).contains(destino)) { throw new
-			 IllegalArgumentException("Movimento inválido para a peça em: " + destino); }
-		 
-    	
-	     // Remover peça capturada (se houver)
-	    if (existePeca(destino)) {
-            removerPeca(destino);
-			j.adicionarPecaCapturada(peca_destino.getTipoPeca());
-        }
-        
-        if (peca instanceof Peao peao) {
-            peao.setJaMoveu(true);
-        }
+			 IllegalArgumentException("Movimento inválido para a peça em: " + destino); 
+		 } else {
+		     // Remover peça capturada (se houver)
+			    if (existePeca(destino)) {
+		            removerPeca(destino);
+					j.adicionarPecaCapturada(peca_destino.getTipoPeca());
+		        }
+		        
+		        if (peca instanceof Peao peao) {
+		            peao.setJaMoveu(true);
+		        }
 
-        // Mover peça
-        removerPeca(origem);
-        peca.setPosicao(destino);
-        colocarPeca(peca, destino);
+		        // Mover peça
+		        removerPeca(origem);
+		        peca.setPosicao(destino);
+		        colocarPeca(peca, destino);
+		        return true;
+
+		 }
 	    
     }
 

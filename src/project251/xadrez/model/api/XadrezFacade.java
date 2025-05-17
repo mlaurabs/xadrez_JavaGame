@@ -91,7 +91,7 @@ public class XadrezFacade {
             }
 
 
-            tabuleiro.moverPeca(origem, destino, jogadorAtual);
+            System.out.println(tabuleiro.moverPeca(origem, destino, jogadorAtual));
 
             
             // Verifica se é um peão chegando à última linha
