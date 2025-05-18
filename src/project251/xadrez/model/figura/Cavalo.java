@@ -17,7 +17,7 @@ public class Cavalo extends Peca {
 	}
 	
 	// para cada movimento, temos que verificar se não é um movimento ilegal
-	// movimentos ilegais: o rei está em xeque, o rei fica em xeque após o seu movimento
+	// movimentos ilegais: o rei está em xeque
 	@Override
 	public ArrayList<Posicao> movValidos(Tabuleiro tabuleiro) {
 	    ArrayList<Posicao> movimentos = new ArrayList<>();

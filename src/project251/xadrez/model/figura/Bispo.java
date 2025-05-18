@@ -15,8 +15,7 @@ public class Bispo extends Peca {
 	    return "B"+this.getCor();
 	}
 	
-	// para cada movimento, temos que verificar se não é um movimento ilegal
-	// movimentos ilegais: o rei está em xeque, o rei fica em xeque após o seu movimento
+	// para cada movimento, temos que verificar os movimentos possiveis
 	@Override
 	public ArrayList<Posicao> movValidos(Tabuleiro tabuleiro) {
 		ArrayList<Posicao> movimentos = new ArrayList<>();
@@ -25,10 +24,10 @@ public class Bispo extends Peca {
         int mov_cor;
 
      // Determina a direção do movimento com base na cor da peça
-     if (this.cor == 0) { // se as peças forem brancas elas andam para frente
+     if (this.cor == 0) { // esse trecho do codigo deixa 'simetrico' os movimentos
          mov_cor = 1;
      } else {
-         mov_cor = -1; // se as peças forem pretas, elas andam para trás
+         mov_cor = -1; 
      }
 
      // Diagonal superior direita (linha + i, coluna + i)
@@ -114,7 +113,8 @@ public class Bispo extends Peca {
 	public String getTipoPeca() {
 		return "B";
 	}
-
+	
+	// o mesmo das outras classes
     public Peca clonar(Tabuleiro tabuleiro) {
         Bispo clone = new Bispo(posicao, cor);
         clone.setPosicao(new Posicao(this.posicao.getLinha(), this.posicao.getColuna()));

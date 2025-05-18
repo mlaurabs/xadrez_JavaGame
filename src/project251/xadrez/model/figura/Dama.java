@@ -6,7 +6,10 @@ import project251.xadrez.model.tabuleiro.Posicao;
 import project251.xadrez.model.tabuleiro.Tabuleiro;
 
 public class Dama extends Peca {
-
+	/**
+	 * Representa a peça Dama no jogo de xadrez.
+	 * Controla movimentos válidos, estado de movimento e clonagem.
+	 */
     public Dama(Posicao posicao, int cor) {
         super(posicao, cor);
     }
@@ -15,7 +18,8 @@ public class Dama extends Peca {
     public String toString() {
         return "D" + this.getCor();
     }
-
+    
+	// para cada movimento, temos que verificar os movimentos possiveis
     @Override
     public ArrayList<Posicao> movValidos(Tabuleiro tabuleiro) {
         ArrayList<Posicao> movimentos = new ArrayList<>();
@@ -26,7 +30,13 @@ public class Dama extends Peca {
             {0, -1},           {0, 1},   // esquerda,       , direita
             {1, -1},  {1, 0},  {1, 1}    // diagonal inf-esq, baixo, diagonal inf-dir
         };
-
+        
+        /**
+         * Para cada direção, ele verifica se não há nenhuma peça atrapalhando.
+         * Se for uma peça da sua cor, ele para e segue para verificar outra direção.
+         * Se for uma peça de outra cor, ele adiciona a captura e depois para.
+         */
+        
         for (int[] direcao : direcoes) {
             int novaLinha = posicao.getLinha() + direcao[0];
             int novaColuna = posicao.getColuna() + direcao[1];
@@ -55,7 +65,9 @@ public class Dama extends Peca {
     public String getTipoPeca() {
         return "D";
     }
-
+    
+    
+    // o mesmo das outras peças
     public Peca clonar(Tabuleiro tabuleiro) {
         Dama clone = new Dama(posicao, cor);
         clone.setPosicao(new Posicao(this.posicao.getLinha(), this.posicao.getColuna()));
