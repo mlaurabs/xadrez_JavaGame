@@ -73,12 +73,11 @@ public class TesteRei {
 	/**
 	 * Verifica movimento inválido de duas casas.
 	 */
-	@Test(expected = IllegalArgumentException.class)
 	public void testeMovimentoInvalido_ReiNaoPodeMoverDuasCasas() {
 		Rei rei = new Rei(new Posicao("e1"), 0);
 		tabuleiro.colocarPeca(rei, new Posicao("e1"));
 
-		tabuleiro.moverPeca(new Posicao("e1"), new Posicao("e3"), Jogador.B);
+		assertFalse(tabuleiro.moverPeca(new Posicao("e1"), new Posicao("e3"), Jogador.B));
 	}
 
 

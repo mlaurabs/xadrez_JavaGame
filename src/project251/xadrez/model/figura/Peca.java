@@ -38,7 +38,6 @@ public abstract class Peca {
         }
     }
 
-
     public void setCor(int cor) {
         this.cor = cor;
     }

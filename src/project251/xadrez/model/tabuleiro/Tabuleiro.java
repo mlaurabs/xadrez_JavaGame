@@ -4,16 +4,35 @@ import java.util.ArrayList;
 import project251.xadrez.model.figura.*;
 import java.util.Scanner;
 
+/**
+ * Representa o tabuleiro de xadrez e suas operações básicas.
+ * Gerencia a posição das peças, movimentos válidos e estado do jogo.
+ */
 public class Tabuleiro {
 
     private static final int LINHAS = 8;
     private static final int COLUNAS = 8;
     private Peca[][] pecas;
     
+    /**
+     * Constrói um tabuleiro vazio de xadrez.
+     */
     public Tabuleiro() {
         pecas = new Peca[LINHAS][COLUNAS];
     }
 
+    public int getLinhas() {
+        return LINHAS;
+    }
+
+    public int getColunas() {
+        return COLUNAS;
+    }
+    
+    /**
+     * Cria uma cópia deste tabuleiro.
+     * @return Novo objeto Tabuleiro com cópias de todas as peças
+     */
     public Tabuleiro clonar() {
     Tabuleiro copia = new Tabuleiro();
 
@@ -32,6 +51,12 @@ public class Tabuleiro {
     return copia;
     }
     
+    /**
+     * Coloca uma peça em determinada posição do tabuleiro.
+     * @param peca (Peça) a ser posicionada
+     * @param posicao (Posicao) com coordenadas (linha, coluna)
+     * @throws IllegalArgumentException Se a posição já estiver ocupada
+     */
     public void colocarPeca(Peca peca, Posicao posicao) {
         if (existePeca(posicao)) {
             throw new IllegalArgumentException("Já existe uma peça na posição " + posicao);
@@ -39,12 +64,21 @@ public class Tabuleiro {
         pecas[posicao.getLinha()][posicao.getColuna()] = peca;
     }
     
+    /**
+     * Promove um peão para outra peça.
+     * @param antig peão (Peão) a ser substituído
+     * @param nova peça (Peça) que substituirá o peão
+     * @param posicao (Posição) onde ocorre a promoção
+     */
     public void promovePeca(Peca antiga, Peca nova, Posicao posicao) {
     	if (existePeca(posicao) && antiga instanceof Peao) {
     		pecas[posicao.getLinha()][posicao.getColuna()] = nova;
         }
     }
     
+    /**
+     * Inicializa o tabuleiro com as peças nas posições iniciais padrão.
+     */
     public void comecaJogo() {
         // Peças brancas
         colocarPeca(new Torre(new Posicao("a1"), 0), new Posicao("a1"));
@@ -75,6 +109,10 @@ public class Tabuleiro {
         }
     }
     
+    /**
+     * Exibe o tabuleiro atual no console.
+     * Mostra a representação visual com coordenadas.
+     */
     public void exibirTabuleiro() {
         for (int linha = LINHAS - 1; linha >= 0; linha--) {
             System.out.print((linha + 1) + " ");
@@ -91,45 +129,76 @@ public class Tabuleiro {
         System.out.println("   a  b  c  d  e  f  g  h");
     }
 
-    public int getLinhas() {
-        return LINHAS;
-    }
-
-    public int getColunas() {
-        return COLUNAS;
-    }
-
-    public Peca getPeca(int linha, int coluna) {
-        validarPosicao(linha, coluna);
-        return pecas[linha][coluna];
-    }
-
-    public Peca getPeca(Posicao posicao) {
-        return getPeca(posicao.getLinha(), posicao.getColuna());
-    }
-
-    public Object removerPeca(Posicao posicao) {
-        validarPosicao(posicao.getLinha(), posicao.getColuna());
-        if (getPeca(posicao) == null) {
-            return null;
+ 
+    /**
+     * Obtém a peça em determinada posição.
+     * @param linha Índice da linha (0-7)
+     * @param coluna Índice da coluna (0-7)
+     * @return Peça na posição ou null se vazio
+     */
+    public Peca getPeca_interno(int linha, int coluna) {
+        if(validarPosicao(linha, coluna)) {
+        	return pecas[linha][coluna];
         }
-        Object removida = getPeca(posicao);
-        pecas[posicao.getLinha()][posicao.getColuna()] = null;
-        return removida;
+        return null;
     }
 
-    private void validarPosicao(int linha, int coluna) { // quando implementarmos a view pode excluir esse metodo
+    /**
+     * Obtém a peça em determinada posição.
+     * @param posicao (Posicao) com notacão no formato ex.:"e4"
+     * @return Peça na posição ou null se vazio
+     */
+    public Peca getPeca(Posicao posicao) {
+        return getPeca_interno(posicao.getLinha(), posicao.getColuna());
+    }
+
+    /**
+     * Remove a peça de determinada posição.
+     * @param posicao (Posição) da peça a ser removida
+     * @return Peça removida ou null se posição vazia
+     */
+    public Object removerPeca(Posicao posicao) {
+        if (validarPosicao(posicao.getLinha(), posicao.getColuna())) {
+        	if (getPeca(posicao) == null) {
+                return null;
+            }
+            Object removida = getPeca(posicao);
+            pecas[posicao.getLinha()][posicao.getColuna()] = null;
+            return removida;
+        }
+        return null;
+    }
+
+    /**
+     * Valida se as coordenadas estão dentro dos limites do tabuleiro.
+     * @param linha Índice da linha
+     * @param coluna Índice da coluna
+     * @return true se posição válida, false caso contrário
+     */
+    private boolean validarPosicao(int linha, int coluna) { // quando implementarmos a view pode excluir esse metodo
         if (linha < 0 || linha >= LINHAS || coluna < 0 || coluna >= COLUNAS) {
-            throw new IllegalArgumentException("Posição fora do tabuleiro: " + linha + "," + coluna);
+        	System.out.println("\nPosição fora do tabuleiro: " + linha + "," + coluna);
+        	return false;
         }  
+        return true;
     }
-
+    
+    /**
+     * Verifica se uma posição existe no tabuleiro.
+     * @param posicao (Posição) a ser verificada
+     * @return true se posição válida, false caso contrário
+     */
     public boolean posicaoExiste(Posicao posicao) {
         int linha = posicao.getLinha();
         int coluna = posicao.getColuna();
         return linha >= 0 && linha < LINHAS && coluna >= 0 && coluna < COLUNAS;
     }
 
+    /**
+     * Verifica se existe uma peça em determinada posição.
+     * @param posicao Posição a ser verificada
+     * @return true se existir peça, false caso contrário
+     */
     public boolean existePeca(Posicao posicao) {
         return getPeca(posicao) != null;
     }
@@ -161,12 +230,14 @@ public class Tabuleiro {
         Peca peca = getPeca(origem);
         Peca peca_destino = getPeca(destino);
         if (peca == null) {
-            throw new IllegalArgumentException("Não há peça na posição de origem: " + origem);
+        	System.out.println("\nNão há peça na posição de origem: " + origem);
+        	return false;
         }
 
         // Verifica se o movimento é válido
-		 if (!peca.movValidos(this).contains(destino)) { throw new
-			 IllegalArgumentException("Movimento inválido para a peça em: " + destino); 
+		 if (!peca.movValidos(this).contains(destino)) {
+			 System.out.println("\nMovimento inválido para a peça em: " + destino);
+			 return false;
 		 } else {
 		     // Remover peça capturada (se houver)
 			    if (existePeca(destino)) {

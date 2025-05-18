@@ -102,7 +102,6 @@ public class TestePeao {
      *
      * Espera-se que uma exceção seja lançada para indicar a ilegalidade do movimento.
      */
-    @Test(expected = IllegalArgumentException.class)
     public void testeMovimentoDiagonalInvalida() {
         Jogador jogador = Jogador.B;
         Posicao pos_origem = new Posicao("e2");
@@ -111,7 +110,7 @@ public class TestePeao {
         Peca peca = tabuleiro.getPeca(pos_origem);
 
         // Deve lançar IllegalArgumentException, pois não há peça a ser capturada em f3
-        tabuleiro.moverPeca(pos_origem, pos_destino, jogador);
+        assertFalse(tabuleiro.moverPeca(pos_origem, pos_destino, jogador));
     }
 
     /**

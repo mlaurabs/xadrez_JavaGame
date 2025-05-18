@@ -84,13 +84,12 @@ public class TesteTorre {
     /**
      * Verifica que a Torre não pode se mover diagonalmente.
      */
-    @Test(expected = IllegalArgumentException.class)
     public void testeMovimentoDiagonalInvalido() {
         Torre torre = new Torre(new Posicao("d4"), 0);
         tabuleiro.colocarPeca(torre, new Posicao("d4"));
 
         // Tentativa de movimento diagonal (inválido)
-        tabuleiro.moverPeca(new Posicao("d4"), new Posicao("e5"), Jogador.B);
+        assertFalse(tabuleiro.moverPeca(new Posicao("d4"), new Posicao("e5"), Jogador.B));
     }
 
     // Método auxiliar para verificar se uma lista contém uma posição

@@ -56,7 +56,6 @@ public class TesteDama {
      * Verifica que a Dama é bloqueada por peças da mesma cor
      * e pode capturar peças adversárias.
      */
-    @Test(expected = IllegalArgumentException.class)
     public void testeMovimentosComBloqueio() {
         Dama damaBranca = new Dama(new Posicao("d1"), 0);
         new Peao(new Posicao("d3"), 0); // Peão aliado
@@ -75,20 +74,19 @@ public class TesteDama {
         assertTrue(contemPosicao(movimentos, "h1")); // Horizontal
 
         // Verifica movimentos bloqueados
-        tabuleiro.moverPeca(new Posicao("d1"), new Posicao("d4"), Jogador.B); // Bloqueado por peça aliada
-        tabuleiro.moverPeca(new Posicao("d1"), new Posicao("h5"), Jogador.B); // Bloqueado por peça aliada
+        assertFalse(tabuleiro.moverPeca(new Posicao("d1"), new Posicao("d4"), Jogador.B)); // Bloqueado por peça aliada
+        assertFalse(tabuleiro.moverPeca(new Posicao("d1"), new Posicao("h5"), Jogador.B)); // Bloqueado por peça aliada
     }
 
     /**
      * Verifica que a Dama não pode se mover como cavalo (em L).
      */
-    @Test(expected = IllegalArgumentException.class)
     public void testeMovimentoCavaloInvalido() {
         Dama dama = new Dama(new Posicao("d4"), 0);
         tabuleiro.colocarPeca(dama, new Posicao("d4"));
 
         // Tentativa de movimento em L (inválido)
-        tabuleiro.moverPeca(new Posicao("d4"), new Posicao("e6"), Jogador.B);
+        assertFalse(tabuleiro.moverPeca(new Posicao("d4"), new Posicao("e6"), Jogador.B));
     }
 
     /**

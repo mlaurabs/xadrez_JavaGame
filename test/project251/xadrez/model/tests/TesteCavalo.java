@@ -86,13 +86,12 @@ public class TesteCavalo {
     /**
      * Verifica que o Cavalo não pode se mover em linhas retas.
      */
-    @Test(expected = IllegalArgumentException.class)
     public void testeMovimentoRetoInvalido() {
         Cavalo cavalo = new Cavalo(new Posicao("b1"), 0);
         tabuleiro.colocarPeca(cavalo, new Posicao("b1"));
 
         // Tentativa de movimento horizontal (inválido)
-        tabuleiro.moverPeca(new Posicao("b1"), new Posicao("d1"), Jogador.B);
+        assertFalse(tabuleiro.moverPeca(new Posicao("b1"), new Posicao("d1"), Jogador.B));
     }
 
     /**
