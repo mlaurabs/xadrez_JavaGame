@@ -7,9 +7,7 @@ import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
 import project251.xadrez.model.api.Jogador;
-import project251.xadrez.model.figura.Rei;
-import project251.xadrez.model.figura.Torre;
-import project251.xadrez.model.figura.Peao;
+import project251.xadrez.model.figura.*;
 import project251.xadrez.model.tabuleiro.Posicao;
 import project251.xadrez.model.tabuleiro.Tabuleiro;
 
@@ -78,6 +76,53 @@ public class TesteRei {
 		tabuleiro.colocarPeca(rei, new Posicao("e1"));
 
 		assertFalse(tabuleiro.moverPeca(new Posicao("e1"), new Posicao("e3"), Jogador.B));
+	}
+	
+	@Test
+	public void testeXequeNormal() {
+	    Jogador jogador_p = Jogador.P;
+	    
+	    Torre torre = new Torre(new Posicao("d7"), 1);
+	    tabuleiro.colocarPeca(torre, new Posicao("d7"));
+	    
+	    Rei rei = new Rei(new Posicao("e1"), 0); 
+	    tabuleiro.colocarPeca(rei, new Posicao("e1"));
+	    
+	    tabuleiro.moverPeca(new Posicao("d7"), new Posicao("e7"), jogador_p);
+	    
+	    assertFalse(rei.estaEmXeque()); 
+	    
+	    rei.verificaXeque(tabuleiro);
+
+	    assertTrue(rei.estaEmXeque()); 
+	}
+	
+	@Test
+	public void testeXequeDescoberto() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Jogador jogador_b = Jogador.B;
+
+	    // Rei preto em e8
+	    Rei reiPreto = new Rei(new Posicao("e8"), 1);
+	    tabuleiro.colocarPeca(reiPreto, new Posicao("e8"));
+
+	    // Torre branca em e3 (vai causar o xeque depois)
+	    Torre torreBranca = new Torre(new Posicao("e3"), 0);
+	    tabuleiro.colocarPeca(torreBranca, new Posicao("e3"));
+
+	    // Bispo branco em e2 (bloqueando a torre)
+	    Bispo bispoBranco = new Bispo(new Posicao("e2"), 0);
+	    tabuleiro.colocarPeca(bispoBranco, new Posicao("e2"));
+
+	    // Movimento do bispo para liberar a torre (movimento qualquer, por exemplo para d3)
+	    tabuleiro.moverPeca(new Posicao("e2"), new Posicao("d3"), jogador_b);
+	    
+	    assertFalse(reiPreto.estaEmXeque()); 
+
+	    // Verificar se o rei preto está em xeque após o xeque descoberto
+	    reiPreto.verificaXeque(tabuleiro);
+
+	    assertTrue(reiPreto.estaEmXeque());
 	}
 
 
