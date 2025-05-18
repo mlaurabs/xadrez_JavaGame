@@ -142,6 +142,7 @@ public class XadrezFacade {
     // esse metodo faz a verificação se tem algum movimento que é capaz de acabar com o xeque
 
      public static void existeMovimentoQueTiraReiDoXeque(Tabuleiro tabuleiro, Jogador jogador) {
+        jogador.xeque_mate = true; 
         Tabuleiro tabuleiroAux = tabuleiro.clonar(); 
 
         // Pega peças do jogador na cópia
