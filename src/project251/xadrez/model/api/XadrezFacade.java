@@ -6,11 +6,11 @@ import project251.xadrez.model.figura.Peao;
 import project251.xadrez.model.figura.Peca;
 import project251.xadrez.model.figura.Rei;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class XadrezFacade {
-
     public static void main(String[] args) {
         Tabuleiro tabuleiro = new Tabuleiro();
         tabuleiro.comecaJogo();
@@ -38,18 +38,19 @@ public class XadrezFacade {
 
             System.out.println("\n===== TURNO DO JOGADOR " + jogadorAtual.getNome() + " =====");
 
-            boolean emXeque = false;
+            jogadorAtual.emXeque = false;
             for (Peca p : tabuleiro.getPecasPorCor(jogadorAtual == Jogador.B ? 0 : 1)) {
                 if (p instanceof Rei rei) {
                     rei.verificaXeque(tabuleiro);
                     if (rei.estaEmXeque()) {
-                        emXeque = true;
+                        jogadorAtual.emXeque = true;
+                        existeMovimentoQueTiraReiDoXeque(tabuleiro, jogadorAtual);
                         System.out.println(">>> SEU REI ESTÁ EM XEQUE! <<<");
                     }
                 }
             }
 
-            if (emXeque && !existeMovimentoQueTiraReiDoXeque(tabuleiro, jogadorAtual)) {
+            if (jogadorAtual.emXeque && jogadorAtual.xeque_mate) {
                 System.out.println(">>> XEQUE-MATE! Jogador " + jogadorAtual.getNome().toUpperCase() + " perdeu o jogo. <<<");
                 System.exit(0);
             }
@@ -82,8 +83,16 @@ public class XadrezFacade {
                 System.out.println("\nVocê só pode mover suas próprias peças!");
                 continue;
             }
+            
+            ArrayList<Posicao> movimentosValidos = new ArrayList<>();
 
-            List<Posicao> movimentosValidos = peca.movValidos(tabuleiro);
+            if (!jogadorAtual.emXeque) {
+                peca.movValidos(tabuleiro);
+            } 
+            
+            movimentosValidos.addAll(peca.movimentos);
+            System.out.println(movimentosValidos);
+
             if (movimentosValidos.isEmpty()) {
                 System.out.println("\nEssa peça não tem movimentos válidos.");
                 continue;
@@ -106,7 +115,7 @@ public class XadrezFacade {
                 continue;
             }
 
-            System.out.println(tabuleiro.moverPeca(origem, destino, jogadorAtual));
+            tabuleiro.moverPeca(origem, destino, jogadorAtual);
 
             if (peca instanceof Peao && (destino.getLinha() == 0 || destino.getLinha() == 7)) {
                 System.out.println("\n***** PEÃO ANTES DA PROMOÇÃO ***** \n");
@@ -132,52 +141,39 @@ public class XadrezFacade {
 
     // esse metodo faz a verificação se tem algum movimento que é capaz de acabar com o xeque
 
-    public static boolean existeMovimentoQueTiraReiDoXeque(Tabuleiro tabuleiro, Jogador jogador) {
-        List<Peca> pecas = tabuleiro.getPecasPorCor(jogador == Jogador.B ? 0 : 1);
+     public static void existeMovimentoQueTiraReiDoXeque(Tabuleiro tabuleiro, Jogador jogador) {
+        Tabuleiro tabuleiroAux = tabuleiro.clonar(); 
 
+        // Pega peças do jogador na cópia
+        ArrayList<Peca> pecas = tabuleiro.getPecasPorCor(jogador == Jogador.B ? 0 : 1);
+       
         for (Peca peca : pecas) {
             Posicao origem = peca.getPosicao();
-            List<Posicao> movimentos = peca.movValidos(tabuleiro);
+            ArrayList<Posicao> movimentos = peca.movimentos;
 
             for (Posicao destino : movimentos) {
-                // Salva peça capturada (pode ser null)
-                Peca capturada = tabuleiro.getPeca(destino);
+                // Clonar novamente o tabuleiro antes de cada teste (para isolar os efeitos)
+                Tabuleiro simulado = tabuleiroAux.clonar();
 
-                // Remove peça da origem
-                tabuleiro.colocarPeca(null, origem);
+                simulado.moverPeca(origem,destino, jogador); 
 
-                // Remove peça que está no destino, se existir
-                if (capturada != null) {
-                    tabuleiro.colocarPeca(null, destino);
-                }
-
-                // Coloca peça no destino
-                tabuleiro.colocarPeca(peca, destino);
-                peca.setPosicao(destino);
-
-                // Verifica se rei ainda está em xeque após o movimento
-                boolean reiEmXeque = false;
-                for (Peca outra : tabuleiro.getPecasPorCor(jogador == Jogador.B ? 0 : 1)) {
+                // Verifica se o rei ainda está em xeque após o movimento
+                for (Peca outra : simulado.getPecasPorCor(jogador.getCor())) {
                     if (outra instanceof Rei rei) {
-                        rei.verificaXeque(tabuleiro);
-                        reiEmXeque = rei.estaEmXeque();
+                        rei.verificaXeque(simulado);
+                        if (rei.estaEmXeque()) {
+                            ArrayList<Posicao> vazio = new ArrayList<>();
+                            peca.setMovimentos(vazio);
+                        } else {
+                            jogador.xeque_mate = false;
+                            ArrayList<Posicao> new_movimentos = new ArrayList<>();
+                            new_movimentos.add(destino);
+                            peca.setMovimentos(new_movimentos);
+                            System.out.println(peca.movimentos);
+                        }
                     }
                 }
-
-                // Desfaz o movimento
-                tabuleiro.colocarPeca(null, destino);
-                tabuleiro.colocarPeca(peca, origem);
-                peca.setPosicao(origem);
-
-                if (capturada != null) {
-                    tabuleiro.colocarPeca(capturada, destino);
-                    capturada.setPosicao(destino);
-                }
-
-                if (!reiEmXeque) return true;
             }
         }
-
-        return false;
     }
 }

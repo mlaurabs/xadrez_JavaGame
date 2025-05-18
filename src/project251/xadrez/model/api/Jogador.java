@@ -6,6 +6,8 @@ import java.util.Map;
 public enum Jogador {
     B,
     P;
+    public boolean emXeque = false;
+    public boolean xeque_mate = false;
 
     // Mapa para armazenar as peças capturadas por tipo (usando String)
     private final Map<String, Integer> pecasCapturadas = new HashMap<>();
@@ -117,5 +119,14 @@ public enum Jogador {
         	return "PRETO";
         }
         return null;
+    }
+
+    public int getCor() {
+        if (this == B) {
+        	return 0;
+        }else{
+        	return 1;
+        }
+
     }
 }

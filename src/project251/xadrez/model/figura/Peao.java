@@ -73,7 +73,7 @@ public class Peao extends Peca {
             }
         };
         
-
+        this.movimentos = movimentos;
 		return movimentos;
 	}
 
@@ -81,4 +81,12 @@ public class Peao extends Peca {
 	public String getTipoPeca() {
 		return "P";
 	}
+
+    public Peca clonar(Tabuleiro tabuleiro) {
+        Peao clone = new Peao(posicao, cor);
+        clone.setPosicao(new Posicao(this.posicao.getLinha(), this.posicao.getColuna()));
+        ArrayList<Posicao> movimentos = clone.movValidos(tabuleiro);
+        clone.setMovimentos(movimentos);
+        return clone;
+    }
 }

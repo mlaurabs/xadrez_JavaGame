@@ -106,7 +106,7 @@ public class Bispo extends Peca {
          }
          i++;
      } while (!tabuleiro.existePeca(diagonal_esq_inf) && tabuleiro.posicaoExiste(diagonal_esq_inf));
-
+        this.movimentos = movimentos;
 		return movimentos;
 	}
 
@@ -114,5 +114,13 @@ public class Bispo extends Peca {
 	public String getTipoPeca() {
 		return "B";
 	}
+
+    public Peca clonar(Tabuleiro tabuleiro) {
+        Bispo clone = new Bispo(posicao, cor);
+        clone.setPosicao(new Posicao(this.posicao.getLinha(), this.posicao.getColuna()));
+        ArrayList<Posicao> movimentos = clone.movValidos(tabuleiro);
+        clone.setMovimentos(movimentos);
+        return clone;
+    }
 	
 }

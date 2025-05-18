@@ -43,7 +43,7 @@ public class Cavalo extends Peca {
 	            }
 	        }
 	    }
-
+		this.movimentos = movimentos;
 	    return movimentos;
 	}
 
@@ -51,5 +51,13 @@ public class Cavalo extends Peca {
 	public String getTipoPeca() {
 		return "C";
 	}
+
+    public Peca clonar(Tabuleiro tabuleiro) {
+        Cavalo clone = new Cavalo(posicao, cor);
+        clone.setPosicao(new Posicao(this.posicao.getLinha(), this.posicao.getColuna()));
+		ArrayList<Posicao> movimentos = clone.movValidos(tabuleiro);
+		clone.setMovimentos(movimentos);
+        return clone;
+    }
 
 }

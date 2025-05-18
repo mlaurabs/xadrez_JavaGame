@@ -8,6 +8,7 @@ import project251.xadrez.model.tabuleiro.Tabuleiro;
 public class Rei extends Peca {
 	private boolean jaMoveu = false; 
 	private boolean estaXeque = false;
+	public boolean saiXeque = true;
 	private boolean podeRoqueGrande = true;
 	private boolean podeRoquePeq = true;
 	
@@ -264,14 +265,22 @@ public class Rei extends Peca {
 	    		movimentos.add(new Posicao("c8")); 
 	    	}
 	    }   
-
-	    return movimentos;
+		this.movimentos = movimentos;
+	    return this.movimentos;
 	}
 
 	@Override
 	public String getTipoPeca() {
 		return "R";
 	}
+
+    public Peca clonar(Tabuleiro tabuleiro) {
+        Rei clone = new Rei(posicao, cor);
+        clone.setPosicao(new Posicao(this.posicao.getLinha(), this.posicao.getColuna()));
+		ArrayList<Posicao> movimentos = clone.movValidos(tabuleiro);
+        clone.setMovimentos(movimentos);
+        return clone;
+    }
 
 }
 

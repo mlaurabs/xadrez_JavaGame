@@ -117,6 +117,7 @@ public class Torre extends Peca {
          i++;
      } while (!tabuleiro.existePeca(dir) && tabuleiro.posicaoExiste(dir));
 
+        this.movimentos = movimentos;
 		return movimentos;
 	}
 
@@ -124,5 +125,12 @@ public class Torre extends Peca {
 	public String getTipoPeca() {
 		return "T";
 	}
-	
+
+    public Peca clonar(Tabuleiro tabuleiro) {
+        Torre clone = new Torre(posicao, cor);
+        clone.setPosicao(new Posicao(this.posicao.getLinha(), this.posicao.getColuna()));
+        ArrayList<Posicao> movimentos = clone.movValidos(tabuleiro);
+        clone.setMovimentos(movimentos);
+        return clone;
+    }
 }

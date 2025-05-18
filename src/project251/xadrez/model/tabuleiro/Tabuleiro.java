@@ -13,6 +13,24 @@ public class Tabuleiro {
     public Tabuleiro() {
         pecas = new Peca[LINHAS][COLUNAS];
     }
+
+    public Tabuleiro clonar() {
+    Tabuleiro copia = new Tabuleiro();
+
+    for (int linha = 0; linha < 8; linha++) {
+        for (int coluna = 0; coluna < 8; coluna++) {
+            Posicao pos = new Posicao(linha, coluna);
+            Peca original = this.getPeca(pos);
+            
+            if (original != null) {
+                Peca copiaPeca = original.clonar(this); // cada peça deve saber se clonar
+                copia.colocarPeca(copiaPeca, new Posicao(linha, coluna));
+            }
+        }
+    }
+
+    return copia;
+    }
     
     public void colocarPeca(Peca peca, Posicao posicao) {
         if (existePeca(posicao)) {

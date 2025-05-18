@@ -47,12 +47,20 @@ public class Dama extends Peca {
                 novaColuna += direcao[1];
             }
         }
-
+        this.movimentos = movimentos;
         return movimentos;
     }
 
     @Override
     public String getTipoPeca() {
         return "D";
+    }
+
+    public Peca clonar(Tabuleiro tabuleiro) {
+        Dama clone = new Dama(posicao, cor);
+        clone.setPosicao(new Posicao(this.posicao.getLinha(), this.posicao.getColuna()));
+        ArrayList<Posicao> movimentos = clone.movValidos(tabuleiro);
+        clone.setMovimentos(movimentos);
+        return clone;
     }
 }

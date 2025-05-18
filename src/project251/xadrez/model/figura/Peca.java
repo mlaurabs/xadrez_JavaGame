@@ -4,14 +4,22 @@ import java.util.ArrayList;
 import project251.xadrez.model.tabuleiro.*;
 
 public abstract class Peca {
-    protected Posicao posicao;
+    public Posicao posicao;
     public int cor; 
+    public ArrayList<Posicao> movimentos = new ArrayList<Posicao>();
     // 0 pras brancas 
     // 1 pras pretas
+
+    public abstract Peca clonar(Tabuleiro tabuleiro);
+
+    public void setMovimentos(ArrayList<Posicao> movimentos) {
+        this.movimentos = movimentos;
+    }
 
     public Peca(Posicao posicao, int cor) {
         this.posicao = posicao;
         this.cor = cor;
+        this.movimentos = new ArrayList<Posicao>();
     }
 
     public Posicao getPosicao() {
