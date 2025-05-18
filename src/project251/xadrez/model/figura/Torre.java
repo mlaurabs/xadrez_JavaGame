@@ -5,28 +5,54 @@ import java.util.ArrayList;
 import project251.xadrez.model.tabuleiro.Posicao;
 import project251.xadrez.model.tabuleiro.Tabuleiro;
 
+/**
+ * Representa a peça Torre no jogo de xadrez.
+ * Controla movimentos válidos, estado de movimento (para roque) e clonagem.
+ */
 public class Torre extends Peca {
 	public boolean jaMoveu = false; 
 
+	/**
+     * Cria uma nova torre na posição especificada.
+     * @param posicao (Posição) inicial da torre no tabuleiro
+     * @param cor (Cor) da peça (0 para branca, 1 para preta)
+     */
 	public Torre(Posicao posicao, int cor) {
 		super(posicao, cor);
 	}
+
+    /**
+     * Verifica se a torre já realizou algum movimento.
+     * @return true se a torre já se moveu
+     */
 
 	public boolean getJaMoveu() { //se falso, pode fazer o roque
 		return jaMoveu;
 	}
 
+	  /**
+     * Define o estado de movimento da torre.
+     * @param jaMoveu true se a torre já se moveu, false caso contrário
+     */
 	public void setJaMoveu(boolean jaMoveu) {
 		this.jaMoveu = jaMoveu;
 	}
 	
+	/**
+     * Retorna a representação textual da torre.
+     * @return String no formato "T" seguido da cor (ex: "T0" para torre branca)
+     */
 	@Override
 	public String toString() {
 	    return "T"+this.getCor();
 	}
 	
-	// para cada movimento, temos que verificar se não é um movimento ilegal
-	// movimentos ilegais: o rei está em xeque, o rei fica em xeque após o seu movimento
+	  /**
+     * Calcula todos os movimentos válidos para a torre no tabuleiro atual.
+     * A torre move-se em linhas retas (horizontal/vertical) sem pular outras peças.
+     * @param tabuleiro Tabuleiro atual do jogo
+     * @return Lista de posições válidas para movimento
+     */
 	@Override
 	public ArrayList<Posicao> movValidos(Tabuleiro tabuleiro) {
 		ArrayList<Posicao> movimentos = new ArrayList<>();
@@ -121,11 +147,20 @@ public class Torre extends Peca {
 		return movimentos;
 	}
 
+	/**
+     * Retorna o tipo da peça.
+     * @return "T" (identificador de torre)
+     */
 	@Override
 	public String getTipoPeca() {
 		return "T";
 	}
 
+	/**
+     * Cria uma cópia exata desta torre.
+     * @param tabuleiro Tabuleiro de referência para cálculo de movimentos
+     * @return Nova instância de Torre com mesmo estado
+     */
     public Peca clonar(Tabuleiro tabuleiro) {
         Torre clone = new Torre(posicao, cor);
         clone.setPosicao(new Posicao(this.posicao.getLinha(), this.posicao.getColuna()));

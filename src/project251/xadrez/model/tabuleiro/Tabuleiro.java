@@ -203,6 +203,14 @@ public class Tabuleiro {
         return getPeca(posicao) != null;
     }
     
+    
+    /**
+     * Interface para promoção de peão.
+     * @param posicao (Posição) onde ocorre a promoção
+     * @param cor (Cor) da peça (0 para branco, 1 para preto)
+     * @param scanner (Scanner) para entrada do usuário
+     * @return Nova peça escolhida para promoção
+     */
     public Peca escolherPromocao(Posicao posicao, int cor, Scanner scanner) {
         System.out.println("\nPROMOÇÃO DE PEÃO!");
         System.out.println("Escolha a peça para promover:");
@@ -226,6 +234,14 @@ public class Tabuleiro {
         }
     }
     
+    
+    /**
+     * Move uma peça de uma posição para outra.
+     * @param origem (Posição) de origem da peça
+     * @param destino (Posição) de destino da peça
+     * @param jogador (Jogador) que está realizando o movimento
+     * @return true se movimento foi realizado, false caso contrário
+     */
     public boolean moverPeca(Posicao origem, Posicao destino, Jogador j) {
         Peca peca = getPeca(origem);
         Peca peca_destino = getPeca(destino);
@@ -260,6 +276,11 @@ public class Tabuleiro {
     }
 
     
+    /**
+     * Obtém todas as peças de uma determinada cor.
+     * @param cor (Cor) das peças a serem recuperadas (0 para branco, 1 para preto)
+     * @return Lista de peças da cor especificada
+     */
     public ArrayList<Peca> getPecasPorCor(int cor) {
         ArrayList<Peca> pecasCor = new ArrayList<>();
         for (int linha = 0; linha < LINHAS; linha++) {
