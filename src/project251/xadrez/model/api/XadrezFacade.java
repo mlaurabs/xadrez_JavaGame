@@ -2,27 +2,31 @@ package project251.xadrez.model.api;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import project251.xadrez.model.figura.*;
 import project251.xadrez.model.tabuleiro.*;
 
+/**
+ * Classe principal que controla o fluxo do jogo de xadrez.
+ * Implementa o padrão Singleton para garantir uma única instância.
+ * Responsável por gerenciar turnos, movimentos e regras do jogo.
+ */
 public class XadrezFacade {
     private final Tabuleiro tabuleiro;
     private Jogador jogadorAtual;
     private final Scanner scanner;
 
- // 1. Construtor privado
+    // 1. Construtor privado (padrão Singleton)
     private XadrezFacade() {
         this.tabuleiro = new Tabuleiro();
         this.tabuleiro.comecaJogo();
-        this.jogadorAtual = Jogador.B;
+        this.jogadorAtual = Jogador.B; // Começa com as peças brancas
         this.scanner = new Scanner(System.in);
     }
 
     // 2. Instância única estática
     private static XadrezFacade instance;
 
-    // 3. Método público de acesso
+    // 3. Método público de acesso (Singleton)
     public static synchronized XadrezFacade getInstance() {
         if (instance == null) {
             instance = new XadrezFacade();
@@ -30,6 +34,10 @@ public class XadrezFacade {
         return instance;
     }
 
+    /**
+     * Inicia o loop principal do jogo.
+     * Exibe a introdução e processa turnos alternados.
+     */
     public void iniciarJogo() {
         exibirIntro();
 
@@ -38,6 +46,9 @@ public class XadrezFacade {
         }
     }
 
+    /**
+     * Exibe as informações iniciais do jogo.
+     */
     private void exibirIntro() {
         System.out.println("\n============= XADREZ =============");
         System.out.println("\n***** LEGENDA *****");
@@ -46,6 +57,9 @@ public class XadrezFacade {
         System.out.println("\n========== INICIANDO JOGO ==========");
     }
 
+    /**
+     * Processa um turno completo de um jogador.
+     */
     private void processarTurno() {
         System.out.println("\n===== TURNO DO JOGADOR " + jogadorAtual.getNome() + " =====");
 
@@ -77,6 +91,7 @@ public class XadrezFacade {
 
         tabuleiro.moverPeca(origem, destino, jogadorAtual);
 
+        // Verifica promoção de peão
         if (peca instanceof Peao && (destino.getLinha() == 0 || destino.getLinha() == 7)) {
             System.out.println("\n***** PEÃO ANTES DA PROMOÇÃO ***** \n");
             tabuleiro.exibirTabuleiro();
@@ -89,6 +104,9 @@ public class XadrezFacade {
         jogadorAtual = jogadorAtual.proximo();
     }
 
+    /**
+     * Verifica se o rei do jogador atual está em xeque.
+     */
     private void verificarXeque() {
         jogadorAtual.emXeque = false;
         for (Peca p : tabuleiro.getPecasPorCor(jogadorAtual.getCor())) {
@@ -103,6 +121,9 @@ public class XadrezFacade {
         }
     }
 
+    /**
+     * Verifica se o movimento atual colocou o adversário em xeque.
+     */
     private void verificarXequeAdversario() {
         Jogador adversario = jogadorAtual.proximo();
         for (Peca p : tabuleiro.getPecasPorCor(adversario.getCor())) {
@@ -115,11 +136,14 @@ public class XadrezFacade {
         }
     }
 
+    /**
+     * Verifica se existe algum movimento que tire o rei do xeque.
+     * Atualiza o estado de xeque-mate se necessário.
+     */
     private void existeMovimentoQueTiraReiDoXeque() {
         jogadorAtual.xeque_mate = true; 
         Tabuleiro tabuleiroAux = tabuleiro.clonar(); 
 
-        // Pega peças do jogador na cópia
         ArrayList<Peca> pecas = tabuleiro.getPecasPorCor(jogadorAtual == Jogador.B ? 0 : 1);
 
         for (Peca peca : pecas) {
@@ -127,20 +151,14 @@ public class XadrezFacade {
             ArrayList<Posicao> movimentos = peca.movimentos;
 
             for (Posicao destino : movimentos) {
-                // Clonar novamente o tabuleiro antes de cada teste (para isolar os efeitos)
                 Tabuleiro simulado = tabuleiroAux.clonar();
+                simulado.moverPeca(origem, destino, jogadorAtual); 
 
-                simulado.moverPeca(origem,destino, jogadorAtual); 
-
-                // Verifica se o rei ainda está em xeque após o movimento
                 for (Peca outra : simulado.getPecasPorCor(jogadorAtual.getCor())) {
                     if (outra instanceof Rei rei) {
                         rei.verificaXeque(simulado);
-                        if (rei.estaEmXeque()) {
-                            ArrayList<Posicao> vazio = new ArrayList<>();
-                            peca.setMovimentos(vazio);
-                        } else {
-                        	jogadorAtual.xeque_mate = false;
+                        if (!rei.estaEmXeque()) {
+                            jogadorAtual.xeque_mate = false;
                             ArrayList<Posicao> new_movimentos = new ArrayList<>();
                             new_movimentos.add(destino);
                             peca.setMovimentos(new_movimentos);
@@ -151,7 +169,11 @@ public class XadrezFacade {
         }
     }
 
-
+    /**
+     * Obtém uma posição válida do usuário.
+     * @param mensagem (String) a ser exibida para o usuário
+     * @return Objeto (Posicao) ou null se inválido
+     */
     private Posicao obterPosicao(String mensagem) {
         System.out.print(mensagem);
         String entrada = scanner.nextLine();
@@ -169,6 +191,11 @@ public class XadrezFacade {
         }
     }
 
+    /**
+     * Valida se a peça selecionada pode ser movida pelo jogador atual.
+     * @param peca (Peça) a ser validada
+     * @return true se a peça for válida, false caso contrário
+     */
     private boolean validarPecaSelecionada(Peca peca) {
         if (peca == null) {
             System.out.println("\nNão há peça nessa posição.");
@@ -181,6 +208,11 @@ public class XadrezFacade {
         return true;
     }
 
+    /**
+     * Obtém os movimentos válidos para uma peça.
+     * @param peca (Peça) a ser analisada
+     * @return Lista de posições válidas
+     */
     private ArrayList<Posicao> obterMovimentosValidos(Peca peca) {
         if (!jogadorAtual.emXeque) {
             peca.movValidos(tabuleiro);
@@ -188,6 +220,10 @@ public class XadrezFacade {
         return new ArrayList<>(peca.movimentos);
     }
 
+    /**
+     * Exibe os movimentos válidos para o usuário.
+     * @param movimentos Lista de posições válidas
+     */
     private void exibirMovimentos(ArrayList<Posicao> movimentos) {
         System.out.println("\nMovimentos válidos:");
         for (Posicao destino : movimentos) {
@@ -196,6 +232,11 @@ public class XadrezFacade {
         System.out.println();
     }
 
+    /**
+     * Obtém uma posição de destino válida do usuário.
+     * @param movimentosValidos Lista de movimentos permitidos
+     * @return Posição de destino selecionada
+     */
     private Posicao obterDestino(ArrayList<Posicao> movimentosValidos) {
         while (true) {
             System.out.print("\nDigite a posição de destino (ex: e4): ");

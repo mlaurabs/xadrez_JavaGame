@@ -5,21 +5,45 @@ import java.util.ArrayList;
 import project251.xadrez.model.tabuleiro.Posicao;
 import project251.xadrez.model.tabuleiro.Tabuleiro;
 
+/**
+ * Representa a peça Rei no jogo de xadrez.
+ * Implementa movimentos especiais como roque e verificação de xeque.
+ */
 public class Rei extends Peca {
+	/** Indica se o rei já realizou algum movimento */
 	private boolean jaMoveu = false; 
+	
+	/** Indica se o rei está em xeque */
 	private boolean estaXeque = false;
+	
+	/** Indica se o rei pode sair do xeque */
 	public boolean saiXeque = true;
+	
+	/** Indica se o roque grande (do lado da dama) é possível */
 	private boolean podeRoqueGrande = true;
 	private boolean podeRoquePeq = true;
 	
+	/**
+     * Cria um novo rei na posição especificada.
+     * @param posicao (Posição) inicial do rei no tabuleiro
+     * @param cor (Cor) da peça (0 para brancas, 1 para pretas)
+     */
 	public Rei(Posicao posicao, int cor) {
 		super(posicao, cor);
 	}
 
+	 /**
+     * Verifica se o rei já realizou algum movimento.
+     * @return true se o rei já se moveu, false caso contrário
+     */
 	public boolean getJaMoveu() { //se falso, pode fazer o roque
 		return jaMoveu;
 	}
 
+	/**
+     * Define o estado de movimento do rei.
+     * @param jaMoveu = true, se o rei já realizou movimento
+     */
 	public void setJaMoveu(boolean jaMoveu) {
 		this.jaMoveu = jaMoveu;
 	}
@@ -29,6 +53,12 @@ public class Rei extends Peca {
 	    return "R"+this.getCor();
 	}
 	
+	 /**
+     * Verifica se uma posição está sob ataque por peças inimigas.
+     * @param posicao (Posição) a ser verificada
+     * @param tabuleiro (Tabuleiro) atual do jogo
+     * @return true se a posição estiver sob ataque, false caso contrário
+     */
 	private boolean casaAtacada(Posicao posicao, Tabuleiro tabuleiro) {
 	    int corInimiga = (this.cor == 0) ? 1 : 0;
 	    ArrayList<Peca> pecasInimigas = tabuleiro.getPecasPorCor(corInimiga);
@@ -43,15 +73,28 @@ public class Rei extends Peca {
 	    return false;
 	}
     
+	/**
+     * Atualiza o estado de xeque do rei.
+     * @param tabuleiro (Tabuleiro) atual do jogo
+     */
     public void verificaXeque(Tabuleiro tabuleiro) {
         this.estaXeque = casaAtacada(this.posicao, tabuleiro);
     }
     
+    /**
+     * Verifica se o rei está em xeque.
+     * @return true se o rei está em xeque, false caso contrário
+     */
     public boolean estaEmXeque() {
         return this.estaXeque;
     }
 
-    public boolean verificaRoquePeq(Tabuleiro tabuleiro) {
+    /**
+     * Verifica se o roque pequeno (do lado do rei) é possível.
+     * @param tabuleiro (Tabuleiro) atual do jogo
+     * @return true se o roque pequeno for possível, false caso contrário
+     */
+    public boolean verificaRoquePeq(Tabuleiro tabuleiro) { // em processo de implementação
         Posicao[] pos_brancas = {
             new Posicao("f1"), // f1
             new Posicao("g1")  // g1
@@ -99,6 +142,7 @@ public class Rei extends Peca {
         return this.podeRoquePeq;
     }
     
+    // em processo de implementação
     public boolean verificaRoqueGrande(Tabuleiro tabuleiro) {
         Posicao[] pos_brancas = {
                 new Posicao("d1"), 
@@ -148,7 +192,12 @@ public class Rei extends Peca {
         return this.podeRoqueGrande;
     }
 		
-	
+    
+    /**
+     * Calcula todos os movimentos válidos para o rei no tabuleiro atual.
+     * @param tabuleiro Tabuleiro atual do jogo
+     * @return Lista de posições válidas para movimento (1 casa para qualquer direção)
+     */
 	@Override
 	public ArrayList<Posicao> movValidos(Tabuleiro tabuleiro) {
 	    ArrayList<Posicao> movimentos = new ArrayList<>();
