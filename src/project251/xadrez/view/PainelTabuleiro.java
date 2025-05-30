@@ -1,5 +1,6 @@
 package project251.xadrez.view;
 
+import project251.xadrez.controller.Controller;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -11,6 +12,8 @@ public class PainelTabuleiro extends JPanel {
     private static final int TAM_CASA = 80;
     private static final Color COR_CLARA = new Color(255, 255, 255);
     private static final Color COR_ESCURA = new Color(0, 0, 0);
+    private final Controller controller = new Controller();
+
 
     // Exemplo de estrutura para o tabuleiro (a ser substituído futuramente por XadrezFacade)
     private String[][] tabuleiro = new String[8][8];
@@ -21,14 +24,18 @@ public class PainelTabuleiro extends JPanel {
 
         addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) { // capta o clique do mouse na casa correspondente
-                int linha = e.getY() / TAM_CASA;
+            public void mouseClicked(MouseEvent e) {
+                int linha = (e.getY() / TAM_CASA);
                 int coluna = e.getX() / TAM_CASA;
-                System.out.println("Clique em: " + linha + ", " + coluna);
-                //integrar com XadrezFacade para mover peças
+
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    // botão direito: salvar jogo (4ª iteração)
+                    return;
+                }
+
+                controller.processarClique(linha, coluna, () -> repaint());
             }
-        });
-    }
+        });}
 
     private void inicializarTabuleiro() {
     	// Peças Roxas (Purple) - Time 1 (linha 0 e 1)
@@ -91,8 +98,8 @@ public class PainelTabuleiro extends JPanel {
         }
     }
 
-    public void iniciarNovoJogo() {
-        inicializarTabuleiro(); // No futuro: integrar com XadrezFacade
+    public void iniciarNovoJogo() { // desenvolver para próximas ietarações
+        inicializarTabuleiro(); 
         repaint();
     }
 }

@@ -80,7 +80,7 @@ public class Tabuleiro {
      * Inicializa o tabuleiro com as peças nas posições iniciais padrão.
      */
     public void comecaJogo() {
-        // Peças brancas
+        // Peças Purple - Time 1 (linha 0 e 1)
         colocarPeca(new Torre(new Posicao("a1"), 0), new Posicao("a1"));
         colocarPeca(new Cavalo(new Posicao("b1"), 0), new Posicao("b1"));
         colocarPeca(new Bispo(new Posicao("c1"), 0), new Posicao("c1"));
@@ -94,7 +94,7 @@ public class Tabuleiro {
             colocarPeca(new Peao(new Posicao(notacao), 0), new Posicao(notacao));
         }
 
-        // Peças pretas
+        // Peças Cyan - Time 1 (linha 6 e 7)
         colocarPeca(new Torre(new Posicao("a8"), 1), new Posicao("a8"));
         colocarPeca(new Cavalo(new Posicao("b8"), 1), new Posicao("b8"));
         colocarPeca(new Bispo(new Posicao("c8"), 1), new Posicao("c8"));
@@ -109,27 +109,7 @@ public class Tabuleiro {
         }
     }
     
-    /**
-     * Exibe o tabuleiro atual no console.
-     * Mostra a representação visual com coordenadas.
-     */
-    public void exibirTabuleiro() {
-        for (int linha = LINHAS - 1; linha >= 0; linha--) {
-            System.out.print((linha + 1) + " ");
-            for (int coluna = 0; coluna < COLUNAS; coluna++) {
-                Peca peca = pecas[linha][coluna];
-                if (peca == null) {
-                    System.out.print("-- ");
-                } else {
-                    System.out.print(peca + " ");
-                }
-            }
-            System.out.println();
-        }
-        System.out.println("   a  b  c  d  e  f  g  h");
-    }
-
- 
+    
     /**
      * Obtém a peça em determinada posição.
      * @param linha Índice da linha (0-7)
@@ -201,37 +181,6 @@ public class Tabuleiro {
      */
     public boolean existePeca(Posicao posicao) {
         return getPeca(posicao) != null;
-    }
-    
-    
-    /**
-     * Interface para promoção de peão.
-     * @param posicao (Posição) onde ocorre a promoção
-     * @param cor (Cor) da peça (0 para branco, 1 para preto)
-     * @param scanner (Scanner) para entrada do usuário
-     * @return Nova peça escolhida para promoção
-     */
-    public Peca escolherPromocao(Posicao posicao, int cor, Scanner scanner) {
-        System.out.println("\nPROMOÇÃO DE PEÃO!");
-        System.out.println("Escolha a peça para promover:");
-        System.out.println("1 - Dama");
-        System.out.println("2 - Torre");
-        System.out.println("3 - Bispo");
-        System.out.println("4 - Cavalo");
-        
-        while (true) {
-            System.out.print("Opção (1-4): ");
-            int opcao = scanner.nextInt();
-            scanner.nextLine(); // Limpa o buffer
-            
-            switch (opcao) {
-                case 1: return new Dama(posicao, cor);
-                case 2: return new Torre(posicao, cor);
-                case 3: return new Bispo(posicao, cor);
-                case 4: return new Cavalo(posicao, cor);
-                default: System.out.println("Opção inválida!");
-            }
-        }
     }
     
     
