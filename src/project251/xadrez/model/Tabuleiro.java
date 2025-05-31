@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Representa o tabuleiro de xadrez e suas operações básicas.
  * Gerencia a posição das peças, movimentos válidos e estado do jogo.
  */
-class Tabuleiro {
+public class Tabuleiro {
 
     private static final int LINHAS = 8;
     private static final int COLUNAS = 8;

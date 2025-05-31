@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Classe abstrata que representa uma peça genérica do xadrez.
  * Define a estrutura básica e comportamentos comuns a todas as peças do jogo.
  */
-abstract class Peca {
+public abstract class Peca {
 	 /** Posição atual da peça no tabuleiro */
     public Posicao posicao;
     

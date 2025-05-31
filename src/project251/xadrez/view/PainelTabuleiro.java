@@ -2,6 +2,8 @@ package project251.xadrez.view;
 
 import project251.xadrez.controller.Controller;
 import project251.xadrez.model.Posicao;
+import project251.xadrez.model.XadrezFacade;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,17 +30,28 @@ public class PainelTabuleiro extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int linha = e.getY() / TAM_CASA; // ✅ Correto
+                int linha = e.getY() / TAM_CASA;
                 int coluna = e.getX() / TAM_CASA;
 
+                // Verifica se o botão direito do mouse foi clicado
                 if (SwingUtilities.isRightMouseButton(e)) {
-                    // botão direito: salvar jogo (4ª iteração)
-                    return;
+                    // Abrir JFileChooser para salvar o estado do jogo
+                    JFileChooser chooser = new JFileChooser();
+                    int resultado = chooser.showSaveDialog(null);
+                    
+                    if (resultado == JFileChooser.APPROVE_OPTION) {
+                        java.io.File arquivo = chooser.getSelectedFile();
+                        Controller.salvarEstadoJogo(XadrezFacade.getInstance(), arquivo); // Salvar estado do jogo
+                    }
+                    return; // Retorna para evitar outros comportamentos ao clicar com o botão direito
                 }
 
+                // Caso contrário, processa o clique normal
                 controller.processarClique(linha, coluna, () -> repaint());
             }
-        });}
+        });
+    }
+
 
 
     private void inicializarTabuleiro() {
