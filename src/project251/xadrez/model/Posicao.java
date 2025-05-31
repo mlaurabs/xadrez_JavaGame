@@ -1,4 +1,4 @@
-package project251.xadrez.model.tabuleiro;
+package project251.xadrez.model;
 
 import java.util.Objects;
 

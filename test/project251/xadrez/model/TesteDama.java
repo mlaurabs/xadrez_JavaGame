@@ -1,15 +1,10 @@
-package project251.xadrez.model.tests;
+package project251.xadrez.model;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import org.junit.Before;
 
-import project251.xadrez.model.api.Jogador;
-import project251.xadrez.model.figura.Dama;
-import project251.xadrez.model.figura.Peca;
-import project251.xadrez.model.figura.Peao;
-import project251.xadrez.model.tabuleiro.Posicao;
-import project251.xadrez.model.tabuleiro.Tabuleiro;
+
+import org.junit.Before;
 
 import java.util.List;
 
@@ -74,8 +69,8 @@ public class TesteDama {
         assertTrue(contemPosicao(movimentos, "h1")); // Horizontal
 
         // Verifica movimentos bloqueados
-        assertFalse(tabuleiro.moverPeca(new Posicao("d1"), new Posicao("d4"), Jogador.B)); // Bloqueado por peça aliada
-        assertFalse(tabuleiro.moverPeca(new Posicao("d1"), new Posicao("h5"), Jogador.B)); // Bloqueado por peça aliada
+        assertFalse(tabuleiro.moverPeca(new Posicao("d1"), new Posicao("d4"), Jogador.P)); // Bloqueado por peça aliada
+        assertFalse(tabuleiro.moverPeca(new Posicao("d1"), new Posicao("h5"), Jogador.P)); // Bloqueado por peça aliada
     }
 
     /**
@@ -86,7 +81,7 @@ public class TesteDama {
         tabuleiro.colocarPeca(dama, new Posicao("d4"));
 
         // Tentativa de movimento em L (inválido)
-        assertFalse(tabuleiro.moverPeca(new Posicao("d4"), new Posicao("e6"), Jogador.B));
+        assertFalse(tabuleiro.moverPeca(new Posicao("d4"), new Posicao("e6"), Jogador.P));
     }
 
     /**

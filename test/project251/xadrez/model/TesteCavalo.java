@@ -1,15 +1,8 @@
-package project251.xadrez.model.tests;
+package project251.xadrez.model;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before;
-
-import project251.xadrez.model.api.Jogador;
-import project251.xadrez.model.figura.Cavalo;
-import project251.xadrez.model.figura.Peca;
-import project251.xadrez.model.figura.Peao;
-import project251.xadrez.model.tabuleiro.Posicao;
-import project251.xadrez.model.tabuleiro.Tabuleiro;
 
 import java.util.List;
 
@@ -91,7 +84,7 @@ public class TesteCavalo {
         tabuleiro.colocarPeca(cavalo, new Posicao("b1"));
 
         // Tentativa de movimento horizontal (inválido)
-        assertFalse(tabuleiro.moverPeca(new Posicao("b1"), new Posicao("d1"), Jogador.B));
+        assertFalse(tabuleiro.moverPeca(new Posicao("b1"), new Posicao("d1"), Jogador.P));
     }
 
     /**

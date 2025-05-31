@@ -1,14 +1,12 @@
-package project251.xadrez.model.tabuleiro;
-import project251.xadrez.model.api.Jogador;
+package project251.xadrez.model;
+
 import java.util.ArrayList;
-import project251.xadrez.model.figura.*;
-import java.util.Scanner;
 
 /**
  * Representa o tabuleiro de xadrez e suas operações básicas.
  * Gerencia a posição das peças, movimentos válidos e estado do jogo.
  */
-public class Tabuleiro {
+class Tabuleiro {
 
     private static final int LINHAS = 8;
     private static final int COLUNAS = 8;
@@ -80,35 +78,37 @@ public class Tabuleiro {
      * Inicializa o tabuleiro com as peças nas posições iniciais padrão.
      */
     public void comecaJogo() {
-        // Peças Purple - Time 1 (linha 0 e 1)
-        colocarPeca(new Torre(new Posicao("a1"), 0), new Posicao("a1"));
-        colocarPeca(new Cavalo(new Posicao("b1"), 0), new Posicao("b1"));
-        colocarPeca(new Bispo(new Posicao("c1"), 0), new Posicao("c1"));
-        colocarPeca(new Dama(new Posicao("d1"), 0), new Posicao("d1"));
-        colocarPeca(new Rei(new Posicao("e1"), 0), new Posicao("e1"));
-        colocarPeca(new Bispo(new Posicao("f1"), 0), new Posicao("f1"));
-        colocarPeca(new Cavalo(new Posicao("g1"), 0), new Posicao("g1"));
-        colocarPeca(new Torre(new Posicao("h1"), 0), new Posicao("h1"));
+    	
+    	// Peças Cyon (Time 1 - linhas 6 e 7 tabuleiro gráfico)
+        colocarPeca(new Torre(new Posicao("a8"), 0), new Posicao("a8"));
+        colocarPeca(new Cavalo(new Posicao("b8"), 0), new Posicao("b8"));
+        colocarPeca(new Bispo(new Posicao("c8"), 0), new Posicao("c8"));
+        colocarPeca(new Dama(new Posicao("d8"), 0), new Posicao("d8"));
+        colocarPeca(new Rei(new Posicao("e8"), 0), new Posicao("e8"));
+        colocarPeca(new Bispo(new Posicao("f8"), 0), new Posicao("f8"));
+        colocarPeca(new Cavalo(new Posicao("g8"), 0), new Posicao("g8"));
+        colocarPeca(new Torre(new Posicao("h8"), 0), new Posicao("h8"));
         for (char c = 'a'; c <= 'h'; c++) {
-            String notacao = "" + c + "2";
+            String notacao = "" + c + "7";
             colocarPeca(new Peao(new Posicao(notacao), 0), new Posicao(notacao));
         }
 
-        // Peças Cyan - Time 1 (linha 6 e 7)
-        colocarPeca(new Torre(new Posicao("a8"), 1), new Posicao("a8"));
-        colocarPeca(new Cavalo(new Posicao("b8"), 1), new Posicao("b8"));
-        colocarPeca(new Bispo(new Posicao("c8"), 1), new Posicao("c8"));
-        colocarPeca(new Dama(new Posicao("d8"), 1), new Posicao("d8"));
-        colocarPeca(new Rei(new Posicao("e8"), 1), new Posicao("e8"));
-        colocarPeca(new Bispo(new Posicao("f8"), 1), new Posicao("f8"));
-        colocarPeca(new Cavalo(new Posicao("g8"), 1), new Posicao("g8"));
-        colocarPeca(new Torre(new Posicao("h8"), 1), new Posicao("h8"));
+        // Peças Purple (Time 2 - linhas 0 e 1 no tabuleiro gráfico)
+        colocarPeca(new Torre(new Posicao("a1"), 1), new Posicao("a1"));
+        colocarPeca(new Cavalo(new Posicao("b1"), 1), new Posicao("b1"));
+        colocarPeca(new Bispo(new Posicao("c1"), 1), new Posicao("c1"));
+        colocarPeca(new Dama(new Posicao("d1"), 1), new Posicao("d1"));
+        colocarPeca(new Rei(new Posicao("e1"), 1), new Posicao("e1"));
+        colocarPeca(new Bispo(new Posicao("f1"), 1), new Posicao("f1"));
+        colocarPeca(new Cavalo(new Posicao("g1"), 1), new Posicao("g1"));
+        colocarPeca(new Torre(new Posicao("h1"), 1), new Posicao("h1"));
         for (char c = 'a'; c <= 'h'; c++) {
-            String notacao = "" + c + "7";
+            String notacao = "" + c + "2";
             colocarPeca(new Peao(new Posicao(notacao), 1), new Posicao(notacao));
         }
+
+        
     }
-    
     
     /**
      * Obtém a peça em determinada posição.

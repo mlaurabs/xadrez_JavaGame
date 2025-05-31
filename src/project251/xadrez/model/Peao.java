@@ -1,14 +1,13 @@
-package project251.xadrez.model.figura;
+package project251.xadrez.model;
 
 import java.util.ArrayList;
-import project251.xadrez.model.tabuleiro.*;
 
 
 /**
  * Representa a peça Peão no jogo de xadrez. Implementa movimentos especiais
  * como avanço inicial de duas casas e captura em diagonal.
  */
-public class Peao extends Peca {
+class Peao extends Peca {
 	
 	/** Indica se o peão já realizou seu primeiro movimento */
 	private boolean jaMoveu = false; 
@@ -60,11 +59,12 @@ public class Peao extends Peca {
         int coluna = posicao.getColuna();
         int mov_cor;
         
-        if (this.cor == 0) { //se as peças forem brancas elas andam pra frente
-        	mov_cor = 1; 
+        if (this.cor == 0) { //se as peças forem cyon elas andam pra frente
+        	System.out.println("entrei");
+        	mov_cor = -1; 
         }
         else {
-        	mov_cor = -1; //se as peças forem pretas elas andar 'para tras' em relação ao tabuleiro das brancas
+        	mov_cor = +1; //se as peças forem purple elas andar 'para tras' em relação ao tabuleiro das cyon
         }
         
         Posicao frente = new Posicao(linha + 1*mov_cor, coluna);

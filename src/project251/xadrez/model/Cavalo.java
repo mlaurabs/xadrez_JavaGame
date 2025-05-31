@@ -1,15 +1,13 @@
-package project251.xadrez.model.figura;
+package project251.xadrez.model;
 
 import java.util.ArrayList;
 
-import project251.xadrez.model.tabuleiro.Posicao;
-import project251.xadrez.model.tabuleiro.Tabuleiro;
 
 /**
  * Representa a peça Cavalo no jogo de xadrez.
  * Controla movimentos válidos, estado de movimento e clonagem.
  */
-public class Cavalo extends Peca {
+class Cavalo extends Peca {
 
 	public Cavalo(Posicao posicao, int cor) {
 		super(posicao, cor);

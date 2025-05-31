@@ -1,14 +1,9 @@
-package project251.xadrez.model.tests;
+package project251.xadrez.model;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import org.junit.Before;
 
-import project251.xadrez.model.api.Jogador;
-import project251.xadrez.model.figura.Peao;
-import project251.xadrez.model.figura.Peca;
-import project251.xadrez.model.tabuleiro.Posicao;
-import project251.xadrez.model.tabuleiro.Tabuleiro;
+import org.junit.Before;
 
 import java.util.List;
 
@@ -70,7 +65,7 @@ public class TestePeao {
      */
     @Test
     public void testeMovimentosValidosAposInicio() {
-        Jogador jogador = Jogador.B;
+        Jogador jogador = Jogador.P;
         Posicao pos_origem = new Posicao(1, 4); // e2
         Peca peca = tabuleiro.getPeca(pos_origem);
 
@@ -103,7 +98,7 @@ public class TestePeao {
      * Espera-se que uma exceção seja lançada para indicar a ilegalidade do movimento.
      */
     public void testeMovimentoDiagonalInvalida() {
-        Jogador jogador = Jogador.B;
+        Jogador jogador = Jogador.P;
         Posicao pos_origem = new Posicao("e2");
         Posicao pos_destino = new Posicao("f3"); // casa diagonal vazia
 
@@ -122,7 +117,7 @@ public class TestePeao {
      */
     @Test
     public void testeMovimentoDiagonalValida() {
-        Jogador jogador = Jogador.B;
+        Jogador jogador = Jogador.P;
 
         // Coloca um peão preto em f3 para ser capturado
         tabuleiro.colocarPeca(new Peao(new Posicao("f3"), 1), new Posicao("f3"));

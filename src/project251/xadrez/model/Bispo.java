@@ -1,10 +1,8 @@
-package project251.xadrez.model.figura;
+package project251.xadrez.model;
 
 import java.util.ArrayList;
-import project251.xadrez.model.tabuleiro.Posicao;
-import project251.xadrez.model.tabuleiro.Tabuleiro;
 
-public class Bispo extends Peca {
+class Bispo extends Peca {
 
 	public Bispo(Posicao posicao, int cor) {
 		super(posicao, cor);

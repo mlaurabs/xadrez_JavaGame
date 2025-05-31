@@ -1,14 +1,9 @@
-package project251.xadrez.model.tests;
+package project251.xadrez.model;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import org.junit.Before;
 
-import project251.xadrez.model.api.Jogador;
-import project251.xadrez.model.figura.Torre;
-import project251.xadrez.model.figura.Peca;
-import project251.xadrez.model.tabuleiro.Posicao;
-import project251.xadrez.model.tabuleiro.Tabuleiro;
+import org.junit.Before;
 
 import java.util.List;
 
@@ -89,7 +84,7 @@ public class TesteTorre {
         tabuleiro.colocarPeca(torre, new Posicao("d4"));
 
         // Tentativa de movimento diagonal (inválido)
-        assertFalse(tabuleiro.moverPeca(new Posicao("d4"), new Posicao("e5"), Jogador.B));
+        assertFalse(tabuleiro.moverPeca(new Posicao("d4"), new Posicao("e5"), Jogador.P));
     }
 
     // Método auxiliar para verificar se uma lista contém uma posição

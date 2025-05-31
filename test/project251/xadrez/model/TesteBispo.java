@@ -1,15 +1,11 @@
-package project251.xadrez.model.tests;
+package project251.xadrez.model;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import org.junit.Before;
 
-import project251.xadrez.model.api.Jogador;
-import project251.xadrez.model.figura.Bispo;
-import project251.xadrez.model.figura.Peca;
-import project251.xadrez.model.figura.Peao;
-import project251.xadrez.model.tabuleiro.Posicao;
-import project251.xadrez.model.tabuleiro.Tabuleiro;
+import project251.xadrez.model.*;
+
+import org.junit.Before;
 
 import java.util.List;
 
@@ -70,7 +66,7 @@ public class TesteBispo {
 
         assertTrue(contemPosicao(movimentos, "d2")); // pode e movimentar para casas anteriores a peça aliada na sua diagonal
         // Verifica movimentos bloqueados
-        assertFalse(tabuleiro.moverPeca(new Posicao("c1"), new Posicao("f4"), Jogador.B)); //bloqueado por peça da mesma cor
+        assertFalse(tabuleiro.moverPeca(new Posicao("c1"), new Posicao("f4"), Jogador.P)); //bloqueado por peça da mesma cor
     }
 	 
 
@@ -82,7 +78,7 @@ public class TesteBispo {
 		tabuleiro.colocarPeca(bispo, new Posicao("c1"));
 
 		// Tentativa de movimento vertical (inválido)
-		assertFalse(tabuleiro.moverPeca(new Posicao("c1"), new Posicao("c4"), Jogador.B));
+		assertFalse(tabuleiro.moverPeca(new Posicao("c1"), new Posicao("c4"), Jogador.P));
 	}
 
 	/**

@@ -1,15 +1,12 @@
-package project251.xadrez.model.figura;
+package project251.xadrez.model;
 
 import java.util.ArrayList;
-
-import project251.xadrez.model.tabuleiro.Posicao;
-import project251.xadrez.model.tabuleiro.Tabuleiro;
 
 /**
  * Representa a peça Torre no jogo de xadrez.
  * Controla movimentos válidos, estado de movimento (para roque) e clonagem.
  */
-public class Torre extends Peca {
+class Torre extends Peca {
 	public boolean jaMoveu = false; 
 
 	/**

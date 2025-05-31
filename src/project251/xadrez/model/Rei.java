@@ -1,15 +1,12 @@
-package project251.xadrez.model.figura;
+package project251.xadrez.model;
 
 import java.util.ArrayList;
-
-import project251.xadrez.model.tabuleiro.Posicao;
-import project251.xadrez.model.tabuleiro.Tabuleiro;
 
 /**
  * Representa a peça Rei no jogo de xadrez.
  * Implementa movimentos especiais como roque e verificação de xeque.
  */
-public class Rei extends Peca {
+class Rei extends Peca {
 	/** Indica se o rei já realizou algum movimento */
 	private boolean jaMoveu = false; 
 	

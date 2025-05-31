@@ -1,10 +1,9 @@
-package project251.xadrez.model.api;
+package project251.xadrez.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-import project251.xadrez.model.figura.*;
-import project251.xadrez.model.tabuleiro.*;
 
 /**
  * Classe principal que controla o fluxo do jogo de xadrez.
@@ -20,7 +19,7 @@ public class XadrezFacade {
     private XadrezFacade() {
         this.tabuleiro = new Tabuleiro();
         this.tabuleiro.comecaJogo();
-        this.jogadorAtual = Jogador.B;
+        this.jogadorAtual = Jogador.C;
         this.scanner = new Scanner(System.in);
     }
 
@@ -43,18 +42,69 @@ public class XadrezFacade {
       
     //}
 
-    /**
-     * Exibe as informações iniciais do jogo.
-     */
-    private void exibirIntro() {
-        System.out.println("\n============= XADREZ =============");
-        System.out.println("\n***** LEGENDA *****");
-        System.out.println("\n*Peças*\nD - Dama\nR - Rei\nT - Torre\nB - Bispo\nC - Cavalo\nP - Peão");
-        System.out.println("\n*Jogadores*\nB - Branco\nP - Preto\n\n*Exemplo*\nTB: torre branca");
-        System.out.println("\n========== INICIANDO JOGO ==========");
+
+    //System.out.println("\n===== TURNO DO JOGADOR " + jogadorAtual.getNome() + " =====");
+
+    //verificarXeque();
+
+	/*
+	 * if (jogadorAtual.emXeque && jogadorAtual.xeque_mate) {
+	 * System.out.println(">>> XEQUE-MATE! Jogador " +
+	 * jogadorAtual.getNome().toUpperCase() + " perdeu o jogo. <<<");
+	 * System.exit(0); }
+	 * 
+	 * tabuleiro.exibirTabuleiro();
+	 * 
+	 * Posicao origem =
+	 * obterPosicao("\nDigite a posição da peça que deseja mover (ex: e2): "); if
+	 * (origem == null) return;
+	 * 
+	 * Peca peca = tabuleiro.getPeca(origem); if (!validarPecaSelecionada(peca))
+	 * return;
+	 * 
+	 * ArrayList<Posicao> movimentosValidos = obterMovimentosValidos(peca); if
+	 * (movimentosValidos.isEmpty()) {
+	 * System.out.println("\nEssa peça não tem movimentos válidos."); return; }
+	 * 
+	 * exibirMovimentos(movimentosValidos);
+	 * 
+	 * Posicao destino = obterDestino(movimentosValidos); if (destino == null)
+	 * return;
+	 * 
+	 * tabuleiro.moverPeca(origem, destino, jogadorAtual);
+	 * 
+	 * // Verifica promoção de peão if (peca instanceof Peao && (destino.getLinha()
+	 * == 0 || destino.getLinha() == 7)) {
+	 * System.out.println("\n***** PEÃO ANTES DA PROMOÇÃO ***** \n");
+	 * tabuleiro.exibirTabuleiro(); Peca novaPeca =
+	 * tabuleiro.escolherPromocao(destino, peca.cor, scanner);
+	 * tabuleiro.promovePeca(peca, novaPeca, destino); }
+	 * 
+	 * verificarXequeAdversario(); Jogador.imprimirPlacarFormatado(); jogadorAtual =
+	 * jogadorAtual.proximo();
+	 */
+    
+    public ArrayList<Posicao> processaTurno(Jogador j, Posicao origem) {
+    	//System.out.println("\n===== TURNO DO JOGADOR " + j.getNome() + " =====");
+    	
+        if (origem == null) return null;
+        
+        Peca peca = tabuleiro.getPeca(origem);
+        System.out.printf("Tipo da peça: %s\n",peca.getTipoPeca());
+        System.out.printf("Cor da peça: %s\n", peca.getCor());
+        if (!validarPecaSelecionada(peca)) return null;
+        
+        ArrayList<Posicao> movimentosValidos = obterMovimentosValidos(peca);
+        if (movimentosValidos.isEmpty()) {
+        	System.out.println("\nEssa peça não tem movimentos válidos.");
+            return null;
+        }
+
+        exibirMovimentos(movimentosValidos);
+
+    	return movimentosValidos;
     }
-
-
+    
     /**
      * Verifica se o rei do jogador atual está em xeque.
      */
@@ -96,7 +146,7 @@ public class XadrezFacade {
         Tabuleiro tabuleiroAux = tabuleiro.clonar(); 
 
         // Pega peças do jogador na cópia
-        ArrayList<Peca> pecas = tabuleiro.getPecasPorCor(jogadorAtual == Jogador.B ? 0 : 1);
+        ArrayList<Peca> pecas = tabuleiro.getPecasPorCor(jogadorAtual == Jogador.P ? 0 : 1);
 
         for (Peca peca : pecas) {
             Posicao origem = peca.getPosicao();
@@ -173,7 +223,7 @@ public class XadrezFacade {
      * @param peca (Peça) a ser analisada
      * @return Lista de posições válidas
      */
-    private ArrayList<Posicao> obterMovimentosValidos(Peca peca) {
+    public ArrayList<Posicao> obterMovimentosValidos(Peca peca) {
         if (!jogadorAtual.emXeque) {
             peca.movValidos(tabuleiro);
         }

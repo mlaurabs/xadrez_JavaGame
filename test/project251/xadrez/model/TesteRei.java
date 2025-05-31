@@ -1,15 +1,10 @@
-package project251.xadrez.model.tests;
+package project251.xadrez.model;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
-
-import project251.xadrez.model.api.Jogador;
-import project251.xadrez.model.figura.*;
-import project251.xadrez.model.tabuleiro.Posicao;
-import project251.xadrez.model.tabuleiro.Tabuleiro;
 
 import java.util.List;
 
@@ -75,7 +70,7 @@ public class TesteRei {
 		Rei rei = new Rei(new Posicao("e1"), 0);
 		tabuleiro.colocarPeca(rei, new Posicao("e1"));
 
-		assertFalse(tabuleiro.moverPeca(new Posicao("e1"), new Posicao("e3"), Jogador.B));
+		assertFalse(tabuleiro.moverPeca(new Posicao("e1"), new Posicao("e3"), Jogador.P));
 	}
 	
 	@Test
@@ -100,7 +95,7 @@ public class TesteRei {
 	@Test
 	public void testeXequeDescoberto() {
 	    Tabuleiro tabuleiro = new Tabuleiro();
-	    Jogador jogador_b = Jogador.B;
+	    Jogador jogador_b = Jogador.P;
 
 	    // Rei preto em e8
 	    Rei reiPreto = new Rei(new Posicao("e8"), 1);

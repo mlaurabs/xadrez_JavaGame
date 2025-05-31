@@ -1,4 +1,4 @@
-package project251.xadrez.model.api;
+package project251.xadrez.model;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,8 +8,8 @@ import java.util.Map;
  * peças capturadas e informações do jogo.
  */
 public enum Jogador {
-    B,  // Jogador das peças brancas
-    P;  // Jogador das peças pretas
+    C,  // Jogador das peças do time 1 (cyon)
+    P;  // Jogador das peças do time 2 (purple)
 
     /** Indica se o jogador está em xeque */
     public boolean emXeque = false;
@@ -19,8 +19,8 @@ public enum Jogador {
 
     // Mapa para armazenar as peças capturadas por tipo
     private final Map<String, Integer> pecasCapturadas = new HashMap<>();
-    
-    // Mapeamento de códigos para nomes completos das peças
+
+ // Mapeamento de códigos para nomes completos das peças
     private static final Map<String, String> NOMES_PECAS = Map.of(
         "P", "PEÃO",
         "T", "TORRE",
@@ -29,15 +29,7 @@ public enum Jogador {
         "D", "DAMA",
         "R", "REI"
     );
-
-    /**
-     * Obtém o próximo jogador (alterna entre brancas e pretas).
-     * @return Próximo jogador na sequência
-     */
-    public Jogador proximo() {
-        return this == B ? P : B;
-    }
-
+    
     /**
      * Verifica se um tipo de peça é válido.
      * @param tipo (String) da peça a ser validado ex.: "P" de preto
@@ -46,6 +38,15 @@ public enum Jogador {
     private boolean isPecaValida(String tipo) {
         return NOMES_PECAS.containsKey(tipo);
     }
+    
+    /**
+     * Obtém o próximo jogador (alterna entre cyons e Purples).
+     * @return Próximo jogador na sequência
+     */
+    public Jogador proximo() {
+        return this == C ? P : C;
+    }
+
 
     /**
      * Registra uma peça capturada pelo jogador.
@@ -68,14 +69,14 @@ public enum Jogador {
         System.out.println("PLACAR");
         
         // Linha do jogador Preto
-        System.out.print("PRETO (P) : ");
-        String preto = P.getPecasCapturadasString().replace("P: ", "");
-        System.out.println(preto.isEmpty() ? "Nenhuma peça capturada" : formatarPlacar(preto));
+        System.out.print("Cyon (C) : ");
+        String cyon = C.getPecasCapturadasString().replace("C: ", "");
+        System.out.println(cyon.isEmpty() ? "Nenhuma peça capturada" : formatarPlacar(cyon));
         
         // Linha do jogador Branco
-        System.out.print("BRANCO (B) : ");
-        String branco = B.getPecasCapturadasString().replace("B: ", "");
-        System.out.println(branco.isEmpty() ? "Nenhuma peça capturada" : formatarPlacar(branco));
+        System.out.print("Purple (P) : ");
+        String purple = P.getPecasCapturadasString().replace("P: ", "");
+        System.out.println(purple.isEmpty() ? "Nenhuma peça capturada" : formatarPlacar(purple));
         
         System.out.println("========================================");
     }
@@ -129,17 +130,17 @@ public enum Jogador {
     
     /**
      * Obtém o nome completo do jogador.
-     * @return "BRANCO" ou "PRETO"
+     * @return "PURPLE" ou "CYON"
      */
     public String getNome() {
-        return (this == B) ? "BRANCO" : "PRETO";
+        return (this == C) ? "CYON" : "PURPLE";
     }
 
     /**
      * Obtém o código numérico da cor do jogador.
-     * @return 0 para brancas, 1 para pretas
+     * @return 0 para CYON, 1 para PURPLE
      */
     public int getCor() {
-        return (this == B) ? 0 : 1;
+        return (this == C) ? 0 : 1;
     }
 }

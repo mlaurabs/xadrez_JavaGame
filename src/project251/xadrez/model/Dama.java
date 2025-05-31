@@ -1,11 +1,9 @@
-package project251.xadrez.model.figura;
+package project251.xadrez.model;
 
 import java.util.ArrayList;
 
-import project251.xadrez.model.tabuleiro.Posicao;
-import project251.xadrez.model.tabuleiro.Tabuleiro;
 
-public class Dama extends Peca {
+class Dama extends Peca {
 	/**
 	 * Representa a peça Dama no jogo de xadrez.
 	 * Controla movimentos válidos, estado de movimento e clonagem.

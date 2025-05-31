@@ -1,13 +1,12 @@
-package project251.xadrez.model.figura;
+package project251.xadrez.model;
 
 import java.util.ArrayList;
-import project251.xadrez.model.tabuleiro.*;
 
 /**
  * Classe abstrata que representa uma peça genérica do xadrez.
  * Define a estrutura básica e comportamentos comuns a todas as peças do jogo.
  */
-public abstract class Peca {
+abstract class Peca {
 	 /** Posição atual da peça no tabuleiro */
     public Posicao posicao;
     
@@ -55,11 +54,11 @@ public abstract class Peca {
     
     /**
      * Retorna a representação textual da cor da peça.
-     * @return "B" para brancas, "P" para pretas
+     * @return "C" para cyon, "P" para purple
      */
     public String getCor() {
         if (cor == 0) {
-            return "B";
+            return "C";
         } else {
             return "P";
         }
