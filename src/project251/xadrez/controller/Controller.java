@@ -3,7 +3,9 @@ package project251.xadrez.controller;
 import javax.swing.*;
 
 import project251.xadrez.model.Jogador;
+import project251.xadrez.model.Peca;
 import project251.xadrez.model.Posicao;
+import project251.xadrez.model.Tabuleiro;
 import project251.xadrez.model.TabuleiroObserver;
 import project251.xadrez.model.XadrezFacade;
 
@@ -39,7 +41,23 @@ public class Controller {
 	public ArrayList<Posicao> obterMovimentosValidos() { return
 			movimentosValidos; }
 	 
-	
+    public static void salvarEstadoJogo(XadrezFacade facade, java.io.File arquivo) {
+        try (java.io.PrintWriter writer = new java.io.PrintWriter(arquivo)) {
+            Tabuleiro tabuleiro = facade.getTabuleiro();
+            for (int lin = 0; lin < 8; lin++) {
+                for (int col = 0; col < 8; col++) {
+                    Peca peca = tabuleiro.getPeca(new Posicao(lin, col));
+                    if (peca != null) {
+                        writer.printf("%s;%d;%d;%s%n", peca.getTipoPeca(), lin, col, peca.getCor());
+                    }
+                }
+            }
+            JOptionPane.showMessageDialog(null, "Jogo salvo com sucesso!");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro ao salvar: " + ex.getMessage());
+        }
+    }
 
 	 
  

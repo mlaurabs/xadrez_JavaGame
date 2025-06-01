@@ -16,7 +16,10 @@ public class XadrezFacade {
     private final Scanner scanner;
     private ArrayList<Posicao> movimentosValidos = new ArrayList<>();
 	private List<TabuleiroObserver> observers = new ArrayList<>();
-	    
+	
+	public Tabuleiro getTabuleiro() {
+		return tabuleiro;
+	}
 
  // 1. Construtor privado
     private XadrezFacade() {
