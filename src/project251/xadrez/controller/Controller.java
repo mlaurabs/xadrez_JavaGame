@@ -29,10 +29,9 @@ public class Controller {
         Posicao clicada = new Posicao(linha, coluna);
 
         System.out.printf("linha: %d - coluna %d\n", clicada.getLinha(), clicada.getColuna());
- 
-        
+
     	movimentosValidos = jogo.processaTurno(jogadorAtual, clicada);
-        //jogo.notificarObservers();
+
         
     }
     
