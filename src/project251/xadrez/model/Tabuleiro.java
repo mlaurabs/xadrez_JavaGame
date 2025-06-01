@@ -1,6 +1,7 @@
 package project251.xadrez.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Representa o tabuleiro de xadrez e suas operações básicas.
@@ -60,6 +61,7 @@ class Tabuleiro {
             throw new IllegalArgumentException("Já existe uma peça na posição " + posicao);
         }
         pecas[posicao.getLinha()][posicao.getColuna()] = peca;
+        //notificarObservers(); // Notifica após alteração
     }
     
     /**
@@ -71,6 +73,7 @@ class Tabuleiro {
     public void promovePeca(Peca antiga, Peca nova, Posicao posicao) {
     	if (existePeca(posicao) && antiga instanceof Peao) {
     		pecas[posicao.getLinha()][posicao.getColuna()] = nova;
+    		//notificarObservers(); // Notifica após alteração
         }
     }
     
@@ -144,6 +147,7 @@ class Tabuleiro {
             }
             Object removida = getPeca(posicao);
             pecas[posicao.getLinha()][posicao.getColuna()] = null;
+            //notificarObservers(); // Notifica após alteração
             return removida;
         }
         return null;
@@ -218,6 +222,7 @@ class Tabuleiro {
 		        removerPeca(origem);
 		        peca.setPosicao(destino);
 		        colocarPeca(peca, destino);
+		        //notificarObservers(); // Notifica após alteração
 		        return true;
 
 		 }

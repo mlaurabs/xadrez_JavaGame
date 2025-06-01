@@ -2,6 +2,8 @@ package project251.xadrez.view;
 
 import project251.xadrez.controller.Controller;
 import project251.xadrez.model.Posicao;
+import project251.xadrez.model.TabuleiroObserver;
+import project251.xadrez.model.XadrezFacade;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,18 +12,20 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class PainelTabuleiro extends JPanel {
-
+public class PainelTabuleiro extends JPanel implements TabuleiroObserver{
     private static final int TAM_CASA = 80;
     private static final Color COR_CLARA = new Color(255, 255, 255);
     private static final Color COR_ESCURA = new Color(0, 0, 0);
-    private final Controller controller = new Controller();
+    private final Controller controller;
+    private ArrayList<Posicao> movimentosValidos = new ArrayList<>();
 
     private String[][] tabuleiro = new String[8][8];
 
-    public PainelTabuleiro() {
+    public PainelTabuleiro(Controller  controller) {
+    	this.controller = controller;
+    	this.controller.registrarObserver(this); // Registra-se via Controller
+    	
         setPreferredSize(new Dimension(8 * TAM_CASA, 8 * TAM_CASA));
-        inicializarTabuleiro();
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -37,6 +41,8 @@ public class PainelTabuleiro extends JPanel {
             }
         });
     }
+    
+
 
     private void inicializarTabuleiro() {
     	
@@ -92,6 +98,7 @@ public class PainelTabuleiro extends JPanel {
 
                 // Pinta a peça (se houver)
                 String nomePeca = tabuleiro[linha][coluna];
+                System.out.println(nomePeca);
                 if (nomePeca != null) {
                     BufferedImage imagem = ImagemPecas.getImagem(nomePeca);
                     if (imagem != null) {
@@ -101,10 +108,9 @@ public class PainelTabuleiro extends JPanel {
             }
         }
 
-        ArrayList<Posicao> destaques = controller.obterMovimentosValidos();
-        if (destaques != null && !destaques.isEmpty()) {
+        if (movimentosValidos != null && !movimentosValidos.isEmpty()) {
             g2.setColor(new Color(255, 182, 255, 120)); 
-            for (Posicao pos : destaques) {
+            for (Posicao pos : movimentosValidos) {
  
                 int x = pos.getColuna() * TAM_CASA;
                 int y = pos.getLinha() * TAM_CASA;
@@ -117,4 +123,17 @@ public class PainelTabuleiro extends JPanel {
         inicializarTabuleiro();
         repaint();
     }
+
+
+
+    @Override
+    public void atualizar() {
+        // Atualiza movimentos e repinta na thread da UI
+        SwingUtilities.invokeLater(() -> {
+            movimentosValidos = controller.obterMovimentosValidos();
+            repaint();
+        });
+    }
+
+
 }

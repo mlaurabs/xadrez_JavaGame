@@ -1,6 +1,9 @@
 package project251.xadrez.view;
 
 import javax.swing.*;
+
+import project251.xadrez.controller.Controller;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -10,6 +13,7 @@ public class JanelaPrincipal extends JFrame {
     private JPanel painelPrincipal;
     private JPanel telaInicial;
     private PainelTabuleiro painelTabuleiro;
+    private Controller controller;
 
     public JanelaPrincipal() {
         super("Jogo de Xadrez - Projeto INF1636");
@@ -18,6 +22,8 @@ public class JanelaPrincipal extends JFrame {
         inicializarComponentes();
 
         setVisible(true);
+        
+     
     }
 
     private void configurarJanela() {
@@ -31,8 +37,11 @@ public class JanelaPrincipal extends JFrame {
         cardLayout = new CardLayout();
         painelPrincipal = new JPanel(cardLayout);
 
+     // Cria o controller primeiro
+        this.controller = new Controller();
+        
         criarTelaInicial();
-        painelTabuleiro = new PainelTabuleiro(); // Será implementado
+        painelTabuleiro = new PainelTabuleiro(controller); 
 
         painelPrincipal.add(telaInicial, "TelaInicial");
         painelPrincipal.add(painelTabuleiro, "Tabuleiro");

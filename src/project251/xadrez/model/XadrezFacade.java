@@ -14,12 +14,14 @@ public class XadrezFacade {
     private final Tabuleiro tabuleiro;
     private Jogador jogadorAtual;
     private final Scanner scanner;
+    private ArrayList<Posicao> movimentosValidos = new ArrayList<>();
+	private List<TabuleiroObserver> observers = new ArrayList<>();
+	    
 
  // 1. Construtor privado
     private XadrezFacade() {
         this.tabuleiro = new Tabuleiro();
         this.tabuleiro.comecaJogo();
-        this.jogadorAtual = Jogador.C;
         this.scanner = new Scanner(System.in);
     }
 
@@ -34,88 +36,54 @@ public class XadrezFacade {
         return instance;
     }
 
-    /**
-     * Inicia o loop principal do jogo.
-     * Exibe a introdução e processa turnos alternados.
-     */
-    //public void iniciarJogo() {
-      
-    //}
-
-
-    //System.out.println("\n===== TURNO DO JOGADOR " + jogadorAtual.getNome() + " =====");
-
-    //verificarXeque();
-
-	/*
-	 * if (jogadorAtual.emXeque && jogadorAtual.xeque_mate) {
-	 * System.out.println(">>> XEQUE-MATE! Jogador " +
-	 * jogadorAtual.getNome().toUpperCase() + " perdeu o jogo. <<<");
-	 * System.exit(0); }
-	 * 
-	 * tabuleiro.exibirTabuleiro();
-	 * 
-	 * Posicao origem =
-	 * obterPosicao("\nDigite a posição da peça que deseja mover (ex: e2): "); if
-	 * (origem == null) return;
-	 * 
-	 * Peca peca = tabuleiro.getPeca(origem); if (!validarPecaSelecionada(peca))
-	 * return;
-	 * 
-	 * ArrayList<Posicao> movimentosValidos = obterMovimentosValidos(peca); if
-	 * (movimentosValidos.isEmpty()) {
-	 * System.out.println("\nEssa peça não tem movimentos válidos."); return; }
-	 * 
-	 * exibirMovimentos(movimentosValidos);
-	 * 
-	 * Posicao destino = obterDestino(movimentosValidos); if (destino == null)
-	 * return;
-	 * 
-	 * tabuleiro.moverPeca(origem, destino, jogadorAtual);
-	 * 
-	 * // Verifica promoção de peão if (peca instanceof Peao && (destino.getLinha()
-	 * == 0 || destino.getLinha() == 7)) {
-	 * System.out.println("\n***** PEÃO ANTES DA PROMOÇÃO ***** \n");
-	 * tabuleiro.exibirTabuleiro(); Peca novaPeca =
-	 * tabuleiro.escolherPromocao(destino, peca.cor, scanner);
-	 * tabuleiro.promovePeca(peca, novaPeca, destino); }
-	 * 
-	 * verificarXequeAdversario(); Jogador.imprimirPlacarFormatado(); jogadorAtual =
-	 * jogadorAtual.proximo();
-	 */
+    public void addObserver(TabuleiroObserver observer) {
+        observers.add(observer);
+    }
+    
+    public void removeObserver(TabuleiroObserver observer) {
+        observers.remove(observer);
+    }
+    
+    public void notificarObservers() {
+        for (TabuleiroObserver observer : observers) {
+        	observer.atualizar();
+        	System.out.println("Notifiquei");
+        	
+        }
+    }
     
     public ArrayList<Posicao> processaTurno(Jogador j, Posicao origem) {
     	//System.out.println("\n===== TURNO DO JOGADOR " + j.getNome() + " =====");
-    	
+    	movimentosValidos.clear();
         if (origem == null) return null;
         
         Peca peca = tabuleiro.getPeca(origem);
         System.out.printf("Tipo da peça: %s\n",peca.getTipoPeca());
         System.out.printf("Cor da peça: %s\n", peca.getCor());
-        if (!validarPecaSelecionada(peca)) return null;
+        if (!validarPecaSelecionada(peca, j)) return null;
         
-        ArrayList<Posicao> movimentosValidos = obterMovimentosValidos(peca);
+        movimentosValidos = obterMovimentosValidos(peca, j);
         if (movimentosValidos.isEmpty()) {
         	System.out.println("\nEssa peça não tem movimentos válidos.");
             return null;
         }
-
+        notificarObservers();
         exibirMovimentos(movimentosValidos);
 
     	return movimentosValidos;
     }
-    
+ 
     /**
      * Verifica se o rei do jogador atual está em xeque.
      */
-    private void verificarXeque() {
+    private void verificarXeque(Jogador jogadorAtual) {
         jogadorAtual.emXeque = false;
         for (Peca p : tabuleiro.getPecasPorCor(jogadorAtual.getCor())) {
             if (p instanceof Rei rei) {
                 rei.verificaXeque(tabuleiro);
                 if (rei.estaEmXeque()) {
                     jogadorAtual.emXeque = true;
-                    existeMovimentoQueTiraReiDoXeque();
+                    existeMovimentoQueTiraReiDoXeque(jogadorAtual);
                     System.out.println(">>> SEU REI ESTÁ EM XEQUE! <<<\n");
                 }
             }
@@ -125,7 +93,7 @@ public class XadrezFacade {
     /**
      * Verifica se o movimento atual colocou o adversário em xeque.
      */
-    private void verificarXequeAdversario() {
+    private void verificarXequeAdversario(Jogador jogadorAtual) {
         Jogador adversario = jogadorAtual.proximo();
         for (Peca p : tabuleiro.getPecasPorCor(adversario.getCor())) {
             if (p instanceof Rei rei) {
@@ -141,7 +109,7 @@ public class XadrezFacade {
      * Verifica se existe algum movimento que tire o rei do xeque.
      * Atualiza o estado de xeque-mate se necessário.
      */
-    private void existeMovimentoQueTiraReiDoXeque() {
+    private void existeMovimentoQueTiraReiDoXeque(Jogador jogadorAtual) {
         jogadorAtual.xeque_mate = true; 
         Tabuleiro tabuleiroAux = tabuleiro.clonar(); 
 
@@ -206,11 +174,12 @@ public class XadrezFacade {
      * @param peca (Peça) a ser validada
      * @return true se a peça for válida, false caso contrário
      */
-    private boolean validarPecaSelecionada(Peca peca) {
+    private boolean validarPecaSelecionada(Peca peca, Jogador jogadorAtual) {
         if (peca == null) {
             System.out.println("\nNão há peça nessa posição.");
             return false;
         }
+        System.out.printf("Aqui em: %s", jogadorAtual.toString());
         if (!peca.getCor().toString().equalsIgnoreCase(jogadorAtual.toString())) {
             System.out.println("\nVocê só pode mover suas próprias peças!");
             return false;
@@ -223,7 +192,7 @@ public class XadrezFacade {
      * @param peca (Peça) a ser analisada
      * @return Lista de posições válidas
      */
-    public ArrayList<Posicao> obterMovimentosValidos(Peca peca) {
+    public ArrayList<Posicao> obterMovimentosValidos(Peca peca, Jogador jogadorAtual) {
         if (!jogadorAtual.emXeque) {
             peca.movValidos(tabuleiro);
         }

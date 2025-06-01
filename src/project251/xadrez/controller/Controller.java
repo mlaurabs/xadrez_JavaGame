@@ -4,17 +4,23 @@ import javax.swing.*;
 
 import project251.xadrez.model.Jogador;
 import project251.xadrez.model.Posicao;
+import project251.xadrez.model.TabuleiroObserver;
 import project251.xadrez.model.XadrezFacade;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
-    private final XadrezFacade xad = XadrezFacade.getInstance();
+    private final XadrezFacade jogo = XadrezFacade.getInstance();
     private Posicao origemSelecionada;
     private ArrayList<Posicao> movimentosValidos = new ArrayList<>();
-    Jogador jogadorAtual = Jogador.C;
+    Jogador jogadorAtual = Jogador.P;
 
+     // Método para registrar observers
+    public void registrarObserver(TabuleiroObserver observer) {
+        jogo.addObserver(observer);
+    }
+    
     
     /**
      * Processa um clique em uma casa do tabuleiro
@@ -25,16 +31,18 @@ public class Controller {
         System.out.printf("linha: %d - coluna %d\n", clicada.getLinha(), clicada.getColuna());
  
         
-    	movimentosValidos = xad.processaTurno(jogadorAtual, clicada);
-    	
-        
+    	movimentosValidos = jogo.processaTurno(jogadorAtual, clicada);
+        //jogo.notificarObservers();
         
     }
     
-   public ArrayList<Posicao> obterMovimentosValidos() {
-	   return movimentosValidos;
-   } 
-    
+	
+	public ArrayList<Posicao> obterMovimentosValidos() { return
+			movimentosValidos; }
+	 
+	
+
+	 
  
 
 }
