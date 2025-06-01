@@ -27,7 +27,7 @@ public class Controller {
         
     	movimentosValidos = xad.processaTurno(jogadorAtual, clicada);
     	
-        
+        repaintCallback.run();
         
     }
     
