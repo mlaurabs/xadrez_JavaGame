@@ -18,12 +18,14 @@ public class PainelTabuleiro extends JPanel implements TabuleiroObserver{
     private static final Color COR_ESCURA = new Color(0, 0, 0);
     private final Controller controller;
     private ArrayList<Posicao> movimentosValidos = new ArrayList<>();
-
+    private String[][] estadoTabuleiro;
     private String[][] tabuleiro = new String[8][8];
 
     public PainelTabuleiro(Controller  controller) {
     	this.controller = controller;
     	this.controller.registrarObserver(this); // Registra-se via Controller
+    	this.estadoTabuleiro = controller.getEstadoTabuleiro();
+
     	
         setPreferredSize(new Dimension(8 * TAM_CASA, 8 * TAM_CASA));
 
@@ -37,51 +39,12 @@ public class PainelTabuleiro extends JPanel implements TabuleiroObserver{
                     return;
                 }
 
-                controller.processarClique(linha, coluna, () -> repaint());
+                controller.processarClique(linha, coluna);
             }
         });
     }
     
 
-
-    private void inicializarTabuleiro() {
-    	
-    	// Peças Cian (Cyan) - Time 1 (linha 6 e 7)
-    	tabuleiro[7][0] = "CyanR"; // Torre
-    	tabuleiro[7][1] = "CyanN"; // Cavalo
-    	tabuleiro[7][2] = "CyanB"; // Bispo
-    	tabuleiro[7][3] = "CyanQ"; // Rainha
-    	tabuleiro[7][4] = "CyanK"; // Rei
-    	tabuleiro[7][5] = "CyanB"; // Bispo
-    	tabuleiro[7][6] = "CyanN"; // Cavalo
-    	tabuleiro[7][7] = "CyanR"; // Torre
-
-        for (int col = 0; col < 8; col++) 
-        	tabuleiro[6][col] = "CyanP";
-
-     // Peças Roxas (Purple) - Time 2 (linha 6 e 7)
-    	tabuleiro[0][0] = "PurpleR"; // Torre
-    	tabuleiro[0][1] = "PurpleN"; // Cavalo
-    	tabuleiro[0][2] = "PurpleB"; // Bispo
-    	tabuleiro[0][3] = "PurpleQ"; // Rainha
-    	tabuleiro[0][4] = "PurpleK"; // Rei
-    	tabuleiro[0][5] = "PurpleB"; // Bispo
-    	tabuleiro[0][6] = "PurpleN"; // Cavalo
-    	tabuleiro[0][7] = "PurpleR"; // Torre
-
-    	
-    	// Peões Roxos (linha 1)
-    	for (int col = 0; col < 8; col++) {
-    		tabuleiro[1][col] = "PurpleP"; // Peões
-    	}
-
-    	// Espaços vazios (linhas 2 a 5)
-    	for (int row = 2; row < 6; row++) {
-    	    for (int col = 0; col < 8; col++) {
-    	    	tabuleiro[row][col] = null; // ou "" para vazio
-    	    }
-    	}
-    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -97,8 +60,7 @@ public class PainelTabuleiro extends JPanel implements TabuleiroObserver{
                 g2.fillRect(x, y, TAM_CASA, TAM_CASA);
 
                 // Pinta a peça (se houver)
-                String nomePeca = tabuleiro[linha][coluna];
-                System.out.println(nomePeca);
+                String nomePeca = estadoTabuleiro[linha][coluna];
                 if (nomePeca != null) {
                     BufferedImage imagem = ImagemPecas.getImagem(nomePeca);
                     if (imagem != null) {
@@ -119,18 +81,17 @@ public class PainelTabuleiro extends JPanel implements TabuleiroObserver{
         }
     }
 
-    public void iniciarNovoJogo() {
-        inicializarTabuleiro();
-        repaint();
-    }
-
+	/*
+	 * public void iniciarNovoJogo() { inicializarTabuleiro(); repaint(); }
+	 */
 
 
     @Override
     public void atualizar() {
         // Atualiza movimentos e repinta na thread da UI
         SwingUtilities.invokeLater(() -> {
-            movimentosValidos = controller.obterMovimentosValidos();
+        	estadoTabuleiro = controller.getEstadoTabuleiro();
+        	movimentosValidos = controller.obterMovimentosValidos();
             repaint();
         });
     }

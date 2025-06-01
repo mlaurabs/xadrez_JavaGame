@@ -92,7 +92,7 @@ public class JanelaPrincipal extends JFrame {
     }
 
     private void iniciarNovoJogo() {
-        painelTabuleiro.iniciarNovoJogo(); // Deve ser implementado
+        //painelTabuleiro.iniciarNovoJogo(); // Deve ser implementado
         cardLayout.show(painelPrincipal, "Tabuleiro");
     }
 

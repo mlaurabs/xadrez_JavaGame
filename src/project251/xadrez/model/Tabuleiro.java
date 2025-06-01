@@ -222,7 +222,6 @@ class Tabuleiro {
 		        removerPeca(origem);
 		        peca.setPosicao(destino);
 		        colocarPeca(peca, destino);
-		        //notificarObservers(); // Notifica após alteração
 		        return true;
 
 		 }

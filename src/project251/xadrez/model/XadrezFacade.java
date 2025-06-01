@@ -52,7 +52,8 @@ public class XadrezFacade {
         }
     }
     
-    public ArrayList<Posicao> processaTurno(Jogador j, Posicao origem) {
+
+    public ArrayList<Posicao> getMovValidos(Jogador j, Posicao origem) {
     	//System.out.println("\n===== TURNO DO JOGADOR " + j.getNome() + " =====");
     	movimentosValidos.clear();
         if (origem == null) return null;
@@ -60,7 +61,7 @@ public class XadrezFacade {
         Peca peca = tabuleiro.getPeca(origem);
         System.out.printf("Tipo da peça: %s\n",peca.getTipoPeca());
         System.out.printf("Cor da peça: %s\n", peca.getCor());
-        if (!validarPecaSelecionada(peca, j)) return null;
+        if (!validarPecaSelecionada(origem, j)) return null;
         
         movimentosValidos = obterMovimentosValidos(peca, j);
         if (movimentosValidos.isEmpty()) {
@@ -174,12 +175,12 @@ public class XadrezFacade {
      * @param peca (Peça) a ser validada
      * @return true se a peça for válida, false caso contrário
      */
-    private boolean validarPecaSelecionada(Peca peca, Jogador jogadorAtual) {
-        if (peca == null) {
+    public boolean validarPecaSelecionada(Posicao origem, Jogador jogadorAtual) {
+    	Peca peca = tabuleiro.getPeca(origem);
+    	if (peca == null) {
             System.out.println("\nNão há peça nessa posição.");
             return false;
         }
-        System.out.printf("Aqui em: %s", jogadorAtual.toString());
         if (!peca.getCor().toString().equalsIgnoreCase(jogadorAtual.toString())) {
             System.out.println("\nVocê só pode mover suas próprias peças!");
             return false;
@@ -233,4 +234,40 @@ public class XadrezFacade {
             }
         }
     }
+    
+    public boolean moverPeca(Posicao origem, Posicao destino, Jogador J) {
+    	return tabuleiro.moverPeca(origem, destino, J);
+
+    }
+
+    public String[][] getEstadoTabuleiro() {
+        String[][] estado = new String[8][8];
+        
+        for (int linha = 0; linha < 8; linha++) {
+            for (int coluna = 0; coluna < 8; coluna++) {
+                Peca peca = tabuleiro.getPeca(new Posicao(linha, coluna));
+                estado[linha][coluna] = converterPecaParaString(peca);
+            }
+        }
+        return estado;
+    }
+
+    private String converterPecaParaString(Peca peca) {
+        if (peca == null) return null;
+        
+        String cor = peca.getCor() == "C" ? "Cyan" : "Purple";
+        String tipo = "";
+        
+        if (peca instanceof Rei) tipo = "K";
+        else if (peca instanceof Dama) tipo = "Q";
+        else if (peca instanceof Torre) tipo = "R";
+        else if (peca instanceof Bispo) tipo = "B";
+        else if (peca instanceof Cavalo) tipo = "N";
+        else if (peca instanceof Peao) tipo = "P";
+        
+        return cor + tipo;
+   }
 }
+    
+
+
