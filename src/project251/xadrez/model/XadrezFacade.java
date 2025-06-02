@@ -80,7 +80,7 @@ public class XadrezFacade {
     /**
      * Verifica se o rei do jogador atual está em xeque.
      */
-    private void verificarXeque(Jogador jogadorAtual) {
+    public void verificarXeque(Jogador jogadorAtual) {
         jogadorAtual.emXeque = false;
         for (Peca p : tabuleiro.getPecasPorCor(jogadorAtual.getCor())) {
             if (p instanceof Rei rei) {
@@ -242,6 +242,53 @@ public class XadrezFacade {
     	return tabuleiro.moverPeca(origem, destino, J);
 
     }
+    
+    public boolean verificarPromocaoPeao(Posicao pos) {
+    	if (pos.getLinha() == 0 || pos.getLinha() == 7) {
+    		Peca p = tabuleiro.getPeca(pos);
+    		if(p instanceof Peao) {
+    			System.out.println("\n***** PROMOÇÃO DO PEAO ***** \n");
+                return true;
+    		}
+        }
+    	return false;
+    }
+    
+    public void promoverPeao(Posicao pos, String tipoEscolhido) {
+        Peca peca_antiga = tabuleiro.getPeca(pos);
+
+        if (!(peca_antiga instanceof Peao)) return;
+
+        String nome_cor = peca_antiga.getCor();
+        Peca novaPeca = null;
+        int n = 0;
+        if(nome_cor.equals("P")) {
+        	n = 1;
+        }
+        
+        switch (tipoEscolhido) {
+            case "Dama":
+                novaPeca = new Dama(pos, n);
+                break;
+            case "Torre":
+                novaPeca = new Torre(pos, n);
+                break;
+            case "Bispo":
+                novaPeca = new Bispo(pos, n);
+                break;
+            case "Cavalo":
+                novaPeca = new Cavalo(pos, n);
+                break;
+            default:
+                System.out.println("Tipo de promoção inválido: " + tipoEscolhido);
+                return;
+        }
+
+        tabuleiro.promovePeca(peca_antiga, novaPeca, pos);
+        System.out.println("Peão promovido a " + tipoEscolhido + " na posição " + pos);
+        notificarObservers(); // Atualiza a view
+    }
+
 
     public String[][] getEstadoTabuleiro() {
         String[][] estado = new String[8][8];

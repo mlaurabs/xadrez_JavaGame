@@ -44,7 +44,22 @@ public class Controller {
             // Segundo clique - tentativa de mover a peça
             if (movimentosValidos.contains(clicada)) {
                 if (jogo.moverPeca(origemSelecionada, clicada, jogadorAtual)) {
-                    jogadorAtual = jogadorAtual.proximo();
+                	 // VERIFICA PROMOÇÃO DE PEÃO
+                    if (jogo.verificarPromocaoPeao(clicada)) {
+                        String[] opcoes = {"Dama", "Torre", "Bispo", "Cavalo"};
+                        String escolha = (String) JOptionPane.showInputDialog(null,
+                            "Escolha a peça para promover o peão:",
+                            "Promoção de Peão",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            opcoes,
+                            opcoes[0]);
+
+                        if (escolha != null) {
+                            jogo.promoverPeao(clicada, escolha); // Implementar esse método na fachada
+                        }
+                    }
+                	jogadorAtual = jogadorAtual.proximo();
                 }
             }
             // Reset após tentativa de movimento
@@ -53,6 +68,24 @@ public class Controller {
             	movimentosValidos.clear();
             }
             jogo.notificarObservers();
+        }
+
+        verificarEstadoPosMovimento();
+        Jogador.imprimirPlacarFormatado();
+        
+     }
+
+
+    private void verificarEstadoPosMovimento() {
+        jogo.verificarXeque(jogadorAtual);
+
+        if (jogadorAtual.emXeque) {
+            if (jogadorAtual.xeque_mate) {
+                JOptionPane.showMessageDialog(null, "XEQUE-MATE! Jogador " + jogadorAtual.getNome().toUpperCase() + " perdeu o jogo.");
+                System.exit(0);
+            } else {
+                JOptionPane.showMessageDialog(null, "XEQUE no jogador " + jogadorAtual.getNome() + "!");
+            }
         }
     }
 
