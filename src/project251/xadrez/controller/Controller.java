@@ -9,7 +9,10 @@ import project251.xadrez.model.Posicao;
 import project251.xadrez.model.TabuleiroObserver;
 import project251.xadrez.model.XadrezFacade;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Controller {
     private final XadrezFacade jogo = XadrezFacade.getInstance();
@@ -31,7 +34,6 @@ public class Controller {
                 if (movimentosValidos == null || movimentosValidos.isEmpty()) {
                     // Nenhum movimento possível para a peça
                     JOptionPane.showMessageDialog(null, "Essa peça não tem movimentos válidos.\nTente outra peça, jogador " + jogadorAtual + "!");
-                    movimentosValidos.clear();
                     origemSelecionada = null;
                 } else {
                     origemSelecionada = clicada;
@@ -64,14 +66,14 @@ public class Controller {
             }
             // Reset após tentativa de movimento
             origemSelecionada = null;
-            if(!movimentosValidos.isEmpty()) {
+            if(movimentosValidos != null || !movimentosValidos.isEmpty()) {
             	movimentosValidos.clear();
             }
             jogo.notificarObservers();
         }
 
         verificarEstadoPosMovimento();
-        Jogador.imprimirPlacarFormatado();
+        Jogador.imprimirPlacarFormatado(); // para conferirmos por enquanto
         
      }
 
@@ -90,19 +92,20 @@ public class Controller {
     }
 
     
-	/*
-	 * public static void salvarEstadoJogo(XadrezFacade facade, java.io.File
-	 * arquivo) { try (java.io.PrintWriter writer = new
-	 * java.io.PrintWriter(arquivo)) { Tabuleiro tabuleiro = facade.getTabuleiro();
-	 * for (int lin = 0; lin < 8; lin++) { for (int col = 0; col < 8; col++) { Peca
-	 * peca = tabuleiro.getPeca(new Posicao(lin, col)); if (peca != null) {
-	 * writer.printf("%s;%d;%d;%s%n", peca.getTipoPeca(), lin, col, peca.getCor());
-	 * } } } JOptionPane.showMessageDialog(null, "Jogo salvo com sucesso!"); } catch
-	 * (Exception ex) { ex.printStackTrace(); JOptionPane.showMessageDialog(null,
-	 * "Erro ao salvar: " + ex.getMessage()); }
-	 */
+    public void salvarEstadoJogo(File arquivo) {
+        try (PrintWriter writer = new PrintWriter(arquivo)) {
+            List<String> estado = jogo.exportarEstadoJogo(); // <- só chama a fachada
+            for (String linha : estado) {
+                writer.println(linha);
+            }
+            JOptionPane.showMessageDialog(null, "Jogo salvo com sucesso!");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro ao salvar: " + ex.getMessage());
+        }
+    }
 
-  
+	 
     public String[][] getEstadoTabuleiro() {
         return jogo.getEstadoTabuleiro();
     }

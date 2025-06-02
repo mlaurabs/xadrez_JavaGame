@@ -254,6 +254,23 @@ public class XadrezFacade {
     	return false;
     }
     
+    public List<String> exportarEstadoJogo() {
+        List<String> estado = new ArrayList<>();
+        Tabuleiro tabuleiro = this.getTabuleiro();
+
+        for (int lin = 0; lin < 8; lin++) {
+            for (int col = 0; col < 8; col++) {
+                Peca peca = tabuleiro.getPeca(new Posicao(lin, col));
+                if (peca != null) {
+                    String linha = String.format("%s;%d;%d;%s", peca.getTipoPeca(), lin, col, peca.getCor());
+                    estado.add(linha);
+                }
+            }
+        }
+
+        return estado;
+    }
+    
     public void promoverPeao(Posicao pos, String tipoEscolhido) {
         Peca peca_antiga = tabuleiro.getPeca(pos);
 

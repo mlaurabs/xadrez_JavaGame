@@ -35,18 +35,16 @@ public class PainelTabuleiro extends JPanel implements TabuleiroObserver{
                 int linha = e.getY() / TAM_CASA;
                 int coluna = e.getX() / TAM_CASA;
 
-                // Verifica se o botão direito do mouse foi clicado
+             // Verifica se o botão direito do mouse foi clicado
                 if (SwingUtilities.isRightMouseButton(e)) {
                     // Abrir JFileChooser para salvar o estado do jogo
-					/*
-					 * JFileChooser chooser = new JFileChooser(); int resultado =
-					 * chooser.showSaveDialog(null);
-					 * 
-					 * if (resultado == JFileChooser.APPROVE_OPTION) { java.io.File arquivo =
-					 * chooser.getSelectedFile();
-					 * Controller.salvarEstadoJogo(XadrezFacade.getInstance(), arquivo); // Salvar
-					 * estado do jogo }
-					 */
+                    JFileChooser chooser = new JFileChooser();
+                    int resultado = chooser.showSaveDialog(null);
+                    
+                    if (resultado == JFileChooser.APPROVE_OPTION) {
+                        java.io.File arquivo = chooser.getSelectedFile();
+                        controller.salvarEstadoJogo(arquivo);
+                    }
                     return; // Retorna para evitar outros comportamentos ao clicar com o botão direito
                 }
 
