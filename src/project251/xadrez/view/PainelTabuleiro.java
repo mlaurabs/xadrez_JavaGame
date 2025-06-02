@@ -54,6 +54,10 @@ public class PainelTabuleiro extends JPanel implements TabuleiroObserver{
         });
     }
     
+    public void encerrar() {
+        // Libere listeners, threads, timers, etc.
+        this.removeAll();
+    }
 
 
     @Override
@@ -81,7 +85,7 @@ public class PainelTabuleiro extends JPanel implements TabuleiroObserver{
         }
 
         if (movimentosValidos != null && !movimentosValidos.isEmpty()) {
-            g2.setColor(new Color(255, 182, 255, 120)); 
+        	g2.setColor(new Color(105, 35, 235, 200)); 
             for (Posicao pos : movimentosValidos) {
  
                 int x = pos.getColuna() * TAM_CASA;

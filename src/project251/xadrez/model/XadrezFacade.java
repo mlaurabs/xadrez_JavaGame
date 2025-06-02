@@ -56,6 +56,64 @@ public class XadrezFacade {
     }
     
 
+    public boolean estaEmXeque(Jogador jogador) {
+        for (Peca p : tabuleiro.getPecasPorCor(jogador.getCor())) {
+            if (p instanceof Rei rei) {
+                rei.verificaXeque(tabuleiro);
+                return rei.estaEmXeque();
+            }
+        }
+        return false;
+    }
+    
+    public boolean ehXequeMate(Jogador jogador) {
+        jogador.xeque_mate = true;
+        Tabuleiro tabuleiroAux = tabuleiro.clonar();
+        ArrayList<Peca> pecas = tabuleiro.getPecasPorCor(jogador.getCor());
+
+        for (Peca peca : pecas) {
+            Posicao origem = peca.getPosicao();
+            peca.movValidos(tabuleiro); // Gera movimentos atuais
+            for (Posicao destino : peca.movimentos) {
+                Tabuleiro simulado = tabuleiroAux.clonar();
+                simulado.moverPeca(origem, destino, jogador);
+
+                for (Peca outra : simulado.getPecasPorCor(jogador.getCor())) {
+                    if (outra instanceof Rei rei) {
+                        rei.verificaXeque(simulado);
+                        if (!rei.estaEmXeque()) {
+                            return false; // Existe pelo menos um movimento que salva o rei
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
+    public boolean simulaJogadaRetiraXeque(Posicao origem, Posicao destino, Jogador jogador) {
+        Tabuleiro simulado = tabuleiro.clonar();
+        simulado.moverPeca(origem, destino, jogador);
+
+        for (Peca p : simulado.getPecasPorCor(jogador.getCor())) {
+            if (p instanceof Rei rei) {
+                rei.verificaXeque(simulado);
+                return !rei.estaEmXeque();
+            }
+        }
+        return false;
+    }
+    
+    public boolean reiEmXequeAposMovimento(Jogador jogador) {
+        for (Peca p : tabuleiro.getPecasPorCor(jogador.getCor())) {
+            if (p instanceof Rei rei) {
+                rei.verificaXeque(tabuleiro);
+                return rei.estaEmXeque();
+            }
+        }
+        return false;
+    }
+    
     public ArrayList<Posicao> getMovValidos(Jogador j, Posicao origem) {
     	//System.out.println("\n===== TURNO DO JOGADOR " + j.getNome() + " =====");
     	movimentosValidos.clear();
