@@ -29,7 +29,7 @@ public class Controller {
         Posicao clicada = new Posicao(linha, coluna);
 
         if (origemSelecionada == null) {
-            // Primeiro clique - seleção da peça
+            // Primeiro clique - tentativa de selecionar peça
             if (jogo.validarPecaSelecionada(clicada, jogadorAtual)) {
                 movimentosValidos = jogo.getMovValidos(jogadorAtual, clicada);
                 if (movimentosValidos == null || movimentosValidos.isEmpty()) {
@@ -43,70 +43,47 @@ public class Controller {
                 JOptionPane.showMessageDialog(null, "Selecione uma peça válida do jogador " + jogadorAtual + "!");
             }
         } else {
-            // Segundo clique - tentativa de movimento
-            boolean moveRealizado = false;
+            // Segundo clique - tentativa de mover a peça
+            if (movimentosValidos.contains(clicada)) {
+                if (jogo.moverPeca(origemSelecionada, clicada, jogadorAtual)) {
+                    if (jogo.verificarPromocaoPeao(clicada)) {
+                        String[] opcoes = {"Dama", "Torre", "Bispo", "Cavalo"};
+                        String escolha = (String) JOptionPane.showInputDialog(null,
+                            "Escolha a peça para promover o peão:",
+                            "Promoção de Peão",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            opcoes,
+                            opcoes[0]);
 
-            // Verifica se é um movimento válido normal
-            if (movimentosValidos.contains(clicada)) { // o erro ta nesses ifs
-            	
-                moveRealizado = jogo.moverPeca(origemSelecionada, clicada, jogadorAtual);
+                        if (escolha != null) {
+                            jogo.promoverPeao(clicada, escolha);
+                        }
+                    }
 
-                // Promoção de peão
-                if (moveRealizado && jogo.verificarPromocaoPeao(clicada)) {
-                    String[] opcoes = {"Dama", "Torre", "Bispo", "Cavalo"};
-                    String escolha = (String) JOptionPane.showInputDialog(null,
-                        "Escolha a peça para promover o peão:",
-                        "Promoção de Peão",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        opcoes,
-                        opcoes[0]);
+                    jogadorAtual = jogadorAtual.proximo();
+                    jogo.verificarXeque(jogadorAtual);
 
-                    if (escolha != null) {
-                        jogo.promoverPeao(clicada, escolha);
+                    if (jogadorAtual.emXeque == true) {
+                    	JOptionPane optionPane = new JOptionPane(
+                    	    "O rei do Jogador " + jogadorAtual.proximo() + " está em Xeque.",
+                    	    JOptionPane.INFORMATION_MESSAGE);
+                    	JDialog dialog = optionPane.createDialog("Xeque");
+                    	dialog.setModal(true);
+                    	dialog.setVisible(true);
+                    	dialog.dispose();
                     }
                 }
             }
-            // Verifica tentativa de roque (curto ou longo)
-            else if (jogo.isRoquePossivel(clicada)) {
-            	System.out.printf("entrei onde eu deveria");
-                moveRealizado = jogo.realizarRoque( clicada, origemSelecionada, jogadorAtual);
-            }
-
-            // Após movimento (normal ou roque)
-            if (moveRealizado) {
-                // Verifica xeque e xeque-mate
-                if (jogo.estaEmXeque(jogadorAtual.proximo())) {
-                    jogo.existeMovimentoQueTiraReiDoXeque(jogadorAtual.proximo());
-                    if (jogadorAtual.proximo().xeque_mate) {
-                        Component parentComponent = null;
-                        JOptionPane optionPane = new JOptionPane(
-                            "Xeque-mate! Jogador " + jogadorAtual.proximo() + " perdeu o jogo.",
-                            JOptionPane.INFORMATION_MESSAGE);
-                        JDialog dialog = optionPane.createDialog("Fim de Jogo");
-                        dialog.setModal(true);
-                        dialog.setVisible(true);
-                        dialog.dispose();
-
-                        voltarParaJanelaInicial(dialog);
-                        return;
-                    } else {
-                        JOptionPane.showMessageDialog(null,
-                            "O rei das peças " + jogadorAtual.proximo() + " está em xeque!");
-                    }
-                }
-
-                jogadorAtual = jogadorAtual.proximo();
-            }
-
             origemSelecionada = null;
-            movimentosValidos.clear();
+            if (movimentosValidos != null && !movimentosValidos.isEmpty()) {
+                movimentosValidos.clear();
+            }
             jogo.notificarObservers();
         }
 
         Jogador.imprimirPlacarFormatado();
     }
-
 
     public void salvarEstadoJogo(File arquivo) {
         try (PrintWriter writer = new PrintWriter(arquivo)) {
@@ -130,16 +107,20 @@ public class Controller {
     }
 
     private void voltarParaJanelaInicial(Component componenteReferencia) {
+        // Verifica se o componente é um PainelTabuleiro e o encerra explicitamente
         if (componenteReferencia instanceof PainelTabuleiro painel) {
-            painel.encerrar();
+            painel.encerrar(); // Método que você deve implementar no PainelTabuleiro
         }
 
+        // Fecha a janela principal onde o componente está
         Window janela = SwingUtilities.getWindowAncestor(componenteReferencia);
         if (janela instanceof JFrame frame) {
-            frame.getContentPane().removeAll();
-            frame.dispose();
+            frame.getContentPane().removeAll(); // Limpa os componentes
+            frame.dispose(); // Fecha a janela completamente
         }
 
+        // Reinicia o jogo ou volta à tela principal
         new project251.xadrez.view.JanelaPrincipal();
     }
+
 }
