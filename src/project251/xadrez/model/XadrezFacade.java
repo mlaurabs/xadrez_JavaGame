@@ -55,6 +55,61 @@ public class XadrezFacade {
         }
     }
     
+ // Verifica se o roque é possível para o jogador (pequeno = true para roque curto, false para roque longo)
+    public boolean isRoquePossivel(Posicao origem) {
+        Peca p = tabuleiro.getPeca(origem);
+        if (p instanceof Rei) {
+        	Rei r = (Rei) p;
+        	return r.roqueValido;
+        }
+        return false;
+    }
+
+
+ // Realiza o roque (movimento especial do rei e torre)
+    public boolean realizarRoque(Posicao origem, Posicao destino, Jogador jogador) {
+    	System.out.printf("\nfui chamada\n");
+        Peca rei = tabuleiro.getPeca(origem);
+        if (!(rei instanceof Rei)) return false;
+
+        Rei r = (Rei) rei;
+        int linha = origem.getLinha();
+
+        // Determina se é roque pequeno ou grande baseado nas posições
+        boolean pequeno = destino.equals(new Posicao(linha, 6)); // G
+        boolean grande = destino.equals(new Posicao(linha, 2));  // C
+
+        if (!pequeno && !grande) return false; // Não é uma posição válida de roque
+
+        // Remove peças das posições originais
+        tabuleiro.removerPeca(origem); // Remove o rei
+        if (pequeno) {
+            tabuleiro.removerPeca(new Posicao(linha, 7)); // Torre de H
+        } else {
+            tabuleiro.removerPeca(new Posicao(linha, 0)); // Torre de A
+        }
+
+        // Move o rei
+        Posicao novaPosicaoRei = pequeno ? new Posicao(linha, 6) : new Posicao(linha, 2); // G ou C
+        tabuleiro.colocarPeca(rei, novaPosicaoRei);
+        r.setPosicao(novaPosicaoRei);
+        r.setJaMoveu(true);
+
+        // Move a torre original (não criar nova!)
+        Peca torreOriginal = pequeno
+            ? new Torre(new Posicao(linha, 5), jogador.getCor()) // F
+            : new Torre(new Posicao(linha, 3), jogador.getCor()); // D
+
+        Posicao novaPosicaoTorre = pequeno ? new Posicao(linha, 5) : new Posicao(linha, 3); // F ou D
+        tabuleiro.colocarPeca(torreOriginal, novaPosicaoTorre);
+
+        notificarObservers();
+        return true;
+    }
+
+
+
+
 
     public boolean estaEmXeque(Jogador jogador) {
         for (Peca p : tabuleiro.getPecasPorCor(jogador.getCor())) {
@@ -171,7 +226,7 @@ public class XadrezFacade {
      * Verifica se existe algum movimento que tire o rei do xeque.
      * Atualiza o estado de xeque-mate se necessário.
      */
-    private void existeMovimentoQueTiraReiDoXeque(Jogador jogadorAtual) {
+    public void existeMovimentoQueTiraReiDoXeque(Jogador jogadorAtual) {
         jogadorAtual.xeque_mate = true; 
         Tabuleiro tabuleiroAux = tabuleiro.clonar(); 
 

@@ -143,4 +143,8 @@ public enum Jogador {
     public int getCor() {
         return (this == C) ? 0 : 1;
     }
+    
+    public int getLinhaInicial() {
+    	return (this == C) ? 7 : 0;
+    }
 }
