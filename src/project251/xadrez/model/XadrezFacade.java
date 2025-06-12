@@ -56,11 +56,15 @@ public class XadrezFacade {
     }
     
  // Verifica se o roque é possível para o jogador (pequeno = true para roque curto, false para roque longo)
-    public boolean isRoquePossivel(Posicao origem) {
+    public boolean tentouRoque(Posicao origem, Posicao destino) {
         Peca p = tabuleiro.getPeca(origem);
         if (p instanceof Rei) {
         	Rei r = (Rei) p;
-        	return r.roqueValido;
+        	if (r.roqueValido) {
+        		if(destino.getColuna() == origem.getColuna() + 2 || destino.getColuna() == origem.getColuna() - 2) {
+        			return true;
+        		}
+        	};
         }
         return false;
     }

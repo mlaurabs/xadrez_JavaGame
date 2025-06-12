@@ -45,7 +45,12 @@ public class Controller {
         } else {
             // Segundo clique - tentativa de mover a peça
             if (movimentosValidos.contains(clicada)) {
-                if (jogo.moverPeca(origemSelecionada, clicada, jogadorAtual)) {
+            	if(jogo.tentouRoque(origemSelecionada, clicada)) {
+            		System.out.printf("\ncaptou a tentativa de roque");
+            		jogo.realizarRoque(origemSelecionada, clicada, jogadorAtual);
+            		jogadorAtual = jogadorAtual.proximo();
+            	}
+            	else if (jogo.moverPeca(origemSelecionada, clicada, jogadorAtual)) {
                     if (jogo.verificarPromocaoPeao(clicada)) {
                         String[] opcoes = {"Dama", "Torre", "Bispo", "Cavalo"};
                         String escolha = (String) JOptionPane.showInputDialog(null,
