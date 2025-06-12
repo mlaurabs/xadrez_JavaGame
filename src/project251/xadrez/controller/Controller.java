@@ -61,27 +61,18 @@ public class Controller {
                         }
                     }
 
-                    if (jogo.estaEmXeque(jogadorAtual.proximo())) {
-                        if (jogo.estaEmXeque(jogadorAtual.proximo())) {
-                        	Component parentComponent = null;
-
-                        	JOptionPane optionPane = new JOptionPane(
-                        	    "Xeque-mate! Jogador " + jogadorAtual.proximo() + " perdeu o jogo.",
-                        	    JOptionPane.INFORMATION_MESSAGE);
-                        	JDialog dialog = optionPane.createDialog("Fim de Jogo");
-                        	dialog.setModal(true);
-                        	dialog.setVisible(true);
-                        	dialog.dispose();
-
-                        	voltarParaJanelaInicial(dialog); // Usa o dialog como referência segura para obter a janela atual
-                            return;
-                        } else {
-                            JOptionPane.showMessageDialog(null,
-                                "O rei das peças " + jogadorAtual.proximo() + " está em xeque!");
-                        }
-                    }
-
                     jogadorAtual = jogadorAtual.proximo();
+                    jogo.verificarXeque(jogadorAtual);
+
+                    if (jogadorAtual.emXeque == true) {
+                    	JOptionPane optionPane = new JOptionPane(
+                    	    "O rei do Jogador " + jogadorAtual.proximo() + " está em Xeque.",
+                    	    JOptionPane.INFORMATION_MESSAGE);
+                    	JDialog dialog = optionPane.createDialog("Xeque");
+                    	dialog.setModal(true);
+                    	dialog.setVisible(true);
+                    	dialog.dispose();
+                    }
                 }
             }
             origemSelecionada = null;

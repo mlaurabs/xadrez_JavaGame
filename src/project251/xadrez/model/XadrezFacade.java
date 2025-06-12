@@ -155,7 +155,7 @@ public class XadrezFacade {
     /**
      * Verifica se o movimento atual colocou o adversário em xeque.
      */
-    private void verificarXequeAdversario(Jogador jogadorAtual) {
+    public void verificarXequeAdversario(Jogador jogadorAtual) {
         Jogador adversario = jogadorAtual.proximo();
         for (Peca p : tabuleiro.getPecasPorCor(adversario.getCor())) {
             if (p instanceof Rei rei) {
@@ -171,7 +171,7 @@ public class XadrezFacade {
      * Verifica se existe algum movimento que tire o rei do xeque.
      * Atualiza o estado de xeque-mate se necessário.
      */
-    private void existeMovimentoQueTiraReiDoXeque(Jogador jogadorAtual) {
+    public void existeMovimentoQueTiraReiDoXeque(Jogador jogadorAtual) {
         jogadorAtual.xeque_mate = true; 
         Tabuleiro tabuleiroAux = tabuleiro.clonar(); 
 
@@ -392,6 +392,21 @@ public class XadrezFacade {
         
         return cor + tipo;
    }
+    public boolean verificaCongelamento(Jogador jogadorAtual) {
+        if(jogadorAtual.emXeque == true) {
+        	return false;
+        };
+
+        for (Peca peca : tabuleiro.getPecasPorCor(jogadorAtual.getCor())) {
+            ArrayList<Posicao> movimentos = obterMovimentosValidos(peca, jogadorAtual);
+            if (!movimentos.isEmpty()) {
+                return false;
+            }
+        }
+        System.out.println("empate");
+        return true;
+    }
+
 }
     
 
