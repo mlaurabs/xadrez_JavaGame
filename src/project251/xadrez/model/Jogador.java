@@ -60,6 +60,20 @@ public enum Jogador {
         pecasCapturadas.put(tipo, pecasCapturadas.getOrDefault(tipo, 0) + 1);
     }
     
+
+    /**
+     * Reinicia o placar, limpando as peças capturadas de ambos os jogadores.
+     */
+    public static void reiniciarPlacar() {
+        C.pecasCapturadas.clear();
+        P.pecasCapturadas.clear();
+        C.emXeque = false;
+        P.emXeque = false;
+        C.xeque_mate = false;
+        P.xeque_mate = false;
+    }
+
+    
     /**
      * Imprime o placar formatado com as peças capturadas por ambos os jogadores.
      */

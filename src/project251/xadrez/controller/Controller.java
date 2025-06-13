@@ -25,7 +25,7 @@ public class Controller {
         jogo.addObserver(observer);
     }
 
-    public void processarClique(int linha, int coluna) {
+    public void processarJogada(int linha, int coluna) {
         Posicao clicada = new Posicao(linha, coluna);
 
         if (origemSelecionada == null) {
@@ -33,14 +33,13 @@ public class Controller {
             if (jogo.validarPecaSelecionada(clicada, jogadorAtual)) {
                 movimentosValidos = jogo.getMovValidos(jogadorAtual, clicada);
                 if (movimentosValidos == null || movimentosValidos.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Essa peça não tem movimentos válidos.\nTente outra peça, jogador " + jogadorAtual + "!");
+                    JOptionPane.showMessageDialog(null, "Essa peça não tem movimentos válidos.\nTente outra peça, jogador " + jogadorAtual.getNome() + "!");
                     origemSelecionada = null;
                 } else {
                     origemSelecionada = clicada;
-                    jogo.notificarObservers();
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Selecione uma peça válida do jogador " + jogadorAtual + "!");
+                JOptionPane.showMessageDialog(null, "Selecione uma peça válida do jogador " + jogadorAtual.getNome() + "!");
             }
         } else {
             // Segundo clique - tentativa de mover a peça
@@ -71,7 +70,7 @@ public class Controller {
 
                     if (jogadorAtual.emXeque == true) {
                     	JOptionPane optionPane = new JOptionPane(
-                    	    "O rei do Jogador " + jogadorAtual.proximo() + " está em Xeque.",
+                    	    "O rei do Jogador " + jogadorAtual.proximo().getNome() + " está em Xeque.",
                     	    JOptionPane.INFORMATION_MESSAGE);
                     	JDialog dialog = optionPane.createDialog("Xeque");
                     	dialog.setModal(true);
@@ -84,7 +83,6 @@ public class Controller {
             if (movimentosValidos != null && !movimentosValidos.isEmpty()) {
                 movimentosValidos.clear();
             }
-            jogo.notificarObservers();
         }
 
         Jogador.imprimirPlacarFormatado();
@@ -109,6 +107,10 @@ public class Controller {
 
     public ArrayList<Posicao> obterMovimentosValidos() {
         return movimentosValidos;
+    }
+    
+    public void reiniciaJogo() {
+    	jogo.reiniciaJogo();
     }
 
     private void voltarParaJanelaInicial(Component componenteReferencia) {

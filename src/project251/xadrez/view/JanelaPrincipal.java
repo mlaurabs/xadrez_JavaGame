@@ -3,6 +3,7 @@ package project251.xadrez.view;
 import javax.swing.*;
 
 import project251.xadrez.controller.Controller;
+import project251.xadrez.model.Jogador;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -49,7 +50,60 @@ public class JanelaPrincipal extends JFrame {
         add(painelPrincipal);
         cardLayout.show(painelPrincipal, "TelaInicial");
     }
+    
+    private void encerrarPartida() {
+        if (painelTabuleiro != null) {
+            painelTabuleiro.encerrar(); // limpa recursos da view
+        }
+        Jogador.reiniciarPlacar();
+        setJMenuBar(null); // remove a barra de menu
+        cardLayout.show(painelPrincipal, "TelaInicial");
+    }
 
+
+    private JMenuBar criarMenuPartida() {
+        JMenuBar menuBar = new JMenuBar();
+
+        // Título como JLabel
+        JLabel titulo = new JLabel("  Xad Estratégia  ");
+        titulo.setFont(new Font("Arial", Font.BOLD, 16));
+        titulo.setForeground(new Color(80, 0, 80)); // Roxo escuro
+        menuBar.add(titulo);
+
+        // Espaço entre título e primeiro botão
+        menuBar.add(Box.createHorizontalStrut(20));
+
+        // Botão: Ver Placar
+        JButton btnVerPlacar = new JButton("Ver Placar");
+        btnVerPlacar.setFocusable(false);
+        btnVerPlacar.addActionListener(e -> {
+            StringBuilder placar = new StringBuilder();
+            placar.append("PLACAR ATUAL:\n\n");
+
+            String cyon = Jogador.C.getPecasCapturadasString().replace("C: ", "");
+            String purple = Jogador.P.getPecasCapturadasString().replace("P: ", "");
+
+            placar.append("Cyon (C): ").append(cyon.isEmpty() ? "Nenhuma peça capturada" : cyon).append("\n");
+            placar.append("Purple (P): ").append(purple.isEmpty() ? "Nenhuma peça capturada" : purple);
+
+            JOptionPane.showMessageDialog(this, placar.toString(), "Placar", JOptionPane.INFORMATION_MESSAGE);
+        });
+        menuBar.add(btnVerPlacar);
+
+        // Espaço entre os botões
+        menuBar.add(Box.createHorizontalStrut(20));
+
+        // Botão: Encerrar Partida
+        JButton btnEncerrar = new JButton("Encerrar Partida");
+        btnEncerrar.setFocusable(false);
+        btnEncerrar.addActionListener(e -> encerrarPartida());
+        menuBar.add(btnEncerrar);
+
+        return menuBar;
+    }
+
+
+    
     private void criarTelaInicial() {
         telaInicial = new JPanel();
         telaInicial.setLayout(new BoxLayout(telaInicial, BoxLayout.Y_AXIS));
@@ -92,9 +146,10 @@ public class JanelaPrincipal extends JFrame {
     }
 
     private void iniciarNovoJogo() {
-        //painelTabuleiro.iniciarNovoJogo(); // Deve ser implementado
+        setJMenuBar(criarMenuPartida()); // <-- define a barra de menu
         cardLayout.show(painelPrincipal, "Tabuleiro");
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(JanelaPrincipal::new);

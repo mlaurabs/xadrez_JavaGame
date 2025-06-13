@@ -48,15 +48,16 @@ public class PainelTabuleiro extends JPanel implements TabuleiroObserver{
                     return; // Retorna para evitar outros comportamentos ao clicar com o botão direito
                 }
 
-                controller.processarClique(linha, coluna);
+                controller.processarJogada(linha, coluna);
 
             }
         });
     }
     
     public void encerrar() {
-        // Libere listeners, threads, timers, etc.
         this.removeAll();
+        controller.reiniciaJogo();
+        repaint();
     }
 
 
@@ -94,10 +95,6 @@ public class PainelTabuleiro extends JPanel implements TabuleiroObserver{
             }
         }
     }
-
-	/*
-	 * public void iniciarNovoJogo() { inicializarTabuleiro(); repaint(); }
-	 */
 
 
     @Override

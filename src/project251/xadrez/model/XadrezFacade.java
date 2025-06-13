@@ -10,29 +10,29 @@ import java.util.Scanner;
  * Implementa o padrão Singleton para garantir uma única instância.
  * Responsável por gerenciar turnos, movimentos e regras do jogo.
  */
-public class XadrezFacade {
-    private final Tabuleiro tabuleiro;
+public class XadrezFacade implements TabuleiroObservado {
+    private final Tabuleiro tabuleiro; 
     private Jogador jogadorAtual;
     private final Scanner scanner;
     private ArrayList<Posicao> movimentosValidos = new ArrayList<>();
 	private List<TabuleiroObserver> observers = new ArrayList<>();
-	
+
 	public Tabuleiro getTabuleiro() {
 		return tabuleiro;
 	}
 
- // 1. Construtor privado
+    // 1. Construtor privado
     private XadrezFacade() {
         this.tabuleiro = new Tabuleiro();
         this.tabuleiro.comecaJogo();
         this.scanner = new Scanner(System.in);
     }
 
-    // 2. Instância única estática
-    private static XadrezFacade instance;
 
-    // 3. Método público de acesso
-    public static synchronized XadrezFacade getInstance() {
+    private static XadrezFacade instance = null; 
+
+    // Método público de acesso
+    public static XadrezFacade getInstance() { 
         if (instance == null) {
             instance = new XadrezFacade();
         }
@@ -53,6 +53,11 @@ public class XadrezFacade {
         	System.out.println("Notifiquei");
         	
         }
+    }
+    
+    public void reiniciaJogo() {
+    	this.tabuleiro.comecaJogo();
+    	notificarObservers();
     }
     
  // Verifica se o roque é possível para o jogador (pequeno = true para roque curto, false para roque longo)
@@ -101,12 +106,13 @@ public class XadrezFacade {
 
         // Move a torre original (não criar nova!)
         Peca torreOriginal = pequeno
-            ? new Torre(new Posicao(linha, 5), jogador.getCor()) // F
-            : new Torre(new Posicao(linha, 3), jogador.getCor()); // D
-
-        Posicao novaPosicaoTorre = pequeno ? new Posicao(linha, 5) : new Posicao(linha, 3); // F ou D
+        	    ? tabuleiro.getPeca(new Posicao(linha, 7))
+        	    : tabuleiro.getPeca(new Posicao(linha, 0));
+        Posicao novaPosicaoTorre = pequeno ? new Posicao(linha, 5) : new Posicao(linha, 3);
+        tabuleiro.removerPeca(torreOriginal.getPosicao());
         tabuleiro.colocarPeca(torreOriginal, novaPosicaoTorre);
-
+        torreOriginal.setPosicao(novaPosicaoTorre);
+        ((Torre)torreOriginal).setJaMoveu(true); 
         notificarObservers();
         return true;
     }
@@ -263,29 +269,6 @@ public class XadrezFacade {
             }
         }
     }
-
-
-    /**
-     * Obtém uma posição válida do usuário.
-     * @param mensagem (String) a ser exibida para o usuário
-     * @return Objeto (Posicao) ou null se inválido
-     */
-    private Posicao obterPosicao(String mensagem) {
-        System.out.print(mensagem);
-        String entrada = scanner.nextLine();
-
-        if ("sair".equalsIgnoreCase(entrada)) {
-            System.out.println("\nJogo Encerrado!");
-            System.exit(0);
-        }
-
-        try {
-            return new Posicao(entrada);
-        } catch (IllegalArgumentException e) {
-            System.out.println("\nPosição inválida.");
-            return null;
-        }
-    }
     
 
     /**
@@ -331,31 +314,13 @@ public class XadrezFacade {
         System.out.println();
     }
 
-
-    /**
-     * Obtém uma posição de destino válida do usuário.
-     * @param movimentosValidos Lista de movimentos permitidos
-     * @return Posição de destino selecionada
-     */
-    private Posicao obterDestino(ArrayList<Posicao> movimentosValidos) {
-        while (true) {
-            System.out.print("\nDigite a posição de destino (ex: e4): ");
-            String destinoStr = scanner.nextLine();
-            try {
-                Posicao destino = new Posicao(destinoStr);
-                if (movimentosValidos.contains(destino)) {
-                    return destino;
-                }
-                System.out.println("Movimento inválido.");
-            } catch (IllegalArgumentException e) {
-                System.out.println("Posição de destino inválida.");
-            }
-        }
-    }
     
     public boolean moverPeca(Posicao origem, Posicao destino, Jogador J) {
-    	return tabuleiro.moverPeca(origem, destino, J);
-
+        boolean sucesso = tabuleiro.moverPeca(origem, destino, J);
+        if (sucesso) {
+            notificarObservers();
+        }
+        return sucesso;
     }
     
     public boolean verificarPromocaoPeao(Posicao pos) {
@@ -418,7 +383,7 @@ public class XadrezFacade {
 
         tabuleiro.promovePeca(peca_antiga, novaPeca, pos);
         System.out.println("Peão promovido a " + tipoEscolhido + " na posição " + pos);
-        notificarObservers(); // Atualiza a view
+        notificarObservers(); 
     }
 
 

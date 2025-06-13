@@ -3,7 +3,7 @@ package project251.xadrez.model;
 import java.util.Objects;
 
 /**
- * Representa uma posição no tabuleiro de xadrez usando coordenadas.
+ * Representa uma estrutura de dados que representa posição no tabuleiro de xadrez usando coordenadas.
  * Permite conversão entre notação algébrica (ex: "a1") e coordenadas numéricas (linha, coluna).
  */
 

@@ -7,7 +7,7 @@ import java.util.List;
  * Representa o tabuleiro de xadrez e suas operações básicas.
  * Gerencia a posição das peças, movimentos válidos e estado do jogo.
  */
-public class Tabuleiro {
+class Tabuleiro {
 
     private static final int LINHAS = 8;
     private static final int COLUNAS = 8;
@@ -50,6 +50,16 @@ public class Tabuleiro {
     return copia;
     }
     
+    public void limparPecas() {
+        if (pecas == null) return;
+
+        for (int i = 0; i < pecas.length; i++) {
+            for (int j = 0; j < pecas[i].length; j++) {
+                pecas[i][j] = null;
+            }
+        }
+    }
+    
     /**
      * Coloca uma peça em determinada posição do tabuleiro.
      * @param peca (Peça) a ser posicionada
@@ -81,7 +91,7 @@ public class Tabuleiro {
      * Inicializa o tabuleiro com as peças nas posições iniciais padrão.
      */
     public void comecaJogo() {
-    	
+    	limparPecas();
     	// Peças Cyon (Time 1 - linhas 6 e 7 tabuleiro gráfico)
         colocarPeca(new Torre(new Posicao("a8"), 0), new Posicao("a8"));
         colocarPeca(new Cavalo(new Posicao("b8"), 0), new Posicao("b8"));
@@ -119,7 +129,7 @@ public class Tabuleiro {
      * @param coluna Índice da coluna (0-7)
      * @return Peça na posição ou null se vazio
      */
-    public Peca getPeca_interno(int linha, int coluna) {
+    private Peca getPeca_interno(int linha, int coluna) {
         if(validarPosicao(linha, coluna)) {
         	return pecas[linha][coluna];
         }
