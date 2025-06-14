@@ -298,10 +298,16 @@ public class XadrezFacade implements TabuleiroObservado {
      * @return Lista de posições válidas
      */
     public ArrayList<Posicao> obterMovimentosValidos(Peca peca, Jogador jogadorAtual) {
-        if (!jogadorAtual.emXeque) {
-            peca.movValidos(tabuleiro);
+        ArrayList<Posicao> movimentosPossiveis = new ArrayList<>();
+        peca.movValidos(tabuleiro); // gera todos os movimentos da peça
+
+        for (Posicao destino : peca.movimentos) {
+            if (simulaJogadaRetiraXeque(peca.getPosicao(), destino, jogadorAtual)) {
+                movimentosPossiveis.add(destino); // só adiciona se o movimento não deixar o rei em xeque
+            }
         }
-        return new ArrayList<>(peca.movimentos);
+
+        return movimentosPossiveis;
     }
 
 
@@ -433,19 +439,19 @@ public class XadrezFacade implements TabuleiroObservado {
     }
     
     public void carregarPartida(String caminhoArquivo, Tabuleiro tabuleiro) {
-        tabuleiro.limparPecas(); 
+        tabuleiro.limparPecas(); // limpa o tabuleiro antes de carregar
 
         try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivo))) {
             String linha;
             while ((linha = br.readLine()) != null) {
                 String[] partes = linha.split(";");
 
-                if (partes.length != 4) continue; 
+                if (partes.length != 4) continue; // ignora linha errada
 
                 char tipo = partes[0].charAt(0);
                 int lin = Integer.parseInt(partes[1]);
                 int col = Integer.parseInt(partes[2]);
-                char jogadorLetra = partes[3].charAt(0); 
+                char jogadorLetra = partes[3].charAt(0); // 'C' ou 'P'
 
                 Jogador jogador = (jogadorLetra == 'C') ? Jogador.C : Jogador.P;
                 int cor = jogador.getCor();
@@ -476,3 +482,5 @@ public class XadrezFacade implements TabuleiroObservado {
 
 }
     
+
+
