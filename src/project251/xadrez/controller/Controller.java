@@ -129,5 +129,16 @@ public class Controller {
         // Reinicia o jogo ou volta à tela principal
         new project251.xadrez.view.JanelaPrincipal();
     }
+    
+    public void carregarEstadoJogo(File arquivo) {
+        try {
+            jogo.carregarPartida(arquivo.getAbsolutePath(), jogo.getTabuleiro());
+            jogadorAtual = Jogador.C; 
+            JOptionPane.showMessageDialog(null, "Jogo carregado com sucesso!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro ao carregar: " + e.getMessage());
+        }
+    }
 
 }
