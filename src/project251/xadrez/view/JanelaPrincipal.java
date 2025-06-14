@@ -40,6 +40,14 @@ public class JanelaPrincipal extends JFrame {
 
      // Cria o controller primeiro
         this.controller = new Controller();
+       
+        
+        //ver depois
+        controller.setOnGameEndListener(mensagem -> {
+            JOptionPane.showMessageDialog(this, mensagem, "Fim de Jogo", JOptionPane.INFORMATION_MESSAGE);
+            encerrarPartida();
+        });
+        //ver depois
         
         criarTelaInicial();
         painelTabuleiro = new PainelTabuleiro(controller); 
@@ -50,6 +58,7 @@ public class JanelaPrincipal extends JFrame {
         add(painelPrincipal);
         cardLayout.show(painelPrincipal, "TelaInicial");
     }
+    
     
     private void encerrarPartida() {
         if (painelTabuleiro != null) {
