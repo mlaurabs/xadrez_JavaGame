@@ -77,6 +77,11 @@ public class Controller {
                     }
 
                     jogadorAtual = jogadorAtual.proximo();
+                    if(jogo.verificaCongelamento(jogadorAtual)) {
+                        JOptionPane.showMessageDialog(null,
+                                "O rei do jogador " + jogadorAtual.getNome() + " está afogado. \n A PARTIDA TERMINA EM EMPATE.",
+                                "AFOGAMENTO", JOptionPane.INFORMATION_MESSAGE);
+                    };
                     jogo.verificarXeque(jogadorAtual);
 
                     if (jogadorAtual.emXeque) {
