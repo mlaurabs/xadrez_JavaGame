@@ -77,7 +77,7 @@ public class XadrezFacade implements TabuleiroObservado {
 
  // Realiza o roque (movimento especial do rei e torre)
     public boolean realizarRoque(Posicao origem, Posicao destino, Jogador jogador) {
-    	System.out.printf("\nfui chamada\n");
+        System.out.printf("\nfui chamada\n");
         Peca rei = tabuleiro.getPeca(origem);
         if (!(rei instanceof Rei)) return false;
 
@@ -90,13 +90,12 @@ public class XadrezFacade implements TabuleiroObservado {
 
         if (!pequeno && !grande) return false; // Não é uma posição válida de roque
 
-        // Remove peças das posições originais
+        // Determina a posição da torre e recupera 
+        Posicao posicaoTorreOrigem = pequeno ? new Posicao(linha, 7) : new Posicao(linha, 0);
+        Peca torreOriginal = tabuleiro.getPeca(posicaoTorreOrigem);
+        
         tabuleiro.removerPeca(origem); // Remove o rei
-        if (pequeno) {
-            tabuleiro.removerPeca(new Posicao(linha, 7)); // Torre de H
-        } else {
-            tabuleiro.removerPeca(new Posicao(linha, 0)); // Torre de A
-        }
+        tabuleiro.removerPeca(posicaoTorreOrigem); // Remove a torre
 
         // Move o rei
         Posicao novaPosicaoRei = pequeno ? new Posicao(linha, 6) : new Posicao(linha, 2); // G ou C
@@ -104,15 +103,12 @@ public class XadrezFacade implements TabuleiroObservado {
         r.setPosicao(novaPosicaoRei);
         r.setJaMoveu(true);
 
-        // Move a torre original (não criar nova!)
-        Peca torreOriginal = pequeno
-        	    ? tabuleiro.getPeca(new Posicao(linha, 7))
-        	    : tabuleiro.getPeca(new Posicao(linha, 0));
-        Posicao novaPosicaoTorre = pequeno ? new Posicao(linha, 5) : new Posicao(linha, 3);
-        tabuleiro.removerPeca(torreOriginal.getPosicao());
+        // Move a torre
+        Posicao novaPosicaoTorre = pequeno ? new Posicao(linha, 5) : new Posicao(linha, 3); // F ou D
         tabuleiro.colocarPeca(torreOriginal, novaPosicaoTorre);
         torreOriginal.setPosicao(novaPosicaoTorre);
-        ((Torre)torreOriginal).setJaMoveu(true); 
+        ((Torre) torreOriginal).setJaMoveu(true);
+
         notificarObservers();
         return true;
     }
