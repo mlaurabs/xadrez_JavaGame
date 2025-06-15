@@ -20,11 +20,22 @@ public class Controller {
     private Posicao origemSelecionada;
     private ArrayList<Posicao> movimentosValidos = new ArrayList<>();
     public Jogador jogadorAtual = Jogador.C;
-
+    private OnGameEndListener gameEndListener; //ver depois
+    
     public void registrarObserver(TabuleiroObserver observer) {
         jogo.addObserver(observer);
     }
 
+  //ver depois
+    public interface OnGameEndListener {
+        void onGameEnd(String mensagemVencedor);
+    }
+    
+    public void setOnGameEndListener(OnGameEndListener listener) {
+        this.gameEndListener = listener;
+    }
+  //ver depois
+    
     public void processarJogada(int linha, int coluna) {
         Posicao clicada = new Posicao(linha, coluna);
 
@@ -66,16 +77,27 @@ public class Controller {
                     }
 
                     jogadorAtual = jogadorAtual.proximo();
+                    if(jogo.verificaCongelamento(jogadorAtual)) {
+                        JOptionPane.showMessageDialog(null,
+                                "O rei do jogador " + jogadorAtual.getNome() + " está afogado. \n A PARTIDA TERMINA EM EMPATE.",
+                                "AFOGAMENTO", JOptionPane.INFORMATION_MESSAGE);
+                    };
                     jogo.verificarXeque(jogadorAtual);
 
-                    if (jogadorAtual.emXeque == true) {
-                    	JOptionPane optionPane = new JOptionPane(
-                    	    "O rei do Jogador " + jogadorAtual.proximo().getNome() + " está em Xeque.",
-                    	    JOptionPane.INFORMATION_MESSAGE);
-                    	JDialog dialog = optionPane.createDialog("Xeque");
-                    	dialog.setModal(true);
-                    	dialog.setVisible(true);
-                    	dialog.dispose();
+                    if (jogadorAtual.emXeque) {
+                        if (jogo.ehXequeMate(jogadorAtual)) {
+                        	//ver depois
+                        	if (gameEndListener != null) {
+                                gameEndListener.onGameEnd("Xeque-mate! O jogador " + jogadorAtual.proximo().getNome() + " venceu o jogo!");
+                            }
+                        	//ver depois
+                            
+                        } else {
+                            JOptionPane.showMessageDialog(null,
+                                "O rei do Jogador " + jogadorAtual.proximo().getNome() + " está em Xeque.",
+                                "Xeque", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        
                     }
                 }
             }
@@ -128,6 +150,17 @@ public class Controller {
 
         // Reinicia o jogo ou volta à tela principal
         new project251.xadrez.view.JanelaPrincipal();
+    }
+    
+    public void carregarEstadoJogo(File arquivo) {
+        try {
+            jogo.carregarPartida(arquivo.getAbsolutePath(), jogo.getTabuleiro());
+            jogadorAtual = Jogador.C; 
+            JOptionPane.showMessageDialog(null, "Jogo carregado com sucesso!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro ao carregar: " + e.getMessage());
+        }
     }
 
 }

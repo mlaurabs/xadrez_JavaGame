@@ -1,5 +1,8 @@
 package project251.xadrez.model;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -291,10 +294,16 @@ public class XadrezFacade implements TabuleiroObservado {
      * @return Lista de posições válidas
      */
     public ArrayList<Posicao> obterMovimentosValidos(Peca peca, Jogador jogadorAtual) {
-        if (!jogadorAtual.emXeque) {
-            peca.movValidos(tabuleiro);
+        ArrayList<Posicao> movimentosPossiveis = new ArrayList<>();
+        peca.movValidos(tabuleiro); // gera todos os movimentos da peça
+
+        for (Posicao destino : peca.movimentos) {
+            if (simulaJogadaRetiraXeque(peca.getPosicao(), destino, jogadorAtual)) {
+                movimentosPossiveis.add(destino); // só adiciona se o movimento não deixar o rei em xeque
+            }
         }
-        return new ArrayList<>(peca.movimentos);
+
+        return movimentosPossiveis;
     }
 
 
@@ -423,6 +432,48 @@ public class XadrezFacade implements TabuleiroObservado {
         }
         System.out.println("empate");
         return true;
+    }
+    
+    public void carregarPartida(String caminhoArquivo, Tabuleiro tabuleiro) {
+        tabuleiro.limparPecas(); // limpa o tabuleiro antes de carregar
+
+        try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivo))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                String[] partes = linha.split(";");
+
+                if (partes.length != 4) continue; // ignora linha errada
+
+                char tipo = partes[0].charAt(0);
+                int lin = Integer.parseInt(partes[1]);
+                int col = Integer.parseInt(partes[2]);
+                char jogadorLetra = partes[3].charAt(0); // 'C' ou 'P'
+
+                Jogador jogador = (jogadorLetra == 'C') ? Jogador.C : Jogador.P;
+                int cor = jogador.getCor();
+
+                Posicao pos = new Posicao(lin, col);
+                Peca peca = criarPeca(tipo, pos, cor);
+
+                if (peca != null) {
+                    tabuleiro.colocarPeca(peca, pos);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private Peca criarPeca(char tipo, Posicao pos, int cor) {
+        return switch (tipo) {
+            case 'P' -> new Peao(pos, cor);
+            case 'T' -> new Torre(pos, cor);
+            case 'C' -> new Cavalo(pos, cor);
+            case 'B' -> new Bispo(pos, cor);
+            case 'D' -> new Dama(pos, cor);
+            case 'R' -> new Rei(pos, cor);
+            default -> null;
+        };
     }
 
 }

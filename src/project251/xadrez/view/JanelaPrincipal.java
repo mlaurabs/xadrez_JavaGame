@@ -40,6 +40,14 @@ public class JanelaPrincipal extends JFrame {
 
      // Cria o controller primeiro
         this.controller = new Controller();
+       
+        
+        //ver depois
+        controller.setOnGameEndListener(mensagem -> {
+            JOptionPane.showMessageDialog(this, mensagem, "Fim de Jogo", JOptionPane.INFORMATION_MESSAGE);
+            encerrarPartida();
+        });
+        //ver depois
         
         criarTelaInicial();
         painelTabuleiro = new PainelTabuleiro(controller); 
@@ -50,6 +58,7 @@ public class JanelaPrincipal extends JFrame {
         add(painelPrincipal);
         cardLayout.show(painelPrincipal, "TelaInicial");
     }
+    
     
     private void encerrarPartida() {
         if (painelTabuleiro != null) {
@@ -129,13 +138,24 @@ public class JanelaPrincipal extends JFrame {
         btnNovoJogo.addActionListener((ActionEvent e) -> iniciarNovoJogo());
 
         JButton btnCarregar = new JButton("Carregar Jogo");
-        btnCarregar.setEnabled(false); // Ativar na 4ª iteração
+        btnCarregar.setEnabled(true); 
         btnCarregar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnCarregar.setMaximumSize(new Dimension(200, 60));
         btnCarregar.setBackground(corFundo);
         btnCarregar.setForeground(corTexto);
         btnCarregar.setFocusPainted(false);
         btnCarregar.setFont(new Font("Arial", Font.BOLD, 16));
+        btnCarregar.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            int resultado = chooser.showOpenDialog(this);
+            if (resultado == JFileChooser.APPROVE_OPTION) {
+                java.io.File arquivo = chooser.getSelectedFile();
+                controller.carregarEstadoJogo(arquivo);
+                painelTabuleiro.atualizar();  // atualiza o painel para refletir o novo estado
+                setJMenuBar(criarMenuPartida());
+                cardLayout.show(painelPrincipal, "Tabuleiro");
+            }
+        });
 
         telaInicial.add(Box.createVerticalGlue());
         telaInicial.add(titulo);
