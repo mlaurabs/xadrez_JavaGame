@@ -29,7 +29,7 @@ public class JanelaPrincipal extends JFrame {
 
     private void configurarJanela() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(640, 680);
+        setSize(640, 705);
         setLocationRelativeTo(null); // Centraliza
         setResizable(false);
     }

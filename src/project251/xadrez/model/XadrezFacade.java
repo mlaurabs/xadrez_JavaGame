@@ -15,7 +15,6 @@ import java.util.Scanner;
  */
 public class XadrezFacade implements TabuleiroObservado {
     private final Tabuleiro tabuleiro; 
-    private Jogador jogadorAtual;
     private final Scanner scanner;
     private ArrayList<Posicao> movimentosValidos = new ArrayList<>();
 	private List<TabuleiroObserver> observers = new ArrayList<>();

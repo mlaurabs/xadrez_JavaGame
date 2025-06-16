@@ -132,6 +132,7 @@ public class Controller {
     }
     
     public void reiniciaJogo() {
+    	jogadorAtual = Jogador.C;
     	jogo.reiniciaJogo();
     }
 
