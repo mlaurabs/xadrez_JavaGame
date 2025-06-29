@@ -1,8 +1,6 @@
 package project251.xadrez.model;
 
 import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Representa o tabuleiro de xadrez e suas operações básicas.
  * Gerencia a posição das peças, movimentos válidos e estado do jogo.

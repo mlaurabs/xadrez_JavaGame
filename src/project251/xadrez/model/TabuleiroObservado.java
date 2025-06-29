@@ -1,7 +1,5 @@
 package project251.xadrez.model;
 
-import java.util.List;
-
 /**
  * Interface para objetos que podem ser observados por TabuleiroObserver.
  * Define métodos para registrar, remover e notificar observadores.
