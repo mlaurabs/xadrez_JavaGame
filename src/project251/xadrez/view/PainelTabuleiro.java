@@ -3,7 +3,6 @@ package project251.xadrez.view;
 import project251.xadrez.controller.Controller;
 import project251.xadrez.model.Posicao;
 import project251.xadrez.model.TabuleiroObserver;
-import project251.xadrez.model.XadrezFacade;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +18,6 @@ public class PainelTabuleiro extends JPanel implements TabuleiroObserver{
     private final Controller controller;
     private ArrayList<Posicao> movimentosValidos = new ArrayList<>();
     private String[][] estadoTabuleiro;
-    private String[][] tabuleiro = new String[8][8];
 
     public PainelTabuleiro(Controller  controller) {
     	this.controller = controller;
