@@ -105,9 +105,9 @@ public class Controller {
                         }
                         
                     }else if(jogo.verificaCongelamento(jogadorAtual)) {
-                    	JOptionPane.showMessageDialog(null,
-                                "O rei do jogador " + jogadorAtual.getNome() + " está afogado. \n A PARTIDA TERMINA EM EMPATE.",
-                                "AFOGAMENTO", JOptionPane.INFORMATION_MESSAGE);
+                    	if (gameEndListener != null) {
+                            gameEndListener.onGameEnd("O rei do jogador " + jogadorAtual.getNome() + " está afogado. \n A PARTIDA TERMINA EM EMPATE.");
+                        }
                     }
                 }
             }
