@@ -123,8 +123,7 @@ public class JanelaPrincipal extends JFrame {
         JButton btnEncerrar = new JButton("Desistência");
         btnEncerrar.setFocusable(false);
         btnEncerrar.addActionListener(e -> {
-            Jogador jogador = controller.getUltimoJogador(); // jogador oposto
-            Jogador vencedor = jogador.proximo();
+            Jogador vencedor = controller.jogadorAtual.proximo(); // jogador oposto
             String mensagem = "O jogador " + vencedor.getNome() + " venceu por desistência!";
             
             JOptionPane.showMessageDialog(this, mensagem, "Vitória por Desistência", JOptionPane.INFORMATION_MESSAGE);

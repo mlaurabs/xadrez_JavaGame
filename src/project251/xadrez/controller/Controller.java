@@ -158,16 +158,6 @@ public class Controller {
     	jogadorAtual = Jogador.C;
     	jogo.reiniciaJogo();
     }
-    
-    /**
-     * Retorna o último jogador que realizou uma jogada.
-     * Se ainda não houve jogada, retorna o oponente do jogador atual.
-     *
-     * @return Jogador que jogou por último.
-     */
-    public Jogador getUltimoJogador() {
-        return ultimoJogador != null ? ultimoJogador : jogadorAtual.proximo();
-    }
 
 
     /**
