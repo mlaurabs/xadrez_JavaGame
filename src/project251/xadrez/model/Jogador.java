@@ -46,6 +46,11 @@ public enum Jogador {
     public Jogador proximo() {
         return this == C ? P : C;
     }
+    
+    public Jogador atual() {
+        return this;
+    }
+
 
 
     /**

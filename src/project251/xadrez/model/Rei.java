@@ -115,24 +115,30 @@ class Rei extends Peca {
 
         int linha = this.posicao.getLinha();
         int coluna = this.posicao.getColuna();
+        System.out.printf(">>>RoqueGrandeValido - linha: %d - coluna: %d\n\n", linha, coluna);
 
         // Torre do roque grande está em a1 ou a8
         Posicao torrePos = (this.cor == 0) ? new Posicao("a1") : new Posicao("a8");
         Peca torre = tabuleiro.getPeca(torrePos);
 
+        System.out.println("nao eh torre\n");
         if (!(torre instanceof Torre)) return false;
         Torre t = (Torre) torre;
+        System.out.println("torre ja se moveu\n");
         if (t.getJaMoveu()) return false;
 
         // Casas entre rei e torre devem estar livres: b1, c1, d1 ou b8, c8, d8
         Posicao b = new Posicao(linha, 1);
         Posicao c = new Posicao(linha, 2);
         Posicao d = new Posicao(linha, 3);
+        System.out.println("existe peca entre o rei e a torre\n");
         if (tabuleiro.existePeca(b) || tabuleiro.existePeca(c) || tabuleiro.existePeca(d)) return false;
 
         // Rei não pode passar por casas atacadas
+        System.out.println("casa atacada\n");
         if (casaAtacada(c, tabuleiro) || casaAtacada(d, tabuleiro)) return false;
 
+        System.out.println("roque grande valido");
         return true;
     }
 

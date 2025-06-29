@@ -176,7 +176,6 @@ public class XadrezFacade implements TabuleiroObservado {
     }
     
     public ArrayList<Posicao> getMovValidos(Jogador j, Posicao origem) {
-    	//System.out.println("\n===== TURNO DO JOGADOR " + j.getNome() + " =====");
     	movimentosValidos.clear();
         if (origem == null) return null;
         
@@ -315,7 +314,6 @@ public class XadrezFacade implements TabuleiroObservado {
         for (Posicao destino : movimentos) {
             System.out.print(destino + " ");
         }
-        System.out.println();
     }
 
     
@@ -419,7 +417,7 @@ public class XadrezFacade implements TabuleiroObservado {
         return cor + tipo;
    }
     public boolean verificaCongelamento(Jogador jogadorAtual) {
-        if(jogadorAtual.emXeque == true) {
+        if(jogadorAtual.proximo().emXeque == true) {
         	return false;
         };
 

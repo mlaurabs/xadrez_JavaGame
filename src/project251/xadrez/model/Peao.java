@@ -60,7 +60,6 @@ class Peao extends Peca {
         int mov_cor;
         
         if (this.cor == 0) { //se as peças forem cyon elas andam pra frente
-        	System.out.println("entrei");
         	mov_cor = -1; 
         }
         else {

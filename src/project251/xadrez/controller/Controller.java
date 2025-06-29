@@ -77,11 +77,7 @@ public class Controller {
                     }
 
                     jogadorAtual = jogadorAtual.proximo();
-                    if(jogo.verificaCongelamento(jogadorAtual)) {
-                        JOptionPane.showMessageDialog(null,
-                                "O rei do jogador " + jogadorAtual.getNome() + " está afogado. \n A PARTIDA TERMINA EM EMPATE.",
-                                "AFOGAMENTO", JOptionPane.INFORMATION_MESSAGE);
-                    };
+                
                     jogo.verificarXeque(jogadorAtual);
 
                     if (jogadorAtual.emXeque) {
@@ -94,10 +90,14 @@ public class Controller {
                             
                         } else {
                             JOptionPane.showMessageDialog(null,
-                                "O rei do Jogador " + jogadorAtual.proximo().getNome() + " está em Xeque.",
+                                "O rei do Jogador " + jogadorAtual.getNome() + " está em Xeque.",
                                 "Xeque", JOptionPane.INFORMATION_MESSAGE);
                         }
                         
+                    }else if(jogo.verificaCongelamento(jogadorAtual)) {
+                    	JOptionPane.showMessageDialog(null,
+                                "O rei do jogador " + jogadorAtual.getNome() + " está afogado. \n A PARTIDA TERMINA EM EMPATE.",
+                                "AFOGAMENTO", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             }
