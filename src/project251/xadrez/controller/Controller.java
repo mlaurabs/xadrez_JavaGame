@@ -107,7 +107,7 @@ public class Controller {
             }
         }
 
-        Jogador.imprimirPlacarFormatado();
+        //Jogador.imprimirPlacarFormatado();
     }
 
     public void salvarEstadoJogo(File arquivo) {

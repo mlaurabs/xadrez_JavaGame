@@ -16,6 +16,12 @@ public enum Jogador {
     
     /** Indica se o jogador está em xeque-mate */
     public boolean xeque_mate = false;
+    
+ // Campos para controle de roque
+    public boolean reiMoveu = false;
+    public boolean torreEsquerdaMoveu = false;
+    public boolean torreDireitaMoveu = false;
+
 
     // Mapa para armazenar as peças capturadas por tipo
     private final Map<String, Integer> pecasCapturadas = new HashMap<>();
@@ -52,6 +58,11 @@ public enum Jogador {
     }
 
 
+    public void resetarRoque() {
+        reiMoveu = false;
+        torreEsquerdaMoveu = false;
+        torreDireitaMoveu = false;
+    }
 
     /**
      * Registra uma peça capturada pelo jogador.

@@ -59,6 +59,8 @@ public class XadrezFacade implements TabuleiroObservado {
     
     public void reiniciaJogo() {
     	this.tabuleiro.comecaJogo();
+    	Jogador.C.resetarRoque();
+    	Jogador.P.resetarRoque();
     	notificarObservers();
     }
     
@@ -79,37 +81,46 @@ public class XadrezFacade implements TabuleiroObservado {
 
  // Realiza o roque (movimento especial do rei e torre)
     public boolean realizarRoque(Posicao origem, Posicao destino, Jogador jogador) {
-        System.out.printf("\nfui chamada\n");
-        Peca rei = tabuleiro.getPeca(origem);
-        if (!(rei instanceof Rei)) return false;
+        System.out.printf("\n[realizarRoque] chamada\n");
 
-        Rei r = (Rei) rei;
+        Peca rei = tabuleiro.getPeca(origem);
+        if (!(rei instanceof Rei r)) return false;
+
         int linha = origem.getLinha();
 
-        // Determina se é roque pequeno ou grande baseado nas posições
+        // Determina se é roque pequeno ou grande baseado na coluna destino
         boolean pequeno = destino.equals(new Posicao(linha, 6)); // G
         boolean grande = destino.equals(new Posicao(linha, 2));  // C
 
-        if (!pequeno && !grande) return false; // Não é uma posição válida de roque
+        if (!pequeno && !grande) return false;
 
-        // Determina a posição da torre e recupera 
+        // Posição da torre original
         Posicao posicaoTorreOrigem = pequeno ? new Posicao(linha, 7) : new Posicao(linha, 0);
         Peca torreOriginal = tabuleiro.getPeca(posicaoTorreOrigem);
-        
-        tabuleiro.removerPeca(origem); // Remove o rei
-        tabuleiro.removerPeca(posicaoTorreOrigem); // Remove a torre
 
-        // Move o rei
-        Posicao novaPosicaoRei = pequeno ? new Posicao(linha, 6) : new Posicao(linha, 2); // G ou C
+        if (!(torreOriginal instanceof Torre)) return false;
+
+        // Remove rei e torre de suas posições originais
+        tabuleiro.removerPeca(origem);
+        tabuleiro.removerPeca(posicaoTorreOrigem);
+
+        // Nova posição do rei
+        Posicao novaPosicaoRei = pequeno ? new Posicao(linha, 6) : new Posicao(linha, 2);
         tabuleiro.colocarPeca(rei, novaPosicaoRei);
         r.setPosicao(novaPosicaoRei);
-        r.setJaMoveu(true);
 
-        // Move a torre
-        Posicao novaPosicaoTorre = pequeno ? new Posicao(linha, 5) : new Posicao(linha, 3); // F ou D
+        // Nova posição da torre
+        Posicao novaPosicaoTorre = pequeno ? new Posicao(linha, 5) : new Posicao(linha, 3);
         tabuleiro.colocarPeca(torreOriginal, novaPosicaoTorre);
         torreOriginal.setPosicao(novaPosicaoTorre);
-        ((Torre) torreOriginal).setJaMoveu(true);
+
+        // Atualiza o estado do jogador (desativa futuros roques)
+        jogador.reiMoveu = true;
+        if (pequeno) {
+            jogador.torreDireitaMoveu = true;
+        } else {
+            jogador.torreEsquerdaMoveu = true;
+        }
 
         notificarObservers();
         return true;
@@ -323,7 +334,9 @@ public class XadrezFacade implements TabuleiroObservado {
      */
     public ArrayList<Posicao> obterMovimentosValidos(Peca peca, Jogador jogadorAtual) {
         ArrayList<Posicao> movimentosPossiveis = new ArrayList<>();
-        peca.movValidos(tabuleiro); // Gera os movimentos possíveis
+
+        // Gera movimentos padrão (sem roque)
+        peca.movValidos(tabuleiro);
 
         for (Posicao destino : peca.movimentos) {
             Tabuleiro simulado = tabuleiro.clonar();
@@ -345,8 +358,19 @@ public class XadrezFacade implements TabuleiroObservado {
             }
         }
 
+        //  Verifica se a peça é um Rei e adiciona o roque se permitido
+        if (peca instanceof Rei rei) {
+            if (rei.RoquePequenoValido(tabuleiro, jogadorAtual)) {
+                movimentosPossiveis.add(new Posicao(jogadorAtual.getLinhaInicial(), 6)); // G
+            }
+            if (rei.RoqueGrandeValido(tabuleiro, jogadorAtual)) {
+                movimentosPossiveis.add(new Posicao(jogadorAtual.getLinhaInicial(), 2)); // C
+            }
+        }
+
         return movimentosPossiveis;
     }
+
 
 
     /**
@@ -361,21 +385,29 @@ public class XadrezFacade implements TabuleiroObservado {
     }
 
     
-    public boolean moverPeca(Posicao origem, Posicao destino, Jogador J) {
-        boolean sucesso = tabuleiro.moverPeca(origem, destino, J);
-        System.out.println(sucesso);
+    public boolean moverPeca(Posicao origem, Posicao destino, Jogador j) {
+    	System.out.printf("\n>>>moverPeca()\n");
+        boolean sucesso = tabuleiro.moverPeca(origem, destino, j);
         if (sucesso) {
-        	System.out.println("********************Sucesso");
-        	Peca peca = tabuleiro.getPeca(origem); // se a peca movida eh torre ou rei
-            if (peca instanceof Torre) {
-            	System.out.println("********************Torre moveu");
-            	Torre t = (Torre) peca;
-            	t.setJaMoveu(true);
-            }else if(peca instanceof Rei) {
-            	Rei r = (Rei) peca;
-            	r.setJaMoveu(true);
-            }
-            
+        	System.out.printf("\n****Sucesso****\n");
+        	Peca peca = tabuleiro.getPeca(destino); // se a peca movida eh torre ou rei
+
+        	if (peca instanceof Rei) {
+        	    j.reiMoveu = true;
+        	}
+        	if (peca instanceof Torre) {
+        		System.out.printf("Eh instancia de torre\n");
+        	    int coluna = origem.getColuna();
+        	    System.out.printf("Coluna %d\n", coluna);
+        	    if (coluna == 0) {
+        	        j.torreEsquerdaMoveu = true;
+        	        System.out.printf("Torre esquerda ja se moveu\n");
+        	    } else if (coluna == 7) {
+        	        j.torreDireitaMoveu = true;
+        	        System.out.printf("Torre direita ja se moveu\n");
+        	    }
+        	}
+
             notificarObservers();
         }
         return sucesso;
