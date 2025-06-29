@@ -450,16 +450,14 @@ public class XadrezFacade implements TabuleiroObservado {
         // Jogador atual
         estado.add("JOGADOR_ATUAL;" + jogadorAtual.name());
 
-        // Salvar o placar de cada jogador
+        // Placar de cada jogador
         for (Jogador jogador : Jogador.values()) {
             StringBuilder placar = new StringBuilder("PLACAR_" + jogador.name());
-            
             for (Map.Entry<String, Integer> entry : jogador.getPecasCapturadas().entrySet()) {
-                String tipo = entry.getKey();  // Tipo da peça (P, T, C, B, D, R)
-                int quantidade = entry.getValue();  // Quantidade capturada
+                String tipo = entry.getKey(); // Tipo da peça (P, T, C, B, D, R)
+                int quantidade = entry.getValue();
                 placar.append(";").append(tipo).append(";").append(quantidade);
             }
-            
             estado.add(placar.toString());
         }
 
@@ -483,8 +481,18 @@ public class XadrezFacade implements TabuleiroObservado {
             for (int col = 0; col < 8; col++) {
                 Peca peca = tabuleiro.getPeca(new Posicao(lin, col));
                 if (peca != null) {
-                    estado.add(String.format("PECA;%s;%d;%d;%s",
-                        peca.getTipoPeca(), lin, col, peca.getCor()));
+                    StringBuilder linhaPeca = new StringBuilder(String.format(
+                        "PECA;%s;%d;%d;%s",
+                        peca.getTipoPeca(), lin, col, peca.getCor()
+                    ));
+
+                    // Se for peão, salvar também se já se moveu
+                    if (peca instanceof Peao) {
+                        Peao peao = (Peao) peca;
+                        linhaPeca.append(";").append(peao.getJaMoveu());
+                    }
+
+                    estado.add(linhaPeca.toString());
                 }
             }
         }
@@ -628,36 +636,31 @@ public class XadrezFacade implements TabuleiroObservado {
                     String[] partes = linha.split(";");
                     Jogador jogador = linha.startsWith("PLACAR_C") ? Jogador.C : Jogador.P;
 
-                    // Processa o placar (tipos de peças e suas quantidades)
                     for (int i = 1; i < partes.length; i += 2) {
-                        String tipo = partes[i]; // Tipo da peça (P, T, C, B, D, R)
-                        int quantidade = Integer.parseInt(partes[i + 1]); // Quantidade capturada
-                        System.out.println("Carregando peças capturadas para " + jogador.name() + ": " + tipo + " - " + quantidade); // Depuração
-                        // Atualiza o placar do jogador
+                        String tipo = partes[i];
+                        int quantidade = Integer.parseInt(partes[i + 1]);
                         for (int j = 0; j < quantidade; j++) {
-                            jogador.adicionarPecaCapturada(tipo); // Usando o método para adicionar peças
+                            jogador.adicionarPecaCapturada(tipo);
                         }
                     }
                 }
-                // Lê o estado do jogador (Xeque, Roque)
+
+                // Lê o estado dos jogadores (xeque e roques)
                 else if (linha.startsWith("JOGADOR_C") || linha.startsWith("JOGADOR_P")) {
                     String[] partes = linha.split(";");
                     Jogador jogador = linha.startsWith("JOGADOR_C") ? Jogador.C : Jogador.P;
 
-                    // Atualiza os status de Xeque, Roque, etc.
                     jogador.emXeque = Boolean.parseBoolean(partes[1]);
                     jogador.reiMoveu = Boolean.parseBoolean(partes[2]);
                     jogador.torreEsquerdaMoveu = Boolean.parseBoolean(partes[3]);
                     jogador.torreDireitaMoveu = Boolean.parseBoolean(partes[4]);
-                    
-                    System.out.println("Estado de " + jogador.name() + " carregado: Xeque - " + jogador.emXeque); // Depuração
                 }
+
                 // Lê as peças no tabuleiro
                 else if (linha.startsWith("PECA")) {
                     String[] partes = linha.split(";");
-                    
-                    if (partes.length == 5) {
-                        // Formato novo: PECA;tipo;linha;coluna;C/P
+
+                    if (partes.length >= 5) {
                         char tipo = partes[1].charAt(0);
                         int lin = Integer.parseInt(partes[2]);
                         int col = Integer.parseInt(partes[3]);
@@ -667,7 +670,13 @@ public class XadrezFacade implements TabuleiroObservado {
                         int cor = jogador.getCor();
                         Posicao pos = new Posicao(lin, col);
                         Peca peca = criarPeca(tipo, pos, cor);
+
                         if (peca != null) {
+                            // Se for peão e a linha tem o campo jaMoveu
+                            if (peca instanceof Peao && partes.length == 6) {
+                                boolean jaMoveu = Boolean.parseBoolean(partes[5]);
+                                ((Peao) peca).setJaMoveu(jaMoveu);
+                            }
                             tabuleiro.colocarPeca(peca, pos);
                         }
                     }
@@ -679,7 +688,6 @@ public class XadrezFacade implements TabuleiroObservado {
 
         return jogadorAtual;
     }
-
 
 
     
