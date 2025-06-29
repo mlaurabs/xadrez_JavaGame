@@ -134,6 +134,10 @@ public enum Jogador {
         }
         return pecasCapturadas.getOrDefault(tipo, 0);
     }
+    
+    public Map<String, Integer> getPecasCapturadas() {
+        return new HashMap<>(pecasCapturadas);
+    }
 
     /**
      * Retorna uma representação formatada das peças capturadas.
