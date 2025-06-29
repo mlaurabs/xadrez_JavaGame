@@ -1,0 +1,5 @@
+Maria Laura Barbosa Soares (2320467)
+Vinícius Martins Rodrigues (2320308)
+Guilherme Cunha Ribeiro (2320951)
+
+Classe com a main: JanelaPrincipal.java
