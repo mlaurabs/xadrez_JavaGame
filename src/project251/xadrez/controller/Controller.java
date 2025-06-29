@@ -21,22 +21,20 @@ public class Controller {
     private ArrayList<Posicao> movimentosValidos = new ArrayList<>();
     public Jogador jogadorAtual = Jogador.C;
     public Jogador ultimoJogador = Jogador.C;
-    private OnGameEndListener gameEndListener; //ver depois
+    private AvisoDeJogoEncerrado gameEndListener;
     
     public void registrarObserver(TabuleiroObserver observer) {
         jogo.addObserver(observer);
     }
 
-  //ver depois
-    public interface OnGameEndListener {
-        void onGameEnd(String mensagemVencedor);
+    public interface AvisoDeJogoEncerrado {
+        void finalDeJogo(String mensagemVencedor);
     }
     
-    public void setOnGameEndListener(OnGameEndListener listener) {
+    public void setOnGameEndListener(AvisoDeJogoEncerrado listener) {
         this.gameEndListener = listener;
     }
-  //ver depois
-    
+
     /**
      * Processa o clique do jogador em uma célula do tabuleiro.
      * Primeiro clique seleciona a peça; segundo clique tenta movimentá-la.
@@ -92,11 +90,9 @@ public class Controller {
 
                     if (jogadorAtual.emXeque) {
                         if (jogo.ehXequeMate(jogadorAtual)) {
-                        	//ver depois
                         	if (gameEndListener != null) {
-                                gameEndListener.onGameEnd("Xeque-mate! O jogador " + jogadorAtual.proximo().getNome() + " venceu o jogo!");
+                                gameEndListener.finalDeJogo("Xeque-mate! O jogador " + jogadorAtual.proximo().getNome() + " venceu o jogo!");
                             }
-                        	//ver depois
                             
                         } else {
                             JOptionPane.showMessageDialog(null,
@@ -106,7 +102,7 @@ public class Controller {
                         
                     }else if(jogo.verificaCongelamento(jogadorAtual)) {
                     	if (gameEndListener != null) {
-                            gameEndListener.onGameEnd("O rei do jogador " + jogadorAtual.getNome() + " está afogado. \n A PARTIDA TERMINA EM EMPATE.");
+                            gameEndListener.finalDeJogo("O rei do jogador " + jogadorAtual.getNome() + " está afogado. \n A PARTIDA TERMINA EM EMPATE.");
                         }
                     }
                 }

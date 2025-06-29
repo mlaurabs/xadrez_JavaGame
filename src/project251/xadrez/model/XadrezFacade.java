@@ -65,7 +65,6 @@ public class XadrezFacade implements TabuleiroObservado {
     public void notificarObservers() {
         for (TabuleiroObserver observer : observers) {
         	observer.atualizar();
-        	System.out.println("Notifiquei");
         	
         }
     }
@@ -118,7 +117,6 @@ public class XadrezFacade implements TabuleiroObservado {
      * @return true se o roque for realizado com sucesso; false caso contrário.
      */
     public boolean realizarRoque(Posicao origem, Posicao destino, Jogador jogador) {
-        System.out.printf("\n[realizarRoque] chamada\n");
 
         Peca rei = tabuleiro.getPeca(origem);
         if (!(rei instanceof Rei r)) return false;
@@ -223,17 +221,13 @@ public class XadrezFacade implements TabuleiroObservado {
         if (origem == null) return null;
         
         Peca peca = tabuleiro.getPeca(origem);
-        System.out.printf("Tipo da peça: %s\n",peca.getTipoPeca());
-        System.out.printf("Cor da peça: %s\n", peca.getCor());
         if (!validarPecaSelecionada(origem, j)) return null;
         
         movimentosValidos = obterMovimentosValidos(peca, j);
         if (movimentosValidos.isEmpty()) {
-        	System.out.println("\nEssa peça não tem movimentos válidos.");
             return null;
         }
         notificarObservers();
-        exibirMovimentos(movimentosValidos);
 
     	return movimentosValidos;
     }
@@ -296,9 +290,6 @@ public class XadrezFacade implements TabuleiroObservado {
                 }
             }
         }
-        if (jogadorAtual.emXeque) {
-            System.out.println(">>> SEU REI ESTÁ EM XEQUE! <<<\n");
-        }
     }
 
     /**
@@ -309,11 +300,9 @@ public class XadrezFacade implements TabuleiroObservado {
     public boolean validarPecaSelecionada(Posicao origem, Jogador jogadorAtual) {
     	Peca peca = tabuleiro.getPeca(origem);
     	if (peca == null) {
-            System.out.println("\nNão há peça nessa posição.");
             return false;
         }
         if (!peca.getCor().toString().equalsIgnoreCase(jogadorAtual.toString())) {
-            System.out.println("\nVocê só pode mover suas próprias peças!");
             return false;
         }
         return true;
@@ -363,20 +352,6 @@ public class XadrezFacade implements TabuleiroObservado {
         return movimentosPossiveis;
     }
 
-
-
-    /**
-     * Exibe os movimentos válidos para o usuário.
-     * @param movimentos Lista de posições válidas
-     */
-    private void exibirMovimentos(ArrayList<Posicao> movimentos) {
-        System.out.println("\nMovimentos válidos:");
-        for (Posicao destino : movimentos) {
-            System.out.print(destino + " ");
-        }
-    }
-
-    
     /**
      * Realiza a movimentação de uma peça do jogador, atualizando o tabuleiro,
      * registrando capturas e notificando observadores.
@@ -388,11 +363,9 @@ public class XadrezFacade implements TabuleiroObservado {
      * @return true se o movimento for bem-sucedido; false caso contrário.
      */
     public boolean moverPeca(Posicao origem, Posicao destino, Jogador j) {
-    	System.out.printf("\n>>>moverPeca()\n");
     	Peca capturada = tabuleiro.getPeca(destino);  // salva peça capturada antes
         boolean sucesso = tabuleiro.moverPeca(origem, destino, j);
         if (sucesso) {
-        	System.out.printf("\n****Sucesso****\n");
         	
         	if (capturada != null) {
                 j.adicionarPecaCapturada(capturada.getTipoPeca());  // atualiza placar
@@ -404,15 +377,11 @@ public class XadrezFacade implements TabuleiroObservado {
         	    j.reiMoveu = true;
         	}
         	if (peca instanceof Torre) {
-        		System.out.printf("Eh instancia de torre\n");
         	    int coluna = origem.getColuna();
-        	    System.out.printf("Coluna %d\n", coluna);
         	    if (coluna == 0) {
         	        j.torreEsquerdaMoveu = true;
-        	        System.out.printf("Torre esquerda ja se moveu\n");
         	    } else if (coluna == 7) {
         	        j.torreDireitaMoveu = true;
-        	        System.out.printf("Torre direita ja se moveu\n");
         	    }
         	}
 
@@ -431,7 +400,6 @@ public class XadrezFacade implements TabuleiroObservado {
     	if (pos.getLinha() == 0 || pos.getLinha() == 7) {
     		Peca p = tabuleiro.getPeca(pos);
     		if(p instanceof Peao) {
-    			System.out.println("\n***** PROMOÇÃO DO PEAO ***** \n");
                 return true;
     		}
         }
@@ -535,12 +503,10 @@ public class XadrezFacade implements TabuleiroObservado {
                 novaPeca = new Cavalo(pos, n);
                 break;
             default:
-                System.out.println("Tipo de promoção inválido: " + tipoEscolhido);
                 return;
         }
 
         tabuleiro.promovePeca(peca_antiga, novaPeca, pos);
-        System.out.println("Peão promovido a " + tipoEscolhido + " na posição " + pos);
         notificarObservers(); 
     }
 
@@ -602,7 +568,6 @@ public class XadrezFacade implements TabuleiroObservado {
                 return false;
             }
         }
-        System.out.println("empate");
         return true;
     }
     
@@ -625,7 +590,6 @@ public class XadrezFacade implements TabuleiroObservado {
                 String[] partes = linha.split(";");
                 if (partes.length == 2) {
                     jogadorAtual = partes[1].equals("P") ? Jogador.P : Jogador.C;
-                    System.out.println("Jogador atual carregado: " + jogadorAtual.name()); // Depuração
                 }
             }
 
@@ -690,7 +654,6 @@ public class XadrezFacade implements TabuleiroObservado {
     }
 
 
-    
     /**
      * Cria uma instância de uma peça com base no caractere que representa seu tipo.
      * Utilizado no carregamento de partidas.
