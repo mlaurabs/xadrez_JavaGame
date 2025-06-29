@@ -6,10 +6,7 @@ import project251.xadrez.model.Jogador;
 import project251.xadrez.model.Posicao;
 import project251.xadrez.model.TabuleiroObserver;
 import project251.xadrez.model.XadrezFacade;
-import project251.xadrez.view.PainelTabuleiro;
 
-import java.awt.Component;
-import java.awt.Window;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -173,27 +170,6 @@ public class Controller {
     }
 
 
-    /**
-     * Encerra a janela atual de jogo e retorna à janela principal da aplicação.
-     * @param componenteReferencia Componente gráfico usado para localizar a janela atual.
-     */
-    private void voltarParaJanelaInicial(Component componenteReferencia) {
-        // Verifica se o componente é um PainelTabuleiro e o encerra explicitamente
-        if (componenteReferencia instanceof PainelTabuleiro painel) {
-            painel.encerrar(); // Método que você deve implementar no PainelTabuleiro
-        }
-
-        // Fecha a janela principal onde o componente está
-        Window janela = SwingUtilities.getWindowAncestor(componenteReferencia);
-        if (janela instanceof JFrame frame) {
-            frame.getContentPane().removeAll(); // Limpa os componentes
-            frame.dispose(); // Fecha a janela completamente
-        }
-
-        // Reinicia o jogo ou volta à tela principal
-        new project251.xadrez.view.JanelaPrincipal();
-    }
-    
     /**
      * Carrega o estado de uma partida previamente salva a partir de um arquivo.
      *
