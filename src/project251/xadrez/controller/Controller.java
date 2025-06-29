@@ -20,6 +20,7 @@ public class Controller {
     private Posicao origemSelecionada;
     private ArrayList<Posicao> movimentosValidos = new ArrayList<>();
     public Jogador jogadorAtual = Jogador.C;
+    public Jogador ultimoJogador = Jogador.C;
     private OnGameEndListener gameEndListener; //ver depois
     
     public void registrarObserver(TabuleiroObserver observer) {
@@ -55,6 +56,7 @@ public class Controller {
         } else {
             // Segundo clique - tentativa de mover a peça
             if (movimentosValidos.contains(clicada)) { // verifica se o movimento é válido antes de mover a peca
+            	ultimoJogador = jogadorAtual;
             	if(jogo.tentouRoque(origemSelecionada, clicada)) {
             		System.out.printf("\ncaptou a tentativa de roque");
             		jogo.realizarRoque(origemSelecionada, clicada, jogadorAtual);
@@ -135,6 +137,11 @@ public class Controller {
     	jogadorAtual = Jogador.C;
     	jogo.reiniciaJogo();
     }
+    
+    public Jogador getUltimoJogador() {
+        return ultimoJogador != null ? ultimoJogador : jogadorAtual.proximo();
+    }
+
 
     private void voltarParaJanelaInicial(Component componenteReferencia) {
         // Verifica se o componente é um PainelTabuleiro e o encerra explicitamente
