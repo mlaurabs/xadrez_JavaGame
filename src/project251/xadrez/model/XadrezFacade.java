@@ -336,8 +336,11 @@ public class XadrezFacade implements TabuleiroObservado {
     	return false;
     }
     
-    public List<String> exportarEstadoJogo() {
+    public List<String> exportarEstadoJogo(Jogador jogadorAtual) {
         List<String> estado = new ArrayList<>();
+        
+        estado.add(jogadorAtual.name());
+        
         Tabuleiro tabuleiro = this.getTabuleiro();
 
         for (int lin = 0; lin < 8; lin++) {
@@ -431,11 +434,15 @@ public class XadrezFacade implements TabuleiroObservado {
         return true;
     }
     
-    public void carregarPartida(String caminhoArquivo, Tabuleiro tabuleiro) {
+    public Jogador carregarPartida(String caminhoArquivo, Tabuleiro tabuleiro) {
         tabuleiro.limparPecas(); // limpa o tabuleiro antes de carregar
-
+        Jogador jogadorAtual = Jogador.C;
+        
         try (BufferedReader br = new BufferedReader(new FileReader(caminhoArquivo))) {
-            String linha;
+            String linha = br.readLine();
+            if (linha != null && (linha.equals("C") || linha.equals("P"))) {
+                jogadorAtual = linha.equals("P") ? Jogador.P : Jogador.C;
+            }
             while ((linha = br.readLine()) != null) {
                 String[] partes = linha.split(";");
 
@@ -459,6 +466,7 @@ public class XadrezFacade implements TabuleiroObservado {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return jogadorAtual;
     }
     
     private Peca criarPeca(char tipo, Posicao pos, int cor) {
