@@ -440,7 +440,7 @@ public class XadrezFacade implements TabuleiroObservado {
     
     /**
      * Exporta o estado atual do jogo em uma lista de strings,
-     * contendo o jogador atual e todas as peças com suas posições e cores.
+     * contendo o jogador atual, seu estado e todas as peças com suas posições e cores.
      * @param jogadorAtual Jogador que deve jogar a próxima rodada.
      * @return Lista representando o estado do jogo.
      */
