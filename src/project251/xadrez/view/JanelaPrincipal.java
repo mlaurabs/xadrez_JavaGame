@@ -64,7 +64,6 @@ public class JanelaPrincipal extends JFrame {
         if (painelTabuleiro != null) {
             painelTabuleiro.encerrar(); // limpa recursos da view
         }
-        Jogador.reiniciarPlacar();
         setJMenuBar(null); // remove a barra de menu
         cardLayout.show(painelPrincipal, "TelaInicial");
     }
@@ -166,7 +165,7 @@ public class JanelaPrincipal extends JFrame {
     }
 
     private void iniciarNovoJogo() {
-        setJMenuBar(criarMenuPartida()); // <-- define a barra de menu
+        setJMenuBar(criarMenuPartida()); // define a barra de menu
         cardLayout.show(painelPrincipal, "Tabuleiro");
     }
 

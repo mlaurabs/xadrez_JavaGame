@@ -57,13 +57,6 @@ public enum Jogador {
         return this;
     }
 
-
-    public void resetarRoque() {
-        reiMoveu = false;
-        torreEsquerdaMoveu = false;
-        torreDireitaMoveu = false;
-    }
-
     /**
      * Registra uma peça capturada pelo jogador.
      * @param tipo (String) da peça capturada (P, T, C, B, D, R)
@@ -80,13 +73,19 @@ public enum Jogador {
     /**
      * Reinicia o placar, limpando as peças capturadas de ambos os jogadores.
      */
-    public static void reiniciarPlacar() {
+    public static void reiniciarPartida() {
         C.pecasCapturadas.clear();
         P.pecasCapturadas.clear();
         C.emXeque = false;
         P.emXeque = false;
         C.xeque_mate = false;
         P.xeque_mate = false;
+        C.reiMoveu = false;
+        P.reiMoveu = false;
+        C.torreEsquerdaMoveu = false;
+        P.torreEsquerdaMoveu = false;
+        C.torreDireitaMoveu = false;
+        P.torreDireitaMoveu = false;
     }
 
     

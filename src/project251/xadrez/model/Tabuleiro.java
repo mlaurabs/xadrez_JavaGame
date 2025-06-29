@@ -216,7 +216,6 @@ class Tabuleiro {
         // Remover peça capturada (se houver)
 	    if (existePeca(destino)) {
             removerPeca(destino);
-			j.adicionarPecaCapturada(peca_destino.getTipoPeca());
         }
         
         if (peca instanceof Peao peao) {

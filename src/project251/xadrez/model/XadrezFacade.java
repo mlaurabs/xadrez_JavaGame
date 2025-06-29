@@ -59,8 +59,7 @@ public class XadrezFacade implements TabuleiroObservado {
     
     public void reiniciaJogo() {
     	this.tabuleiro.comecaJogo();
-    	Jogador.C.resetarRoque();
-    	Jogador.P.resetarRoque();
+    	Jogador.reiniciarPartida();
     	notificarObservers();
     }
     
@@ -393,11 +392,17 @@ public class XadrezFacade implements TabuleiroObservado {
     
     public boolean moverPeca(Posicao origem, Posicao destino, Jogador j) {
     	System.out.printf("\n>>>moverPeca()\n");
+    	Peca capturada = tabuleiro.getPeca(destino);  // salva peça capturada antes
         boolean sucesso = tabuleiro.moverPeca(origem, destino, j);
         if (sucesso) {
         	System.out.printf("\n****Sucesso****\n");
-        	Peca peca = tabuleiro.getPeca(destino); // se a peca movida eh torre ou rei
-
+        	
+        	if (capturada != null) {
+                j.adicionarPecaCapturada(capturada.getTipoPeca());  // atualiza placar
+            }
+        	
+        	Peca peca = tabuleiro.getPeca(destino); 
+        	// se a peca movida eh torre ou rei
         	if (peca instanceof Rei) {
         	    j.reiMoveu = true;
         	}
