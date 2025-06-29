@@ -37,6 +37,14 @@ public class Controller {
     }
   //ver depois
     
+    /**
+     * Processa o clique do jogador em uma célula do tabuleiro.
+     * Primeiro clique seleciona a peça; segundo clique tenta movimentá-la.
+     * Trata lógica de roque, promoção de peão, xeque, xeque-mate e empate por afogamento.
+     *
+     * @param linha Linha clicada no tabuleiro.
+     * @param coluna Coluna clicada no tabuleiro.
+     */
     public void processarJogada(int linha, int coluna) {
         Posicao clicada = new Posicao(linha, coluna);
 
@@ -109,9 +117,14 @@ public class Controller {
             }
         }
 
-        //Jogador.imprimirPlacarFormatado();
     }
 
+    /**
+     * Salva o estado atual do jogo em um arquivo texto.
+     * Inclui o jogador da vez e todas as peças com suas posições e cores.
+     *
+     * @param arquivo Arquivo de destino onde o estado será salvo.
+     */
     public void salvarEstadoJogo(File arquivo) {
         try (PrintWriter writer = new PrintWriter(arquivo)) {
             List<String> estado = jogo.exportarEstadoJogo(jogadorAtual);
@@ -124,25 +137,50 @@ public class Controller {
             JOptionPane.showMessageDialog(null, "Erro ao salvar: " + ex.getMessage());
         }
     }
-
+    
+    
+    /**
+     * Retorna o estado atual do tabuleiro em forma de matriz de strings,
+     * para ser usado na visualização gráfica.
+     *
+     * @return Matriz de 8x8 representando o estado do tabuleiro.
+     */
     public String[][] getEstadoTabuleiro() {
         return jogo.getEstadoTabuleiro();
     }
 
+    /**
+     * Retorna a lista atual de movimentos válidos da peça selecionada.
+     *
+     * @return Lista de posições para onde a peça pode se mover.
+     */
     public ArrayList<Posicao> obterMovimentosValidos() {
         return movimentosValidos;
     }
     
+    /**
+     * Reinicia o jogo do zero, limpando o tabuleiro e reiniciando o jogador atual.
+     */
     public void reiniciaJogo() {
     	jogadorAtual = Jogador.C;
     	jogo.reiniciaJogo();
     }
     
+    /**
+     * Retorna o último jogador que realizou uma jogada.
+     * Se ainda não houve jogada, retorna o oponente do jogador atual.
+     *
+     * @return Jogador que jogou por último.
+     */
     public Jogador getUltimoJogador() {
         return ultimoJogador != null ? ultimoJogador : jogadorAtual.proximo();
     }
 
 
+    /**
+     * Encerra a janela atual de jogo e retorna à janela principal da aplicação.
+     * @param componenteReferencia Componente gráfico usado para localizar a janela atual.
+     */
     private void voltarParaJanelaInicial(Component componenteReferencia) {
         // Verifica se o componente é um PainelTabuleiro e o encerra explicitamente
         if (componenteReferencia instanceof PainelTabuleiro painel) {
@@ -160,6 +198,11 @@ public class Controller {
         new project251.xadrez.view.JanelaPrincipal();
     }
     
+    /**
+     * Carrega o estado de uma partida previamente salva a partir de um arquivo.
+     *
+     * @param arquivo Arquivo contendo o estado salvo da partida.
+     */
     public void carregarEstadoJogo(File arquivo) {
         try {
             jogadorAtual = jogo.carregarPartida(arquivo.getAbsolutePath(), jogo.getTabuleiro());

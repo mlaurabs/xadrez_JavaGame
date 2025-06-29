@@ -71,7 +71,6 @@ class Tabuleiro {
             throw new IllegalArgumentException("Já existe uma peça na posição " + posicao);
         }
         pecas[posicao.getLinha()][posicao.getColuna()] = peca;
-        //notificarObservers(); // Notifica após alteração
     }
     
     /**
@@ -83,7 +82,6 @@ class Tabuleiro {
     public void promovePeca(Peca antiga, Peca nova, Posicao posicao) {
     	if (existePeca(posicao) && antiga instanceof Peao) {
     		pecas[posicao.getLinha()][posicao.getColuna()] = nova;
-    		//notificarObservers(); // Notifica após alteração
         }
     }
     
@@ -157,7 +155,6 @@ class Tabuleiro {
             }
             Object removida = getPeca(posicao);
             pecas[posicao.getLinha()][posicao.getColuna()] = null;
-            //notificarObservers(); // Notifica após alteração
             return removida;
         }
         return null;
@@ -169,7 +166,7 @@ class Tabuleiro {
      * @param coluna Índice da coluna
      * @return true se posição válida, false caso contrário
      */
-    private boolean validarPosicao(int linha, int coluna) { // quando implementarmos a view pode excluir esse metodo
+    private boolean validarPosicao(int linha, int coluna) { 
         if (linha < 0 || linha >= LINHAS || coluna < 0 || coluna >= COLUNAS) {
         	System.out.println("\nPosição fora do tabuleiro: " + linha + "," + coluna);
         	return false;

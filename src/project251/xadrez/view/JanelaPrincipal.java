@@ -27,6 +27,9 @@ public class JanelaPrincipal extends JFrame {
      
     }
 
+    /**
+     * Configura as propriedades básicas da janela principal:
+     */
     private void configurarJanela() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(640, 705);
@@ -34,6 +37,11 @@ public class JanelaPrincipal extends JFrame {
         setResizable(false);
     }
 
+    /**
+     * Inicializa os componentes da interface gráfica, incluindo
+     * a tela inicial, o painel do tabuleiro e a navegação entre telas.
+     * Também define o listener de fim de jogo.
+     */
     private void inicializarComponentes() {
         cardLayout = new CardLayout();
         painelPrincipal = new JPanel(cardLayout);
@@ -60,6 +68,10 @@ public class JanelaPrincipal extends JFrame {
     }
     
     
+    /**
+     * Encerra a partida atual e retorna à tela inicial.
+     * Limpa os recursos da visualização e remove a barra de menu.
+     */
     private void encerrarPartida() {
         if (painelTabuleiro != null) {
             painelTabuleiro.encerrar(); // limpa recursos da view
@@ -68,7 +80,13 @@ public class JanelaPrincipal extends JFrame {
         cardLayout.show(painelPrincipal, "TelaInicial");
     }
 
-
+    
+    /**
+     * Cria e retorna a barra de menu da partida.
+     * Contém ações como ver placar e encerrar partida por desistência.
+     *
+     * @return JMenuBar configurada com ações de jogo.
+     */
     private JMenuBar criarMenuPartida() {
         JMenuBar menuBar = new JMenuBar();
 
@@ -118,7 +136,10 @@ public class JanelaPrincipal extends JFrame {
     }
 
 
-    
+    /**
+     * Cria e configura a tela inicial do jogo.
+     * Contém botões para iniciar uma nova partida ou carregar uma partida salva.
+     */
     private void criarTelaInicial() {
         telaInicial = new JPanel();
         telaInicial.setLayout(new BoxLayout(telaInicial, BoxLayout.Y_AXIS));
@@ -171,6 +192,9 @@ public class JanelaPrincipal extends JFrame {
         telaInicial.add(Box.createVerticalGlue());
     }
 
+    /**
+     * Inicia uma nova partida, exibindo o tabuleiro e configurando a barra de menu.
+     */
     private void iniciarNovoJogo() {
         setJMenuBar(criarMenuPartida()); // define a barra de menu
         cardLayout.show(painelPrincipal, "Tabuleiro");

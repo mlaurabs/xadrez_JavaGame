@@ -19,11 +19,16 @@ public class XadrezFacade implements TabuleiroObservado {
     private ArrayList<Posicao> movimentosValidos = new ArrayList<>();
 	private List<TabuleiroObserver> observers = new ArrayList<>();
 
+	/**
+	 * Retorna a instância atual do tabuleiro de jogo.
+	 * @return Tabuleiro em uso no momento.
+	 */
+
 	public Tabuleiro getTabuleiro() {
 		return tabuleiro;
 	}
 
-    // 1. Construtor privado
+
     private XadrezFacade() {
         this.tabuleiro = new Tabuleiro();
         this.tabuleiro.comecaJogo();
@@ -33,7 +38,13 @@ public class XadrezFacade implements TabuleiroObservado {
 
     private static XadrezFacade instance = null; 
 
-    // Método público de acesso
+
+    /**
+     * Retorna a instância única (singleton) da fachada do jogo.
+     * Se ainda não foi criada, instancia um novo objeto.
+     * @return Instância única da classe XadrezFacade.
+     */
+
     public static XadrezFacade getInstance() { 
         if (instance == null) {
             instance = new XadrezFacade();
@@ -57,12 +68,25 @@ public class XadrezFacade implements TabuleiroObservado {
         }
     }
     
+    
+    /**
+     * Reinicia o jogo de xadrez para o estado inicial padrão.
+     * Limpa e reinicia o tabuleiro e os estados dos jogadores.
+     */
+
     public void reiniciaJogo() {
     	this.tabuleiro.comecaJogo();
     	Jogador.reiniciarPartida();
     	notificarObservers();
     }
     
+    /**
+     * Verifica se a movimentação do rei corresponde a uma tentativa de roque.
+     * @param origem Posição inicial do rei.
+     * @param destino Posição de destino do rei.
+     * @return true se corresponde ao movimento de roque; false caso contrário.
+     */
+
     public boolean tentouRoque(Posicao origem, Posicao destino) {
         Peca p = tabuleiro.getPeca(origem);
         if (!(p instanceof Rei)) return false;
@@ -84,7 +108,13 @@ public class XadrezFacade implements TabuleiroObservado {
 
 
 
- // Realiza o roque (movimento especial do rei e torre)
+    /**
+     * Realiza o movimento especial de roque (curto ou longo) para o jogador atual.
+     * @param origem  Posição inicial do rei.
+     * @param destino Posição final do rei (coluna 6 para roque pequeno, coluna 2 para roque grande).
+     * @param jogador Jogador que está tentando realizar o roque.
+     * @return true se o roque for realizado com sucesso; false caso contrário.
+     */
     public boolean realizarRoque(Posicao origem, Posicao destino, Jogador jogador) {
         System.out.printf("\n[realizarRoque] chamada\n");
 
@@ -132,7 +162,13 @@ public class XadrezFacade implements TabuleiroObservado {
     }
 
 
-//manter
+    /**
+     * Verifica se o rei do jogador especificado está atualmente em xeque.
+     * Um rei está em xeque quando está sob ameaça de captura em seu turno atual.
+     *
+     * @param jogador Jogador a ser verificado.
+     * @return true se o rei estiver em xeque; false caso contrário.
+     */
     public boolean estaEmXeque(Jogador jogador) {
         for (Peca p : tabuleiro.getPecasPorCor(jogador.getCor())) {
             if (p instanceof Rei rei) {
@@ -143,6 +179,11 @@ public class XadrezFacade implements TabuleiroObservado {
         return false;
     }
     
+    /**
+     * Verifica se o jogador especificado está em situação de xeque-mate.
+     * @param jogador Jogador a ser verificado.
+     * @return true se for xeque-mate; false caso contrário.
+     */
     public boolean ehXequeMate(Jogador jogador) {
         jogador.xeque_mate = true;
         Tabuleiro tabuleiroAux = tabuleiro.clonar();
@@ -169,6 +210,12 @@ public class XadrezFacade implements TabuleiroObservado {
     }
     
     
+    /**
+     * Retorna a lista de movimentos válidos para a peça localizada na posição de origem
+     * @param j Jogador que está solicitando os movimentos.
+     * @param origem Posição atual da peça.
+     * @return Lista de posições possíveis de destino, ou null se não houver movimentos válidos.
+     */
     public ArrayList<Posicao> getMovValidos(Jogador j, Posicao origem) {
     	movimentosValidos.clear();
         if (origem == null) return null;
@@ -190,8 +237,15 @@ public class XadrezFacade implements TabuleiroObservado {
     }
  
     /**
-     * Verifica se o jogador está em xeque e se há algum movimento que possa tirá-lo da situação.
-     * Atualiza os estados `emXeque` e `xeque_mate` do jogador.
+     * Verifica se o rei do jogador atual está em xeque e se há algum movimento
+     * que possa livrá-lo da ameaça. Atualiza os estados internos do jogador:
+     * - `emXeque`: true se o rei estiver em xeque.
+     * - `xeque_mate`: true se não houver movimentos válidos para sair do xeque.
+     * 
+     * Se houver pelo menos um movimento que retire o rei da ameaça,
+     * o xeque-mate é evitado e os movimentos possíveis são atualizados.
+     *
+     * @param jogadorAtual Jogador a ser verificado.
      */
     public void verificarXeque(Jogador jogadorAtual) {
         jogadorAtual.emXeque = false;
@@ -321,6 +375,16 @@ public class XadrezFacade implements TabuleiroObservado {
     }
 
     
+    /**
+     * Realiza a movimentação de uma peça do jogador, atualizando o tabuleiro,
+     * registrando capturas e notificando observadores.
+     * Também atualiza os estados do jogador em relação ao movimento de rei ou torre.
+     *
+     * @param origem Posição inicial da peça.
+     * @param destino Posição final desejada.
+     * @param j Jogador que está realizando a jogada.
+     * @return true se o movimento for bem-sucedido; false caso contrário.
+     */
     public boolean moverPeca(Posicao origem, Posicao destino, Jogador j) {
     	System.out.printf("\n>>>moverPeca()\n");
     	Peca capturada = tabuleiro.getPeca(destino);  // salva peça capturada antes
@@ -355,6 +419,12 @@ public class XadrezFacade implements TabuleiroObservado {
         return sucesso;
     }
     
+    /**
+     * Verifica se um peão alcançou a última linha do tabuleiro
+     * e deve ser promovido.
+     * @param pos Posição do peão.
+     * @return true se a promoção for possível; false caso contrário.
+     */
     public boolean verificarPromocaoPeao(Posicao pos) {
     	if (pos.getLinha() == 0 || pos.getLinha() == 7) {
     		Peca p = tabuleiro.getPeca(pos);
@@ -366,6 +436,12 @@ public class XadrezFacade implements TabuleiroObservado {
     	return false;
     }
     
+    /**
+     * Exporta o estado atual do jogo em uma lista de strings,
+     * contendo o jogador atual e todas as peças com suas posições e cores.
+     * @param jogadorAtual Jogador que deve jogar a próxima rodada.
+     * @return Lista representando o estado do jogo.
+     */
     public List<String> exportarEstadoJogo(Jogador jogadorAtual) {
         List<String> estado = new ArrayList<>();
         
@@ -386,6 +462,12 @@ public class XadrezFacade implements TabuleiroObservado {
         return estado;
     }
     
+    /**
+     * Substitui um peão por uma nova peça (promoção), de acordo com a escolha do jogador.
+     * Atualiza o tabuleiro e notifica observadores.
+     * @param pos Posição do peão a ser promovido.
+     * @param tipoEscolhido Tipo da nova peça ("Dama", "Torre", "Bispo", "Cavalo").
+     */
     public void promoverPeao(Posicao pos, String tipoEscolhido) {
         Peca peca_antiga = tabuleiro.getPeca(pos);
 
@@ -421,7 +503,12 @@ public class XadrezFacade implements TabuleiroObservado {
         notificarObservers(); 
     }
 
-
+    
+    /**
+     * Retorna uma representação textual simplificada do tabuleiro atual,
+     * com base no tipo e cor das peças.
+     * @return Matriz de strings com a visualização do estado do tabuleiro.
+     */
     public String[][] getEstadoTabuleiro() {
         String[][] estado = new String[8][8];
         
@@ -434,6 +521,12 @@ public class XadrezFacade implements TabuleiroObservado {
         return estado;
     }
 
+    /**
+     * Converte uma peça para uma string representativa, com base no tipo e cor.
+     * Utilizada para exportar ou exibir o estado do tabuleiro.
+     * @param peca Peça a ser convertida.
+     * @return String representando a peça (ex: "CyanK", "PurpleP"), ou null se vazia.
+     */
     private String converterPecaParaString(Peca peca) {
         if (peca == null) return null;
         
@@ -449,6 +542,14 @@ public class XadrezFacade implements TabuleiroObservado {
         
         return cor + tipo;
    }
+
+    
+    /**
+     * Verifica se o jogador adversário está em situação de congelamento (afogamento/stalemate).
+     * Isso ocorre quando o jogador não está em xeque, mas não possui movimentos válidos.
+     * @param jogadorAtual Jogador que acabou de jogar (oponente será verificado).
+     * @return true se for um caso de congelamento (empate); false caso contrário.
+     */
     public boolean verificaCongelamento(Jogador jogadorAtual) {
         if(jogadorAtual.proximo().emXeque == true) {
         	return false;
@@ -464,6 +565,13 @@ public class XadrezFacade implements TabuleiroObservado {
         return true;
     }
     
+    /**
+     * Carrega uma partida salva a partir de um arquivo de texto.
+     * Atualiza o tabuleiro com as peças e determina o jogador da vez.
+     * @param caminhoArquivo Caminho para o arquivo salvo.
+     * @param tabuleiro Tabuleiro onde a partida será carregada.
+     * @return Jogador que tem a vez após o carregamento.
+     */
     public Jogador carregarPartida(String caminhoArquivo, Tabuleiro tabuleiro) {
         tabuleiro.limparPecas(); // limpa o tabuleiro antes de carregar
         Jogador jogadorAtual = Jogador.C;
@@ -499,6 +607,14 @@ public class XadrezFacade implements TabuleiroObservado {
         return jogadorAtual;
     }
     
+    /**
+     * Cria uma instância de uma peça com base no caractere que representa seu tipo.
+     * Utilizado no carregamento de partidas.
+     * @param tipo Caractere identificador da peça ('P', 'T', 'C', 'B', 'D', 'R').
+     * @param pos Posição inicial da peça.
+     * @param cor Inteiro representando a cor (0 para CYON, 1 para PURPLE).
+     * @return Instância da peça correspondente, ou null se o tipo for inválido.
+     */
     private Peca criarPeca(char tipo, Posicao pos, int cor) {
         return switch (tipo) {
             case 'P' -> new Peao(pos, cor);
