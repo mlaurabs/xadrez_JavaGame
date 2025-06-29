@@ -102,9 +102,16 @@ public class JanelaPrincipal extends JFrame {
         menuBar.add(Box.createHorizontalStrut(20));
 
         // Botão: Encerrar Partida
-        JButton btnEncerrar = new JButton("Encerrar Partida");
+        JButton btnEncerrar = new JButton("Desistência");
         btnEncerrar.setFocusable(false);
-        btnEncerrar.addActionListener(e -> encerrarPartida());
+        btnEncerrar.addActionListener(e -> {
+            Jogador jogador = controller.getUltimoJogador(); // jogador oposto
+            Jogador vencedor = jogador.proximo();
+            String mensagem = "O jogador " + vencedor.getNome() + " venceu por desistência!";
+            
+            JOptionPane.showMessageDialog(this, mensagem, "Vitória por Desistência", JOptionPane.INFORMATION_MESSAGE);
+            encerrarPartida();  // volta para tela inicial
+        });
         menuBar.add(btnEncerrar);
 
         return menuBar;
