@@ -112,7 +112,7 @@ public class Controller {
 
     public void salvarEstadoJogo(File arquivo) {
         try (PrintWriter writer = new PrintWriter(arquivo)) {
-            List<String> estado = jogo.exportarEstadoJogo();
+            List<String> estado = jogo.exportarEstadoJogo(jogadorAtual);
             for (String linha : estado) {
                 writer.println(linha);
             }
@@ -155,8 +155,7 @@ public class Controller {
     
     public void carregarEstadoJogo(File arquivo) {
         try {
-            jogo.carregarPartida(arquivo.getAbsolutePath(), jogo.getTabuleiro());
-            jogadorAtual = Jogador.C; 
+            jogadorAtual = jogo.carregarPartida(arquivo.getAbsolutePath(), jogo.getTabuleiro());
             JOptionPane.showMessageDialog(null, "Jogo carregado com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
