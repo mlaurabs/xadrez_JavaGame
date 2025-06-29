@@ -212,30 +212,23 @@ class Tabuleiro {
         	System.out.println("\nNão há peça na posição de origem: " + origem);
         	return false;
         }
+        
+        // Remover peça capturada (se houver)
+	    if (existePeca(destino)) {
+            removerPeca(destino);
+			j.adicionarPecaCapturada(peca_destino.getTipoPeca());
+        }
+        
+        if (peca instanceof Peao peao) {
+            peao.setJaMoveu(true);
+        }
 
-        // Verifica se o movimento é válido
-		 if (!peca.movValidos(this).contains(destino)) {
-			 System.out.println("\nMovimento inválido para a peça em: " + destino);
-			 return false;
-		 } else {
-		     // Remover peça capturada (se houver)
-			    if (existePeca(destino)) {
-		            removerPeca(destino);
-					j.adicionarPecaCapturada(peca_destino.getTipoPeca());
-		        }
-		        
-		        if (peca instanceof Peao peao) {
-		            peao.setJaMoveu(true);
-		        }
-
-		        // Mover peça
-		        removerPeca(origem);
-		        peca.setPosicao(destino);
-		        colocarPeca(peca, destino);
-		        return true;
-
-		 }
-	    
+        // Mover peça
+        removerPeca(origem);
+        peca.setPosicao(destino);
+        colocarPeca(peca, destino);
+        return true;
+    
     }
 
     

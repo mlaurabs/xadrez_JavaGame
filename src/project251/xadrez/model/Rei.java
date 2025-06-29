@@ -14,8 +14,6 @@ class Rei extends Peca {
 	/** Indica se o rei pode sair do xeque */
 	public boolean saiXeque = true;
 	
-	public boolean roqueValido = false;
-	
 	
 	/**
      * Cria um novo rei na posição especificada.

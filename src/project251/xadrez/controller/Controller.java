@@ -54,7 +54,7 @@ public class Controller {
             }
         } else {
             // Segundo clique - tentativa de mover a peça
-            if (movimentosValidos.contains(clicada)) {
+            if (movimentosValidos.contains(clicada)) { // verifica se o movimento é válido antes de mover a peca
             	if(jogo.tentouRoque(origemSelecionada, clicada)) {
             		System.out.printf("\ncaptou a tentativa de roque");
             		jogo.realizarRoque(origemSelecionada, clicada, jogadorAtual);

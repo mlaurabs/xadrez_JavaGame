@@ -64,19 +64,25 @@ public class XadrezFacade implements TabuleiroObservado {
     	notificarObservers();
     }
     
- // Verifica se o roque é possível para o jogador (pequeno = true para roque curto, false para roque longo)
     public boolean tentouRoque(Posicao origem, Posicao destino) {
         Peca p = tabuleiro.getPeca(origem);
-        if (p instanceof Rei) {
-        	Rei r = (Rei) p;
-        	if (r.roqueValido) {
-        		if(destino.getColuna() == origem.getColuna() + 2 || destino.getColuna() == origem.getColuna() - 2) {
-        			return true;
-        		}
-        	};
+        if (!(p instanceof Rei)) return false;
+
+        int linha = origem.getLinha();
+
+        // Roque pequeno: rei vai para coluna 6
+        if (destino.equals(new Posicao(linha, 6))) {
+            return true;
         }
+
+        // Roque grande: rei vai para coluna 2
+        if (destino.equals(new Posicao(linha, 2))) {
+            return true;
+        }
+
         return false;
     }
+
 
 
  // Realiza o roque (movimento especial do rei e torre)
@@ -114,6 +120,7 @@ public class XadrezFacade implements TabuleiroObservado {
         tabuleiro.colocarPeca(torreOriginal, novaPosicaoTorre);
         torreOriginal.setPosicao(novaPosicaoTorre);
 
+        notificarObservers();
         // Atualiza o estado do jogador (desativa futuros roques)
         jogador.reiMoveu = true;
         if (pequeno) {
@@ -121,8 +128,7 @@ public class XadrezFacade implements TabuleiroObservado {
         } else {
             jogador.torreEsquerdaMoveu = true;
         }
-
-        notificarObservers();
+        
         return true;
     }
 
