@@ -319,7 +319,19 @@ public class XadrezFacade implements TabuleiroObservado {
     
     public boolean moverPeca(Posicao origem, Posicao destino, Jogador J) {
         boolean sucesso = tabuleiro.moverPeca(origem, destino, J);
+        System.out.println(sucesso);
         if (sucesso) {
+        	System.out.println("********************Sucesso");
+        	Peca peca = tabuleiro.getPeca(origem); // se a peca movida eh torre ou rei
+            if (peca instanceof Torre) {
+            	System.out.println("********************Torre moveu");
+            	Torre t = (Torre) peca;
+            	t.setJaMoveu(true);
+            }else if(peca instanceof Rei) {
+            	Rei r = (Rei) peca;
+            	r.setJaMoveu(true);
+            }
+            
             notificarObservers();
         }
         return sucesso;
